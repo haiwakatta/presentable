@@ -1,0 +1,3406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sundial Health · Seed Pitch · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<style>
+/* ================================================================
+   DESIGN TOKENS — Investor theme
+   Bold-modern · vivid orange accent · larger type · more breathing room
+   ================================================================ */
+:root {
+  /* Surfaces */
+  --bg:           #ffffff;
+  --bg-tint:      #fafafa;
+  --bg-card:      #ffffff;
+  --bg-card-alt:  #f4f4f5;
+  --bg-dark:      #0c0a09;
+
+  /* Ink — punchier than enterprise, slightly cooler */
+  --ink-1: #0a0a0a;
+  --ink-2: #1f1f1f;
+  --ink-3: #525252;
+  --ink-4: #9a9a9a;
+  --ink-5: #d4d4d4;
+
+  /* Lines */
+  --line-1: #ececec;
+  --line-2: #d4d4d4;
+  --line-3: #0a0a0a;
+
+  /* Accent — vivid orange (the brand) */
+  --accent:       #ea580c;
+  --accent-tint:  #fff7ed;
+  --accent-ink:   #ffffff;
+
+  /* Semantic */
+  --warn:         #c2410c;
+  --warn-tint:    #fff7ed;
+  --positive:     #047857;
+  --positive-tint:#ecfdf5;
+  --risk:         #dc2626;
+  --risk-tint:    #fef2f2;
+
+  /* On-dark */
+  --on-dark-1: #fafaf8;
+  --on-dark-2: #c8ccd1;
+  --on-dark-3: #78716c;
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
+  --font-body:    'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:    'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  /* Type scale — bolder, larger than enterprise */
+  --eyebrow-size:   11px;
+  --title-size:     clamp(30px, 4vw, 52px);
+  --title-large:    clamp(40px, 5.5vw, 72px);
+  --subtitle-size:  clamp(15px, 1.5vw, 19px);
+  --body-size:      clamp(13px, 1.15vw, 16px);
+  --body-small:     clamp(11.5px, 0.95vw, 13px);
+  --label-size:     10px;
+  --source-size:    10px;
+  --stat-size:      clamp(48px, 6vw, 88px);
+
+  /* Spacing — more breathing room */
+  --slide-pad-y: 6vh;
+  --slide-pad-x: 6.5vw;
+  --gap-xs: 0.5rem;
+  --gap-sm: 1rem;
+  --gap-md: 1.5rem;
+  --gap-lg: 2.5rem;
+  --gap-xl: 4rem;
+
+  /* Geometry — slightly more rounded */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --hairline: 1px;
+}
+
+
+/* ================================================================
+   BASE
+   ================================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-tint);
+  color: var(--ink-1);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ================================================================
+   DECK CONTAINER & SLIDE FRAME
+   ================================================================ */
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.slide.active { display: flex; }
+
+.slide-inner {
+  width: 100%;
+  height: 100%;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  max-width: 100%;
+  position: relative;
+}
+
+/* Dark slide variant — used sparingly */
+.slide.dark { background: var(--bg-dark); color: var(--on-dark-1); }
+.slide.dark .eyebrow { color: var(--on-dark-3); }
+.slide.dark .subtitle { color: var(--on-dark-2); }
+.slide.dark .source { color: var(--on-dark-3); }
+.slide.dark .title-rule { background: rgba(255,255,255,0.12); }
+
+/* ================================================================
+   COMMON ELEMENTS — eyebrow, title, subtitle, source, page no.
+   ================================================================ */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-4);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--title-size);
+  font-weight: 400;
+  font-variation-settings: "opsz" 36;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink-1);
+  max-width: 95%;
+}
+
+.title.large {
+  font-size: var(--title-large);
+}
+
+.title em {
+  font-style: italic;
+  color: var(--ink-3);
+  font-variation-settings: "opsz" 36;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: var(--subtitle-size);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink-3);
+  max-width: 85%;
+}
+
+.body {
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.body-small {
+  font-size: var(--body-small);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+.title-rule {
+  height: 1px;
+  background: var(--ink-1);
+  width: 36px;
+  margin-bottom: 0.25rem;
+}
+
+/* Source line — always at the bottom of an analytical slide */
+.source {
+  position: absolute;
+  bottom: 1.6rem;
+  left: var(--slide-pad-x);
+  right: var(--slide-pad-x);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: var(--source-size);
+  color: var(--ink-5);
+  letter-spacing: 0.04em;
+}
+
+.source .source-label::before { content: "Source: "; color: var(--ink-4); }
+.source .page-no { color: var(--ink-4); }
+
+/* ================================================================
+   1 — COVER SLIDE
+   ================================================================ */
+.cover {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+}
+
+.cover-top { display: flex; justify-content: space-between; align-items: center; }
+.cover-mark { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+.cover-confid {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 4px 8px;
+  border: 1px solid var(--line-2);
+}
+
+.cover-center { display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; }
+.cover-eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+.cover-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 144;
+  color: var(--ink-1);
+  max-width: 88%;
+}
+.cover-title em { font-style: italic; color: var(--ink-3); }
+.cover-sub {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ink-3);
+  max-width: 60%;
+  margin-top: 0.5rem;
+}
+
+.cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.cover-meta { display: flex; flex-direction: column; gap: 0.25rem; }
+.cover-meta .meta-label { color: var(--ink-4); text-transform: uppercase; font-size: 10px; }
+
+/* ================================================================
+   2 — SECTION DIVIDER
+   ================================================================ */
+.section-divider {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  align-items: center;
+  height: 100%;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+  gap: var(--gap-xl);
+}
+.section-divider .roman {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 12vw, 180px);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 144;
+  letter-spacing: -0.02em;
+}
+.section-divider .roman-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 1rem;
+}
+.section-divider h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 36;
+}
+.section-divider .section-summary {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink-3);
+  margin-top: 1rem;
+  line-height: 1.55;
+  max-width: 95%;
+}
+
+/* ================================================================
+   3 — EXECUTIVE SUMMARY (Pyramid)
+   ================================================================ */
+.exec-summary {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: var(--gap-md);
+  height: 100%;
+}
+.exec-summary .key-msg {
+  background: var(--ink-1);
+  color: var(--bg);
+  padding: 1.25rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.7vw, 22px);
+  font-weight: 400;
+  line-height: 1.35;
+  font-variation-settings: "opsz" 24;
+  letter-spacing: -0.005em;
+}
+.exec-summary .key-msg .label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-dark-3);
+  margin-bottom: 0.6rem;
+}
+.exec-summary .support-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.exec-summary .support {
+  border-top: 1px solid var(--ink-1);
+  padding-top: 0.9rem;
+}
+.exec-summary .support .support-no {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: 0.6rem;
+}
+.exec-summary .support h4 {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink-1);
+  margin-bottom: 0.5rem;
+}
+.exec-summary .support p {
+  font-size: var(--body-small);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+/* ================================================================
+   4 — ACTION-TITLE CONTENT (default text slide)
+   ================================================================ */
+.action-title-slide {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--gap-md);
+  height: 100%;
+}
+.action-title-slide .title-block { display: flex; flex-direction: column; gap: 0.5rem; }
+.action-title-slide .content { display: flex; flex-direction: column; gap: 1rem; padding-top: 0.5rem; }
+
+ul.bullets { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; max-width: 80%; flex: 1 1 auto; min-height: 0; }
+ul.bullets li {
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: 1.55;
+  color: var(--ink-2);
+  padding-left: 1.4rem;
+  position: relative;
+}
+ul.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 1px;
+  background: var(--ink-1);
+}
+ul.bullets li strong { color: var(--ink-1); font-weight: 600; }
+ul.bullets li .lead { color: var(--ink-1); font-weight: 500; }
+
+/* ================================================================
+   5 — SCR (Situation / Complication / Resolution)
+   ================================================================ */
+.scr {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line-1);
+  border-bottom: 1px solid var(--line-1);
+  margin-top: 0.5rem;
+}
+.scr-col {
+  padding: 1.25rem 1.5rem 1.5rem 0;
+  border-right: 1px solid var(--line-1);
+}
+.scr-col:nth-child(2) { padding-left: 1.5rem; }
+.scr-col:nth-child(3) { padding-left: 1.5rem; border-right: none; }
+.scr-col .label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 0.8rem;
+}
+.scr-col h4 {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+  color: var(--ink-1);
+}
+.scr-col p { font-size: var(--body-size); line-height: 1.55; color: var(--ink-2); }
+.scr-col.resolution { background: var(--bg-card-alt); padding-left: 1.5rem; padding-right: 1.5rem; }
+
+/* ================================================================
+   6 — TWO-COLUMN
+   ================================================================ */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-lg);
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.two-col > div { display: flex; flex-direction: column; gap: 0.6rem; }
+.two-col h3 {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.6vw, 22px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+}
+.two-col p { font-size: var(--body-size); line-height: 1.55; color: var(--ink-2); }
+
+/* ================================================================
+   7 — THREE-COLUMN
+   ================================================================ */
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-lg);
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.three-col > div { display: flex; flex-direction: column; gap: 0.6rem; }
+.three-col .colno {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.three-col h3 {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+}
+.three-col p { font-size: var(--body-size); line-height: 1.55; color: var(--ink-2); }
+
+/* ================================================================
+   8 — 2x2 MATRIX
+   ================================================================ */
+.matrix-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  height: 65%;
+  max-width: 78%;
+}
+.matrix-y-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  align-self: center;
+  justify-self: center;
+}
+.matrix-x-label {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--line-1);
+}
+.matrix {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  border: 1px solid var(--ink-1);
+  position: relative;
+}
+.matrix-quad {
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.matrix-quad:nth-child(1) { border-right: 1px solid var(--line-1); border-bottom: 1px solid var(--line-1); }
+.matrix-quad:nth-child(2) { border-bottom: 1px solid var(--line-1); }
+.matrix-quad:nth-child(3) { border-right: 1px solid var(--line-1); }
+.matrix-quad .qlabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.matrix-quad .qname {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink-1);
+  margin-top: 0.4rem;
+}
+.matrix-quad .qdesc {
+  font-size: var(--body-small);
+  line-height: 1.5;
+  color: var(--ink-3);
+  margin-top: 0.4rem;
+}
+.matrix-quad.hero {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+}
+.matrix-quad.hero .qlabel { color: var(--on-dark-3); }
+.matrix-quad.hero .qname { color: var(--on-dark-1); }
+.matrix-quad.hero .qdesc { color: var(--on-dark-2); }
+
+/* ================================================================
+   9 — STRATEGY HOUSE
+   ================================================================ */
+.house {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 90%;
+}
+.house-roof {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.house-roof .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--on-dark-3);
+}
+.house-roof h4 {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--on-dark-1);
+}
+.house-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+.pillar {
+  border: 1px solid var(--line-2);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 130px;
+}
+.pillar .pno {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.pillar h5 {
+  font-family: var(--font-display);
+  font-size: clamp(13px, 1.15vw, 16px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+}
+.pillar p {
+  font-size: var(--body-small);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+.house-foundation {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--line-1);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+.house-foundation .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+.house-foundation p {
+  font-size: var(--body-small);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ================================================================
+   10 — STAT GRID
+   ================================================================ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink-1);
+  margin-top: 1rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: center;
+}
+.stat {
+  padding: 1.5rem 1.25rem 1rem 0;
+  border-right: 1px solid var(--line-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.stat:last-child { border-right: none; }
+.stat:not(:first-child) { padding-left: 1.25rem; }
+.stat .stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.stat .stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 72;
+}
+.stat .stat-num .unit {
+  font-size: 0.55em;
+  color: var(--ink-3);
+  margin-left: 0.15em;
+  font-variation-settings: "opsz" 36;
+}
+.stat .stat-desc {
+  font-size: var(--body-small);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+.stat .stat-delta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--positive);
+  letter-spacing: 0.04em;
+}
+.stat .stat-delta.neg { color: var(--risk); }
+
+/* ================================================================
+   11 — BIG STAT CALLOUT
+   ================================================================ */
+.big-stat {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: var(--gap-xl);
+  align-items: center;
+  height: 65%;
+  margin-top: 1rem;
+}
+.big-stat .number {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 12vw, 180px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 144;
+}
+.big-stat .number .unit {
+  font-size: 0.4em;
+  color: var(--ink-3);
+  font-variation-settings: "opsz" 72;
+}
+.big-stat .frame { display: flex; flex-direction: column; gap: 0.8rem; }
+.big-stat .frame h4 {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+}
+.big-stat .frame p {
+  font-size: var(--body-size);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+/* ================================================================
+   12 — MECE TREE
+   ================================================================ */
+.mece {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+.mece-root {
+  border: 1px solid var(--ink-1);
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  padding: 0.7rem 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 500;
+  line-height: 1.3;
+  justify-self: center;
+  max-width: 60%;
+  text-align: center;
+}
+.mece-branches {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  position: relative;
+}
+.mece-branches::before {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  left: 16.67%;
+  right: 16.67%;
+  height: 1px;
+  background: var(--line-2);
+}
+.mece-branch {
+  border-top: 1px solid var(--ink-1);
+  padding-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mece-branch .bno {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.mece-branch h5 {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+  margin-bottom: 0.3rem;
+}
+.mece-sub { display: flex; flex-direction: column; gap: 0.35rem; }
+.mece-sub-item {
+  font-size: var(--body-small);
+  line-height: 1.4;
+  color: var(--ink-2);
+  padding-left: 0.85rem;
+  position: relative;
+}
+.mece-sub-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 1px;
+  background: var(--ink-3);
+}
+
+/* ================================================================
+   13 — RISK MATRIX (3x3)
+   ================================================================ */
+.risk-matrix {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  height: 70%;
+  max-width: 78%;
+}
+.risk-matrix .y-axis {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  justify-items: end;
+  padding-right: 0.5rem;
+}
+.risk-matrix .y-axis-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  align-self: center;
+  text-align: center;
+}
+.risk-matrix .y-tick {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  border: 1px solid var(--ink-1);
+  position: relative;
+}
+.risk-cell {
+  border-right: 1px solid var(--line-1);
+  border-bottom: 1px solid var(--line-1);
+  padding: 0.5rem;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-content: flex-start;
+}
+.risk-cell:nth-child(3n) { border-right: none; }
+.risk-cell:nth-last-child(-n+3) { border-bottom: none; }
+.risk-cell.low { background: var(--positive-tint); }
+.risk-cell.med { background: var(--warn-tint); }
+.risk-cell.high { background: var(--risk-tint); }
+.risk-dot {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+}
+.risk-matrix .x-axis {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  border-top: 1px solid var(--line-1);
+  padding-top: 0.5rem;
+}
+.risk-matrix .x-tick {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.risk-legend {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+.risk-legend .item { display: flex; align-items: center; gap: 0.4rem; }
+.risk-legend .swatch { width: 10px; height: 10px; border: 1px solid var(--ink-1); }
+
+/* ================================================================
+   14 — TIMELINE / ROADMAP (horizontal phases)
+   ================================================================ */
+.roadmap {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+  border-top: 1px solid var(--ink-1);
+}
+.roadmap::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  pointer-events: none;
+}
+.phase {
+  padding: 0.8rem 1rem 0.6rem 0;
+  border-right: 1px solid var(--line-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+.phase:last-child { border-right: none; padding-right: 0; }
+.phase:not(:first-child) { padding-left: 1rem; }
+.phase::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  background: var(--ink-1);
+  border-radius: 50%;
+}
+.phase:first-child::before { left: -4px; }
+.phase .ptime {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.phase h4 {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+}
+.phase ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+.phase ul li {
+  font-size: var(--body-small);
+  line-height: 1.4;
+  color: var(--ink-2);
+  padding-left: 0.7rem;
+  position: relative;
+}
+.phase ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--ink-4);
+}
+
+/* ================================================================
+   15 — PROCESS FLOW (sequential, with arrows)
+   ================================================================ */
+.flow {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  align-items: stretch;
+}
+.flow-step {
+  padding: 0.85rem 0.8rem;
+  border: 1px solid var(--line-2);
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+  background: var(--bg);
+}
+.flow-step:last-child { border-right: 1px solid var(--line-2); }
+.flow-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid var(--bg);
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  z-index: 2;
+}
+.flow-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 9px solid var(--line-2);
+  border-top: 19px solid transparent;
+  border-bottom: 19px solid transparent;
+  z-index: 1;
+}
+.flow-step.active { background: var(--ink-1); color: var(--on-dark-1); border-color: var(--ink-1); }
+.flow-step.active:not(:last-child)::after { border-left-color: var(--ink-1); }
+.flow-step.active:not(:last-child)::before { border-left-color: var(--ink-1); }
+.flow-step .sno {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
+.flow-step.active .sno { color: var(--on-dark-3); }
+.flow-step h5 {
+  font-family: var(--font-display);
+  font-size: clamp(12px, 1.05vw, 14px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink-1);
+}
+.flow-step.active h5 { color: var(--on-dark-1); }
+.flow-step p {
+  font-size: var(--body-small);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+.flow-step.active p { color: var(--on-dark-2); }
+
+/* ================================================================
+   16 — COMPARISON TABLE
+   ================================================================ */
+.ctable {
+  margin-top: 0.5rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--body-size);
+}
+.ctable thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: left;
+  padding: 0.7rem 0.8rem 0.7rem 0;
+  border-bottom: 1px solid var(--ink-1);
+  vertical-align: bottom;
+}
+.ctable thead th.hero {
+  color: var(--ink-1);
+  background: var(--bg-card-alt);
+  padding-left: 0.8rem;
+  border-bottom: 1px solid var(--ink-1);
+}
+.ctable tbody td {
+  padding: 0.7rem 0.8rem 0.7rem 0;
+  border-bottom: 1px solid var(--line-1);
+  vertical-align: top;
+  line-height: 1.45;
+}
+.ctable tbody td:first-child {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink-1);
+  font-size: clamp(13px, 1.1vw, 15px);
+}
+.ctable tbody td.hero {
+  background: var(--bg-card-alt);
+  padding-left: 0.8rem;
+  color: var(--ink-1);
+  font-weight: 500;
+}
+.ctable tbody td.neg { color: var(--ink-4); }
+.ctable .mark {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+.ctable .yes { color: var(--positive); }
+.ctable .no { color: var(--ink-5); }
+.ctable .partial { color: var(--warn); }
+
+/* ================================================================
+   17 — OPTIONS ASSESSMENT (options × criteria)
+   ================================================================ */
+.options-table {
+  margin-top: 0.5rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--body-size);
+}
+.options-table thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid var(--ink-1);
+}
+.options-table thead th:first-child { text-align: left; }
+.options-table tbody td {
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--line-1);
+  text-align: center;
+  vertical-align: middle;
+}
+.options-table tbody td:first-child {
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink-1);
+  font-size: clamp(13px, 1.1vw, 15px);
+}
+.options-table tbody tr.recommended td { background: var(--bg-card-alt); }
+.options-table tbody tr.recommended td:first-child::before {
+  content: "▸ ";
+  color: var(--ink-1);
+}
+.score {
+  display: inline-block;
+  width: 38px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 0;
+  letter-spacing: 0.04em;
+}
+.score.high { background: var(--ink-1); color: var(--on-dark-1); }
+.score.med { background: var(--bg-card-alt); color: var(--ink-1); border: 1px solid var(--line-2); }
+.score.low { background: transparent; color: var(--ink-4); border: 1px solid var(--line-1); }
+
+/* ================================================================
+   18 — INSIGHT / QUOTE CALLOUT
+   ================================================================ */
+.insight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  max-width: 75%;
+  margin: 0 auto;
+}
+.insight .quote-mark {
+  font-family: var(--font-display);
+  font-size: 90px;
+  line-height: 1;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 144;
+  font-weight: 300;
+  margin-bottom: -0.5rem;
+}
+.insight .quote-text {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 36;
+}
+.insight .quote-attr {
+  margin-top: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.insight .quote-attr::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--ink-3);
+}
+
+/* ================================================================
+   19 — CLOSING / NEXT STEPS
+   ================================================================ */
+.closing-next {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  gap: var(--gap-md);
+}
+.next-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-lg);
+}
+.next-col h4 {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.5vw, 21px);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--ink-1);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--ink-1);
+}
+.next-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+.next-col ul li {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 0.8rem;
+  align-items: baseline;
+  font-size: var(--body-size);
+  line-height: 1.45;
+  color: var(--ink-2);
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line-1);
+}
+.next-col ul li .ino {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+.next-col ul li .iown {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ================================================================
+   20 — CLOSING / THANKS
+   ================================================================ */
+.thanks {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+}
+.thanks-center { display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
+.thanks-title {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 8vw, 120px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink-1);
+  font-variation-settings: "opsz" 144;
+}
+.thanks-title em { font-style: italic; color: var(--ink-3); }
+.thanks-sub {
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.5vw, 19px);
+  color: var(--ink-3);
+  max-width: 60%;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+.thanks-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+}
+
+/* ================================================================
+   PYRAMID SUMMARY COMPONENT
+   ================================================================ */
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  max-width: 92%;
+}
+.pyramid-top {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  padding: 1.1rem 1.4rem;
+  text-align: center;
+}
+.pyramid-top .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--on-dark-3);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.pyramid-top h4 {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.5vw, 21px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--on-dark-1);
+}
+.pyramid-mid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.pyramid-mid > div {
+  border: 1px solid var(--ink-1);
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.pyramid-mid .ino {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.pyramid-mid h5 {
+  font-family: var(--font-display);
+  font-size: clamp(13px, 1.1vw, 16px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+}
+.pyramid-base {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.pyramid-base > div {
+  background: var(--bg-card-alt);
+  padding: 0.6rem 0.9rem;
+  border-top: 1px solid var(--line-2);
+}
+.pyramid-base p {
+  font-size: var(--body-small);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+/* ================================================================
+   CHART COMPONENTS — line, bar, stacked, waterfall (via Chart.js)
+   ================================================================ */
+.chart-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  position: relative;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+.chart-canvas-box {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  width: 100%;
+}
+.chart-canvas-box canvas {
+  position: absolute !important;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+.chart-legend {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  padding-top: 0.3rem;
+}
+.chart-legend .item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.chart-legend .swatch {
+  width: 14px;
+  height: 10px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.chart-legend .swatch.line {
+  height: 2px;
+  align-self: center;
+}
+.chart-legend .swatch.dashed {
+  background: repeating-linear-gradient(90deg, var(--ink-3) 0 4px, transparent 4px 7px) !important;
+  height: 2px;
+  align-self: center;
+}
+.chart-legend .swatch.dot {
+  border-radius: 50%;
+  width: 10px;
+}
+.chart-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+  margin-top: -0.2rem;
+}
+
+/* ================================================================
+   v0.3 COMPONENTS — additional patterns from consulting component library
+   ================================================================ */
+
+/* --- Big-number section divider ------------------------------------ */
+.section-divider-big {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  height: 100%;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+  gap: var(--gap-xl);
+  border-top: 1px solid var(--line-1);
+  border-bottom: 1px solid var(--line-1);
+}
+.sdb-left { display: flex; flex-direction: column; gap: 0.8rem; }
+.sdb-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.sdb-left h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 400;
+  font-variation-settings: "opsz" 36;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink-1);
+}
+.sdb-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-top: 0.4rem;
+}
+.sdb-number {
+  font-family: var(--font-display);
+  font-size: clamp(180px, 22vw, 360px);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--ink-1);
+  text-align: right;
+  justify-self: end;
+}
+
+/* --- Harvey Balls (rating visual) ---------------------------------- */
+.hb {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-1);
+  background: conic-gradient(var(--ink-1) var(--fill, 0%), transparent var(--fill, 0%));
+  vertical-align: middle;
+}
+.hb.hb-0 { --fill: 0%; }
+.hb.hb-1 { --fill: 25%; }
+.hb.hb-2 { --fill: 50%; }
+.hb.hb-3 { --fill: 75%; }
+.hb.hb-4 { --fill: 100%; }
+
+.hb-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: var(--body-size);
+}
+.hb-table thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid var(--ink-1);
+  vertical-align: bottom;
+}
+.hb-table thead th:first-child { text-align: left; }
+.hb-table tbody td {
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1px solid var(--line-1);
+  text-align: center;
+  vertical-align: middle;
+}
+.hb-table tbody td:first-child {
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink-1);
+  font-size: clamp(13px, 1.1vw, 15px);
+}
+.hb-table tbody tr.hero td { background: var(--bg-card-alt); }
+.hb-table tbody tr.hero td:first-child::before { content: "▸ "; color: var(--ink-1); }
+.hb-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.hb-legend .item { display: flex; align-items: center; gap: 0.5rem; }
+
+/* --- Stakeholder directory ------------------------------------------ */
+.directory {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: var(--body-small);
+}
+.directory thead th {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.75rem 0.8rem;
+}
+.directory thead th:last-child { text-align: center; }
+.directory tbody td {
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--line-1);
+  vertical-align: middle;
+  line-height: 1.4;
+}
+.directory tbody td:first-child {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink-1);
+  font-size: clamp(13px, 1.05vw, 14px);
+}
+.directory tbody td:last-child { text-align: center; }
+.directory tbody tr:nth-child(even) td { background: var(--bg-card-alt); }
+
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  min-width: 64px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.pill-high { background: var(--ink-1); color: var(--on-dark-1); }
+.pill-med  { background: var(--warn-tint); color: var(--warn); }
+.pill-low  { background: var(--bg-card-alt); color: var(--ink-3); border: 1px solid var(--line-2); }
+.pill-yes  { background: var(--positive-tint); color: var(--positive); }
+.pill-no   { background: transparent; color: var(--ink-4); border: 1px solid var(--line-1); }
+
+/* --- Checklist ------------------------------------------------------ */
+.checklist {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--gap-lg);
+  align-items: start;
+}
+.checklist-side {
+  border-right: 1px solid var(--line-2);
+  padding-right: 1rem;
+  padding-top: 0.4rem;
+  min-height: 100%;
+}
+.cls-label {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 500;
+  color: var(--ink-1);
+  line-height: 1.2;
+}
+.cls-sublabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-top: 0.5rem;
+}
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.4rem;
+}
+.cl-item {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: var(--body-size);
+  line-height: 1.5;
+  color: var(--ink-2);
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--line-1);
+}
+.cl-item:last-child { border-bottom: none; }
+.cl-item::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--ink-1);
+  display: inline-block;
+  background: transparent;
+}
+.cl-item.done::before {
+  background: var(--ink-1);
+}
+.cl-item.done::after {
+  content: "";
+  position: absolute;
+  /* Note: ::after on a grid item won't be easily positioned; use a span if needed */
+}
+.cl-item .cl-text { color: var(--ink-2); }
+.cl-item .cl-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+}
+
+/* --- SWOT ----------------------------------------------------------- */
+.swot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0;
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid var(--ink-1);
+  margin-bottom: 2rem;
+}
+.swot-cell {
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  min-height: 0;
+}
+.swot-cell.s { border-right: 1px solid var(--line-1); border-bottom: 1px solid var(--line-1); }
+.swot-cell.w { border-bottom: 1px solid var(--line-1); background: var(--bg-card-alt); }
+.swot-cell.o { border-right: 1px solid var(--line-1); }
+.swot-cell.t { background: var(--bg-card-alt); }
+.swot-cell .swot-tag {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.swot-cell .swot-letter {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 500;
+  font-variation-settings: "opsz" 36;
+  line-height: 1;
+  color: var(--ink-1);
+}
+.swot-cell .swot-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.swot-cell .swot-axes {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.swot-cell ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+.swot-cell ul li {
+  font-size: var(--body-small);
+  line-height: 1.45;
+  color: var(--ink-2);
+  padding-left: 0.85rem;
+  position: relative;
+}
+.swot-cell ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 1px;
+  background: var(--ink-3);
+}
+
+/* --- Buyer persona card --------------------------------------------- */
+.persona {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 1.1fr 2fr;
+  gap: 0;
+  border: 1px solid var(--ink-1);
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 2rem;
+}
+.persona-head {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  padding: 1.5rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.persona-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1.5px solid var(--on-dark-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--on-dark-1);
+}
+.persona-name {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 500;
+  font-variation-settings: "opsz" 36;
+  line-height: 1.2;
+  color: var(--on-dark-1);
+}
+.persona-role {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--on-dark-3);
+  margin-top: 0.3rem;
+}
+.persona-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--on-dark-2);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 0.8rem;
+  margin-top: auto;
+}
+.persona-body {
+  padding: 1.3rem 1.4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.1rem 1.4rem;
+}
+.persona-block { display: flex; flex-direction: column; gap: 0.4rem; }
+.persona-block .pb-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--ink-1);
+}
+.persona-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+.persona-block ul li {
+  font-size: var(--body-small);
+  line-height: 1.45;
+  color: var(--ink-2);
+  padding-left: 0.75rem;
+  position: relative;
+}
+.persona-block ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 1px;
+  background: var(--ink-3);
+}
+
+/* --- TAM / SAM / SOM nested ---------------------------------------- */
+.market-funnel {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.mf-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 130px;
+  gap: 0.8rem;
+  align-items: stretch;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line-1);
+}
+.mf-row:last-child { border-bottom: none; }
+.mf-tier {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  align-self: center;
+}
+.mf-tier .mf-tier-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 500;
+  color: var(--ink-1);
+  letter-spacing: 0;
+  text-transform: none;
+  margin-top: 0.15rem;
+}
+.mf-bar {
+  position: relative;
+  align-self: center;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+}
+.mf-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--ink-1);
+  display: flex;
+  align-items: center;
+  padding-left: 0.9rem;
+  color: var(--on-dark-1);
+  font-family: var(--font-display);
+  font-size: clamp(13px, 1.15vw, 16px);
+  font-weight: 500;
+}
+.mf-bar-fill.mid  { background: var(--ink-2); }
+.mf-bar-fill.tight { background: var(--ink-3); color: var(--on-dark-1); }
+.mf-bar-track {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--line-2);
+  pointer-events: none;
+}
+.mf-value {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 500;
+  font-variation-settings: "opsz" 36;
+  color: var(--ink-1);
+  align-self: center;
+  text-align: right;
+}
+.mf-desc {
+  grid-column: 1 / -1;
+  font-size: var(--body-small);
+  color: var(--ink-3);
+  line-height: 1.45;
+  margin-top: -0.3rem;
+  padding-left: 0;
+}
+
+/* --- Initiative card grid ------------------------------------------- */
+.initiative-grid {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.initiative-card {
+  border: 1px solid var(--ink-1);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.initiative-card .ic-no {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.initiative-card h4 {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink-1);
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line-1);
+  margin-bottom: 0.3rem;
+}
+.initiative-card .ic-section { display: flex; flex-direction: column; gap: 0.3rem; }
+.initiative-card .ic-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.initiative-card .ic-section p {
+  font-size: var(--body-small);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+/* --- Before / After transformation --------------------------------- */
+.before-after {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.ba-side {
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.ba-side.before {
+  border: 1px solid var(--line-2);
+  background: var(--bg-card-alt);
+  color: var(--ink-3);
+}
+.ba-side.after {
+  border: 1px solid var(--ink-1);
+  background: var(--bg);
+}
+.ba-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ba-side.after .ba-label { color: var(--ink-1); }
+.ba-side h3 {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.5vw, 21px);
+  font-weight: 500;
+  font-variation-settings: "opsz" 36;
+  line-height: 1.25;
+  color: var(--ink-3);
+}
+.ba-side.after h3 { color: var(--ink-1); }
+.ba-side ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; margin-top: 0.4rem; }
+.ba-side ul li {
+  font-size: var(--body-small);
+  line-height: 1.5;
+  padding-left: 0.85rem;
+  position: relative;
+}
+.ba-side ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 5px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.ba-side.before ul li { color: var(--ink-3); }
+.ba-side.after ul li { color: var(--ink-2); }
+.ba-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 40px;
+  color: var(--ink-1);
+  font-weight: 300;
+  position: relative;
+}
+
+/* --- Workstream / Gantt-like layout --------------------------------- */
+.workstreams {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 200px repeat(8, 1fr);
+  gap: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 2rem;
+  border-top: 1px solid var(--line-1);
+}
+.ws-header {
+  display: contents;
+}
+.ws-header > div {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  padding: 0.6rem 0.5rem 0.7rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--ink-1);
+  border-right: 1px solid var(--line-1);
+}
+.ws-header > div:first-child { text-align: left; padding-left: 0; }
+.ws-header > div:last-child { border-right: none; }
+
+.ws-row { display: contents; }
+.ws-row > .ws-name {
+  font-family: var(--font-display);
+  font-size: clamp(12px, 1.05vw, 14px);
+  font-weight: 500;
+  color: var(--ink-1);
+  padding: 0.85rem 0.5rem 0.85rem 0;
+  border-bottom: 1px solid var(--line-1);
+  border-right: 1px solid var(--line-1);
+  align-self: center;
+}
+.ws-row > .ws-cell {
+  border-bottom: 1px solid var(--line-1);
+  border-right: 1px solid var(--line-1);
+  position: relative;
+  min-height: 44px;
+}
+.ws-row > .ws-cell:last-child { border-right: none; }
+.ws-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 14px;
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  z-index: 2;
+}
+.ws-bar.alt { background: var(--ink-3); }
+.ws-bar.outline { background: var(--bg); color: var(--ink-1); border: 1px solid var(--ink-1); }
+.ws-milestone {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: var(--ink-1);
+  z-index: 3;
+}
+.ws-milestone::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-45deg);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+/* ================================================================
+   v0.4 COMPONENTS — financial modeling & operational patterns
+   ================================================================ */
+
+/* --- Financial summary tiles (NPV / IRR / Payback / ROI) ---------- */
+.fin-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink-1);
+  margin-top: 0.5rem;
+}
+.fin-tile {
+  padding: 1.3rem 1.25rem 1rem 0;
+  border-right: 1px solid var(--line-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.fin-tile:last-child { border-right: none; }
+.fin-tile:not(:first-child) { padding-left: 1.25rem; }
+.fin-tile-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.fin-tile-value {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 400;
+  font-variation-settings: "opsz" 72;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--ink-1);
+}
+.fin-tile-value .unit {
+  font-size: 0.55em;
+  color: var(--ink-3);
+  margin-left: 0.15em;
+}
+.fin-tile-target {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+.fin-tile-gauge {
+  height: 3px;
+  background: var(--line-1);
+  position: relative;
+  margin-top: 0.4rem;
+}
+.fin-tile-gauge-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--ink-1);
+}
+.fin-tile-gauge-mark {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1.5px;
+  background: var(--ink-3);
+}
+.fin-tile-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.fin-tile-status.beat { color: var(--positive); }
+.fin-tile-status.meet { color: var(--ink-3); }
+.fin-tile-status.miss { color: var(--warn); }
+
+/* --- Power / Interest 2×2 with positioned stakeholder dots -------- */
+.power-interest {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 2rem;
+}
+.pi-y-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  align-self: center;
+  justify-self: center;
+}
+.pi-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  border: 1px solid var(--ink-1);
+}
+.pi-quad {
+  border-right: 1px solid var(--line-1);
+  border-bottom: 1px solid var(--line-1);
+  padding: 0.7rem 0.85rem;
+  position: relative;
+}
+.pi-quad:nth-child(2),
+.pi-quad:nth-child(4) { border-right: none; }
+.pi-quad:nth-child(3),
+.pi-quad:nth-child(4) { border-bottom: none; }
+.pi-quad.hero { background: var(--bg-card-alt); }
+.pi-qlabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.pi-qaction {
+  font-family: var(--font-display);
+  font-size: clamp(13px, 1.15vw, 16px);
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-top: 0.2rem;
+  line-height: 1.2;
+}
+.pi-quad.hero .pi-qaction { color: var(--ink-1); }
+.pi-dot {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  background: var(--ink-1);
+  border-radius: 50%;
+  color: var(--on-dark-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  box-shadow: 0 0 0 3px var(--bg);
+}
+.pi-dot-name {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-1);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  background: var(--bg);
+  padding: 1px 5px;
+  border: 1px solid var(--line-2);
+  transform: translateY(-50%);
+  z-index: 6;
+}
+.pi-x-label {
+  grid-column: 2;
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--line-1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* --- Risk register (detailed scored table) ------------------------- */
+.risk-register {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: var(--body-small);
+}
+.risk-register thead th {
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.6rem 0.55rem;
+  vertical-align: bottom;
+  line-height: 1.2;
+}
+.risk-register thead th.num { text-align: right; }
+.risk-register thead th.ctr { text-align: center; }
+.risk-register tbody td {
+  padding: 0.55rem 0.55rem;
+  border-bottom: 1px solid var(--line-1);
+  vertical-align: top;
+  line-height: 1.4;
+  font-size: 11px;
+}
+.risk-register tbody td.num { text-align: right; font-family: var(--font-mono); }
+.risk-register tbody td.ctr { text-align: center; }
+.risk-register tbody td.rid {
+  font-family: var(--font-mono);
+  color: var(--ink-3);
+  text-align: center;
+  font-size: 10px;
+}
+.risk-register tbody td.rname {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink-1);
+  font-size: clamp(12px, 1.05vw, 14px);
+}
+.risk-register tbody tr:nth-child(even) td { background: var(--bg-card-alt); }
+.rscore {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 36px;
+  padding: 2px 0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.rscore.high  { background: var(--ink-1);        color: var(--on-dark-1); }
+.rscore.med   { background: var(--warn-tint);    color: var(--warn); }
+.rscore.low   { background: var(--positive-tint); color: var(--positive); }
+
+/* --- RAG status dashboard ----------------------------------------- */
+.rag-dashboard {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 2rem;
+}
+.rag-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+.rag-tile {
+  border: 1px solid var(--line-2);
+  padding: 0.85rem 1rem 0.85rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: relative;
+}
+.rag-tile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+}
+.rag-tile.green::before { background: var(--positive); }
+.rag-tile.amber::before { background: var(--warn); }
+.rag-tile.red::before   { background: var(--risk); }
+.rag-tile .rag-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.rag-tile .rag-status {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 500;
+  color: var(--ink-1);
+  line-height: 1.15;
+}
+.rag-tile .rag-note {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-3);
+  margin-top: 0.2rem;
+}
+.rag-body {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: var(--gap-lg);
+}
+.rag-body > div { display: flex; flex-direction: column; gap: 0.6rem; }
+.rag-body h4 {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  color: var(--ink-1);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ink-1);
+}
+.rag-body ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.rag-body ul li {
+  font-size: var(--body-small);
+  line-height: 1.45;
+  color: var(--ink-2);
+  padding-left: 1.1rem;
+  position: relative;
+}
+.rag-body ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--ink-3);
+}
+.rag-body ul.numbered { counter-reset: rg; }
+.rag-body ul.numbered li {
+  counter-increment: rg;
+  padding-left: 1.5rem;
+}
+.rag-body ul.numbered li::before {
+  content: counter(rg) ".";
+  font-family: var(--font-mono);
+  color: var(--ink-3);
+  font-size: 11px;
+}
+
+/* --- Gantt task list ---------------------------------------------- */
+.gantt-tasks {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: var(--body-small);
+}
+.gantt-tasks thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: left;
+  padding: 0.6rem 0.55rem 0.7rem 0.55rem;
+  border-bottom: 1px solid var(--ink-1);
+}
+.gantt-tasks thead th.num { text-align: right; }
+.gantt-tasks thead th.ctr { text-align: center; }
+.gantt-tasks tbody td {
+  padding: 0.5rem 0.55rem;
+  border-bottom: 1px solid var(--line-1);
+  vertical-align: middle;
+  line-height: 1.4;
+  font-size: 11.5px;
+}
+.gantt-tasks tbody td.num { text-align: right; font-family: var(--font-mono); }
+.gantt-tasks tbody td.ctr { text-align: center; }
+.gantt-tasks tbody tr.step td {
+  background: var(--bg-card-alt);
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink-1);
+  font-size: clamp(12px, 1.05vw, 14px);
+  border-bottom: 1px solid var(--line-2);
+}
+.gantt-tasks tbody td.indent {
+  padding-left: 1.7rem;
+}
+
+/* status pill variants (extending the .pill family) */
+.pill-complete   { background: var(--positive-tint); color: var(--positive); }
+.pill-progress   { background: var(--ink-1);         color: var(--on-dark-1); }
+.pill-overdue    { background: var(--risk-tint);     color: var(--risk); }
+.pill-notstarted { background: transparent;          color: var(--ink-4); border: 1px solid var(--line-1); }
+
+/* ================================================================
+   CHROME — navigation, progress, PDF
+   ================================================================ */
+.chrome {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  background: linear-gradient(to top, rgba(255,255,255,0.95) 60%, transparent);
+  z-index: 100;
+  pointer-events: none;
+}
+.chrome > * { pointer-events: auto; }
+
+.counter { letter-spacing: 0.08em; }
+.counter .of { color: var(--ink-4); }
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--ink-1);
+  transition: width 0.3s ease;
+  z-index: 101;
+  pointer-events: none;
+}
+
+.nav-btns { display: flex; gap: 0.4rem; align-items: center; }
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 6px 10px;
+  color: var(--ink-2);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.15s;
+}
+.nav-btn:hover { background: var(--ink-1); color: var(--on-dark-1); border-color: var(--ink-1); }
+.pdf-btn { font-weight: 500; }
+
+/* embed mode hides chrome */
+body.embed .chrome { display: none; }
+body.embed .progress { display: none; }
+
+/* ================================================================
+   PRINT — PDF EXPORT
+   ================================================================ */
+@page {
+  size: 13.333in 7.5in;
+  margin: 0;
+}
+
+@media print {
+  html, body { overflow: visible; background: white; height: auto; }
+  .deck { height: auto; }
+  .slide {
+    display: flex !important;
+    position: relative;
+    inset: auto;
+    width: 13.333in;
+    height: 7.5in;
+    page-break-after: always;
+    page-break-inside: avoid;
+    break-after: page;
+    break-inside: avoid;
+    overflow: hidden;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  .chrome, .progress { display: none !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  .slide.dark { background: var(--bg-dark) !important; }
+  .matrix-quad.hero, .house-roof, .pyramid-top, .mece-root, .exec-summary .key-msg, .flow-step.active, .score.high {
+    background: var(--ink-1) !important;
+    color: var(--on-dark-1) !important;
+  }
+  .risk-cell.low { background: var(--positive-tint) !important; }
+  .risk-cell.med { background: var(--warn-tint) !important; }
+  .risk-cell.high { background: var(--risk-tint) !important; }
+  .bg-card-alt, .house-foundation, .scr-col.resolution, .pyramid-base > div, .options-table tbody tr.recommended td,
+  .ctable thead th.hero, .ctable tbody td.hero {
+    background: var(--bg-card-alt) !important;
+  }
+}
+
+
+/* ================================================================
+   THEME OVERRIDES — investor-specific component tweaks
+   ================================================================ */
+/* Use the accent color on the big cover italic for brand energy */
+.cover-title em { color: var(--accent); font-style: italic; }
+.title em { color: var(--accent); font-style: italic; }
+
+/* "The Ask" — investor-specific layout */
+.ask {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--gap-xl);
+  align-items: center;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.ask-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.ask-amount .a-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ask-amount .a-number {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 12vw, 180px);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--ink-1);
+}
+.ask-amount .a-number .unit { font-size: 0.5em; color: var(--accent); }
+.ask-amount .a-sub {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: var(--ink-3);
+  line-height: 1.5;
+  margin-top: 0.4rem;
+  max-width: 90%;
+}
+.ask-use {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.ask-use .au-title {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 500;
+  color: var(--ink-1);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--ink-1);
+  margin-bottom: 0.5rem;
+}
+.ask-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line-1);
+}
+.ask-row .au-label {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.1vw, 15px);
+  color: var(--ink-2);
+}
+.ask-row .au-bar {
+  position: relative;
+  height: 6px;
+  background: var(--line-1);
+  margin-top: 0.35rem;
+}
+.ask-row .au-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--accent);
+}
+.ask-row .au-pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-1);
+  letter-spacing: 0.02em;
+}
+
+/* Team grid — 4 founder cards */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-bottom: 2rem;
+}
+.team-card {
+  border: 1px solid var(--line-2);
+  padding: 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.team-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--ink-1);
+  color: var(--on-dark-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+}
+.team-card.hero { background: var(--bg-card-alt); border-color: var(--ink-1); }
+.team-card.hero .team-avatar { background: var(--accent); }
+.team-card h4 {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink-1);
+  margin-top: 0.4rem;
+}
+.team-card .team-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.team-card .team-prior {
+  font-size: var(--body-small);
+  line-height: 1.4;
+  color: var(--ink-2);
+  margin-top: 0.3rem;
+}
+.team-card .team-prior strong {
+  color: var(--ink-1);
+  font-weight: 500;
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+
+  <!-- =================================================================
+       SLIDE 1 — COVER
+       ================================================================= -->
+  <section class="slide active">
+    <div class="cover">
+      <div class="cover-top">
+        <div class="cover-mark">Sundial Health · 2026</div>
+        <div class="cover-confid">Seed · For investors</div>
+      </div>
+      <div class="cover-center">
+        <div class="cover-eyebrow">Pitch · April 2026</div>
+        <h1 class="cover-title">Primary care <em>without</em> the no-show problem.</h1>
+        <p class="cover-sub">An AI scheduling layer that brings primary-care no-show rates from 38% to under 10%. 12 clinics in conversation, 2 paying. Raising $2M seed.</p>
+      </div>
+      <div class="cover-bottom">
+        <div class="cover-meta">
+          <div class="meta-label">Contact</div>
+          <div>founders@sundialhealth.com</div>
+        </div>
+        <div class="cover-meta" style="text-align: right;">
+          <div class="meta-label">Round</div>
+          <div>Seed · $2M target</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 2 — PROBLEM (dark moment with big-stat)
+       ================================================================= -->
+  <section class="slide dark">
+    <div class="slide-inner" style="justify-content: center; gap: 1.5rem;">
+      <div class="eyebrow" style="color: var(--accent);">The problem</div>
+      <h2 class="title large" style="color: var(--on-dark-1); max-width: 90%; font-weight: 500;">
+        Primary care clinics lose <em>38% of appointments</em> and 4 admin-hours a day trying to fix it.
+      </h2>
+      <p class="subtitle" style="color: var(--on-dark-2); max-width: 65%; margin-top: 0.5rem;">
+        Independent clinics — the 22,000 that don't belong to a hospital system — carry this loss alone. There's no tool built for them. Most use a part-time admin and a phone.
+      </p>
+      <div style="display: flex; gap: 3rem; margin-top: 2rem; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--on-dark-3);">
+        <div>38% no-show rate</div>
+        <div>$73K avg annual loss per clinic</div>
+        <div>22,000 independent clinics</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 3 — SOLUTION
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">The solution</div>
+      <h2 class="title">Sundial is the <em>AI layer</em> that calls patients back, fills cancellations, and learns each clinic's population.</h2>
+      <div class="title-rule"></div>
+      <ul class="bullets">
+        <li><span class="lead">Voice-AI confirmations and re-scheduling.</span> Sundial calls every appointment 24 hours ahead — actual conversational AI, not robocalls. 78% of patients pick up; 64% confirm or rebook in under 90 seconds.</li>
+        <li><span class="lead">Real-time cancellation backfill.</span> When a slot opens, Sundial calls the right patient from the waitlist — selected by clinical priority, not by who asked first. Average fill time: 11 minutes.</li>
+        <li><span class="lead">Population learning.</span> The model learns each clinic's no-show patterns by patient cohort, time of day, weather, season. A clinic in El Paso gets a different model than one in Portland — automatically.</li>
+        <li><span class="lead">Sits on top of every EHR.</span> Reads from Epic, Cerner, athenahealth, and DrChrono via standard APIs. No clinical workflow changes; admin sees Sundial as a feed of confirmed appointments.</li>
+      </ul>
+      <div class="source">
+        <div class="source-label">Solution scope from product spec v1.4, March 2026.</div>
+        <div class="page-no">03</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 4 — WHY NOW (three-column)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Why now</div>
+      <h2 class="title">Three forces have converged that didn't exist 24 months ago.</h2>
+      <div class="title-rule"></div>
+      <div class="three-col">
+        <div>
+          <div class="colno">— 01 Capability</div>
+          <h3>Voice AI crossed the believability line in late 2024.</h3>
+          <p>The combination of low-latency speech models, retrieval-augmented dialogue, and natural turn-taking made AI phone calls indistinguishable from human ones for routine scheduling. Two years ago this was a research demo; today it's a product layer.</p>
+        </div>
+        <div>
+          <div class="colno">— 02 Pain</div>
+          <h3>Care-staff shortage has become structural, not cyclical.</h3>
+          <p>Healthcare admin labor is 17% short and projected to widen through 2028. The 22K independent clinics can't compete with hospital systems on wages. Every clinic we've talked to has tried — and failed — to hire admin help.</p>
+        </div>
+        <div>
+          <div class="colno">— 03 Buyer readiness</div>
+          <h3>Telehealth normalized the "scheduling layer" as a buying category.</h3>
+          <p>Before 2020, primary-care clinics didn't buy software outside their EHR. The telehealth wave taught them that scheduling and EHR are separable. We're entering a market that now has a checking account for our category.</p>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">BLS healthcare employment data 2024 · McKinsey Global Institute care-workforce 2024 · interview synthesis Q1 2026.</div>
+        <div class="page-no">04</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 5 — EARLY SIGNAL (stat grid — NOT "traction"; seed-stage framing)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Early signal</div>
+      <h2 class="title">Twelve clinic conversations, two paying pilots, six weeks of live data.</h2>
+      <div class="title-rule"></div>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-label">Clinic conversations</div>
+          <div class="stat-num">12</div>
+          <div class="stat-desc">90-min interviews with practice managers in 5 states. 11 of 12 named no-shows as their #1 operational pain.</div>
+          <div class="stat-delta">— Discovery</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Paying pilots</div>
+          <div class="stat-num">2</div>
+          <div class="stat-desc">$1,200/mo each, signed Feb 2026. Both clinics are independent 4–6 provider primary-care groups.</div>
+          <div class="stat-delta">— Validation</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">No-show reduction</div>
+          <div class="stat-num">47<span class="unit">%</span></div>
+          <div class="stat-desc">Live pilot data, Mar–Apr 2026. Baseline 38% → measured 20% across 1,840 appointments.</div>
+          <div class="stat-delta">▲ Above target</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Revenue per clinic</div>
+          <div class="stat-num">$3.2<span class="unit">K</span></div>
+          <div class="stat-desc">Average additional monthly revenue captured per clinic — 2.7× the subscription price.</div>
+          <div class="stat-delta">▲ 2.7× of price</div>
+        </div>
+      </div>
+      <p class="body" style="margin-top: 1.2rem; max-width: 70%;">
+        This is signal, not traction. Two paying pilots aren't a business. They are evidence the wedge works in production — and a credible launch point for the build that the seed funds.
+      </p>
+      <div class="source">
+        <div class="source-label">Pilot data Mar–Apr 2026, Tucson Family Health and Greenwood Primary Care · interviews Jan–Mar 2026.</div>
+        <div class="page-no">05</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 6 — FOUNDER ORIGIN (dark moment with team grid)
+       ================================================================= -->
+  <section class="slide dark">
+    <div class="slide-inner">
+      <div class="eyebrow" style="color: var(--accent);">Why us</div>
+      <h2 class="title large" style="color: var(--on-dark-1); max-width: 95%; font-weight: 500;">
+        Three founders. One was a primary-care physician. One built scheduling at Epic. One ran ops at Cedar.
+      </h2>
+      <div class="title-rule" style="background: var(--on-dark-3);"></div>
+      <div class="team-grid" style="margin-top: 1rem;">
+        <div class="team-card hero" style="background: rgba(255,255,255,0.04); border-color: var(--accent); color: var(--on-dark-1);">
+          <div class="team-avatar">PR</div>
+          <div class="team-role" style="color: var(--on-dark-3);">— Co-founder · CEO</div>
+          <h4 style="color: var(--on-dark-1);">Priya Raman, MD</h4>
+          <div class="team-prior" style="color: var(--on-dark-2);">Primary-care physician 2017–2024 at <strong style="color: var(--on-dark-1);">One Medical</strong> and an indie clinic in Tucson. Stanford med; ran the clinic's scheduling pilot that became Sundial's wedge.</div>
+        </div>
+        <div class="team-card" style="background: transparent; border-color: var(--on-dark-3); color: var(--on-dark-1);">
+          <div class="team-avatar" style="background: var(--on-dark-1); color: var(--bg-dark);">DM</div>
+          <div class="team-role" style="color: var(--on-dark-3);">— Co-founder · CTO</div>
+          <h4 style="color: var(--on-dark-1);">Dan Maeda</h4>
+          <div class="team-prior" style="color: var(--on-dark-2);">Built outbound-call scheduling at <strong style="color: var(--on-dark-1);">Epic</strong> 2019–2024. Earlier: voice infra at <strong style="color: var(--on-dark-1);">Twilio</strong>. Knows Epic FHIR APIs by heart.</div>
+        </div>
+        <div class="team-card" style="background: transparent; border-color: var(--on-dark-3); color: var(--on-dark-1);">
+          <div class="team-avatar" style="background: var(--on-dark-1); color: var(--bg-dark);">SO</div>
+          <div class="team-role" style="color: var(--on-dark-3);">— Co-founder · COO</div>
+          <h4 style="color: var(--on-dark-1);">Sara Okonkwo</h4>
+          <div class="team-prior" style="color: var(--on-dark-2);">Ran clinic-ops vertical at <strong style="color: var(--on-dark-1);">Cedar</strong> 2020–2024 (patient financial engagement). Earlier: McKinsey healthcare practice.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 7 — MARKET (TAM/SAM/SOM)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Market</div>
+      <h2 class="title">22,000 independent primary-care clinics in the US. We need 800 to make this a $12M ARR seed-to-A bridge.</h2>
+      <div class="title-rule"></div>
+      <div class="market-funnel">
+        <div class="mf-row">
+          <div class="mf-tier">Total · TAM<span class="mf-tier-name">All US ambulatory care</span></div>
+          <div class="mf-bar"><div class="mf-bar-track"></div><div class="mf-bar-fill" style="width: 100%;">$6.4B</div></div>
+          <div class="mf-value">$6.4B</div>
+          <div class="mf-desc">Total US spend on ambulatory scheduling, intake, and patient-engagement software, 2026.</div>
+        </div>
+        <div class="mf-row">
+          <div class="mf-tier">Serviceable · SAM<span class="mf-tier-name">Independent primary care, 4–20 providers</span></div>
+          <div class="mf-bar"><div class="mf-bar-track"></div><div class="mf-bar-fill mid" style="width: 12%;">$780M</div></div>
+          <div class="mf-value">$780M</div>
+          <div class="mf-desc">22,000 clinics that don't belong to a hospital system and can buy independent of system procurement.</div>
+        </div>
+        <div class="mf-row">
+          <div class="mf-tier">Obtainable · SOM<span class="mf-tier-name">3-year realistic target</span></div>
+          <div class="mf-bar"><div class="mf-bar-track"></div><div class="mf-bar-fill tight" style="width: 1.5%;">$11.5M</div></div>
+          <div class="mf-value">$11.5M</div>
+          <div class="mf-desc">800 clinics at $1,200/mo by Year 3 = $11.5M ARR. The seed-to-A bridge.</div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">CMS NPPES practitioner registry 2024 · IBISWorld primary-care market 2025 · Sundial internal model v1.1.</div>
+        <div class="page-no">07</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 8 — PATH TO VALIDATION (workstreams — NOT a typical pitch component)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">What the seed buys</div>
+      <h2 class="title">Three workstreams over 18 months — by Series A we will have proved each one.</h2>
+      <div class="title-rule"></div>
+      <div class="workstreams">
+        <div class="ws-row">
+          <div class="ws-num">01</div>
+          <div class="ws-body">
+            <h4>Build voice-AI scheduling at clinic scale</h4>
+            <p>Move from the pilot architecture (which works at 2 clinics) to a multi-tenant platform that supports 50+ clinics with per-population model tuning.</p>
+            <div class="ws-meta"><span><strong>Owner</strong> Dan</span><span><strong>Duration</strong> M0 — M6</span><span><strong>Spend</strong> $0.9M</span></div>
+          </div>
+          <div class="ws-success">Gate · 50 clinics live, &lt; 1.4s mean call latency</div>
+        </div>
+        <div class="ws-row">
+          <div class="ws-num">02</div>
+          <div class="ws-body">
+            <h4>Build the indie-clinic sales motion</h4>
+            <p>Go from inbound pilot conversations to a repeatable sales motion: 2 clinic-vertical AEs, content-led pipeline, partnerships with two practice-management associations.</p>
+            <div class="ws-meta"><span><strong>Owner</strong> Sara</span><span><strong>Duration</strong> M3 — M15</span><span><strong>Spend</strong> $0.7M</span></div>
+          </div>
+          <div class="ws-success">Gate · 200 paying clinics by M15, $290K MRR</div>
+        </div>
+        <div class="ws-row">
+          <div class="ws-num">03</div>
+          <div class="ws-body">
+            <h4>Prove clinical efficacy in a published study</h4>
+            <p>Partner with an academic medical center to run a 6-clinic prospective study on no-show reduction and downstream care continuity. Submit to JAMIA Open by M18.</p>
+            <div class="ws-meta"><span><strong>Owner</strong> Priya</span><span><strong>Duration</strong> M6 — M18</span><span><strong>Spend</strong> $0.2M</span></div>
+          </div>
+          <div class="ws-success">Gate · Study accepted; effect size p&lt;0.01</div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Sundial 18-month operating plan v1.0 · gates correspond to Series A storyline milestones.</div>
+        <div class="page-no">08</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 9 — COMPETITION (comparison table — NOT a 2x2 matrix)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Where we play</div>
+      <h2 class="title">Generic schedulers fight cost; we fight <em>no-shows</em>. Different problem, different buyer.</h2>
+      <div class="title-rule"></div>
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="hero">Sundial</th>
+            <th>Zocdoc</th>
+            <th>Phreesia</th>
+            <th>Status quo (phone admin)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Targets no-shows as primary KPI</td>
+            <td class="hero">Yes — core metric</td>
+            <td>No — booking volume</td>
+            <td>Partial — check-in flow</td>
+            <td>No — manual reminders</td>
+          </tr>
+          <tr>
+            <td>Voice-AI native</td>
+            <td class="hero">Yes — built on it</td>
+            <td>No</td>
+            <td>No</td>
+            <td>n/a</td>
+          </tr>
+          <tr>
+            <td>Built for independent clinics</td>
+            <td class="hero">Yes — primary buyer</td>
+            <td>Patient-facing marketplace</td>
+            <td>Hospital systems</td>
+            <td>n/a</td>
+          </tr>
+          <tr>
+            <td>Population-aware model</td>
+            <td class="hero">Yes — per-clinic</td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Price (typical 5-provider clinic)</td>
+            <td class="hero">$1,200/mo</td>
+            <td>$3,000+/mo</td>
+            <td>$4,000+/mo</td>
+            <td>$3,500/mo (part-time admin)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="source">
+        <div class="source-label">Competitive analysis Apr 2026 · pricing from public sources and customer interviews.</div>
+        <div class="page-no">09</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 10 — THE ASK
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">The ask</div>
+      <h2 class="title">Raising $2M seed to reach a 200-clinic, $290K MRR Series A in 18 months.</h2>
+      <div class="title-rule"></div>
+      <div class="ask">
+        <div class="ask-amount">
+          <div class="a-label">Round · Seed</div>
+          <div class="a-number">$2<span class="unit">M</span></div>
+          <div class="a-sub">At $12M post-money. Lead investor with healthcare or vertical SaaS focus. Existing angels participating up to $300K.</div>
+        </div>
+        <div class="ask-use">
+          <div class="au-title">Use of funds · 18-month runway</div>
+          <div class="ask-row">
+            <div><div class="au-label">Engineering &amp; product</div><div class="au-bar"><div class="au-bar-fill" style="width: 50%;"></div></div></div>
+            <div class="au-pct">50% · $1.0M</div>
+          </div>
+          <div class="ask-row">
+            <div><div class="au-label">Clinical + sales</div><div class="au-bar"><div class="au-bar-fill" style="width: 35%;"></div></div></div>
+            <div class="au-pct">35% · $0.7M</div>
+          </div>
+          <div class="ask-row">
+            <div><div class="au-label">Operations &amp; G&amp;A</div><div class="au-bar"><div class="au-bar-fill" style="width: 10%;"></div></div></div>
+            <div class="au-pct">10% · $0.2M</div>
+          </div>
+          <div class="ask-row" style="border-bottom: none;">
+            <div><div class="au-label">Reserve</div><div class="au-bar"><div class="au-bar-fill" style="width: 5%;"></div></div></div>
+            <div class="au-pct">5% · $0.1M</div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Aligned to 18-month operating plan; Series A trigger at 200 clinics &amp; published efficacy study.</div>
+        <div class="page-no">10</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 11 — CLOSING (dark hero — vision restated)
+       ================================================================= -->
+  <section class="slide dark">
+    <div class="slide-inner" style="justify-content: center; gap: 1.5rem;">
+      <div class="eyebrow" style="color: var(--accent);">Where this goes</div>
+      <h2 class="title large" style="color: var(--on-dark-1); max-width: 92%; font-weight: 500;">
+        The operating layer for the 22,000 clinics that don't have one.
+      </h2>
+      <p class="subtitle" style="color: var(--on-dark-2); max-width: 65%; margin-top: 0.5rem;">
+        Scheduling is the wedge. The same voice-AI infrastructure that handles confirmations will, in time, handle intake forms, billing follow-up, and care-gap outreach. We start where the pain is sharpest.
+      </p>
+      <div style="display: flex; gap: 3rem; margin-top: 3rem; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--on-dark-3);">
+        <div>founders@sundialhealth.com</div>
+        <div>sundialhealth.com/seed</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================
+     CHROME — counter, nav, PDF
+     ================================================================ -->
+<div class="chrome">
+  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">11</span></div>
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="prev()" aria-label="Previous slide">← Prev</button>
+    <button class="nav-btn" onclick="next()" aria-label="Next slide">Next →</button>
+    <button class="nav-btn pdf-btn" onclick="window.print()" aria-label="Export PDF">⤓ PDF</button>
+  </div>
+</div>
+<script>
+(function () {
+  /* ================================================================
+     CHART.JS — design-system defaults & bootstrap
+     ================================================================ */
+  const isPdf = location.search.includes('pdf');
+  const charts = new Map();   // canvas -> Chart instance
+  window.__charts = charts;   // exposed for Playwright exporter
+
+  function applyChartDefaults() {
+    if (typeof Chart === 'undefined') return;
+    const C = Chart;
+    C.defaults.font.family = '"Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    C.defaults.font.size = 11;
+    C.defaults.color = '#6a6a6a';
+    C.defaults.borderColor = '#ececec';
+    C.defaults.elements.line.borderWidth = 2;
+    C.defaults.elements.line.tension = 0.15;
+    C.defaults.elements.point.radius = 0;
+    C.defaults.elements.point.hoverRadius = 6;
+    C.defaults.elements.bar.borderWidth = 0;
+    C.defaults.elements.bar.borderRadius = 0;
+    if (isPdf) {
+      C.defaults.animation = false;
+      C.defaults.animations.colors = false;
+      C.defaults.animations.x = false;
+      C.defaults.animations.y = false;
+    }
+  }
+
+  function buildOptions(userOpts, type) {
+    const base = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: isPdf ? false : { duration: 600 },
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: !isPdf, backgroundColor: '#0a0a0a', titleFont: { family: 'JetBrains Mono', size: 11 }, bodyFont: { family: 'Manrope', size: 12 }, padding: 10, displayColors: false }
+      },
+      scales: {
+        x: {
+          grid: { display: type !== 'bar-horizontal', color: '#ececec', drawBorder: false, drawTicks: false, lineWidth: 1 },
+          ticks: { color: '#6a6a6a', font: { family: 'JetBrains Mono', size: 10 }, padding: 8 },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: '#ececec', drawBorder: false, drawTicks: false, lineWidth: 1 },
+          ticks: { color: '#6a6a6a', font: { family: 'JetBrains Mono', size: 10 }, padding: 8 },
+          border: { display: false }
+        }
+      },
+      layout: { padding: { top: 6, right: 8, bottom: 0, left: 0 } }
+    };
+
+    // Deep-merge user options on top of base
+    const merged = JSON.parse(JSON.stringify(base));
+    if (userOpts) {
+      function deepMerge(target, src) {
+        for (const k in src) {
+          if (src[k] && typeof src[k] === 'object' && !Array.isArray(src[k])) {
+            target[k] = deepMerge(target[k] || {}, src[k]);
+          } else {
+            target[k] = src[k];
+          }
+        }
+        return target;
+      }
+      deepMerge(merged, userOpts);
+    }
+
+    // Convert "callback_unit" sugar into a real tick callback (since JSON can't carry functions)
+    ['x', 'y'].forEach(axis => {
+      const t = merged.scales && merged.scales[axis] && merged.scales[axis].ticks;
+      if (t && t.callback_unit) {
+        const unit = t.callback_unit;
+        delete t.callback_unit;
+        t.callback = function (value) {
+          if (unit === '$M') return '$' + value.toLocaleString() + 'M';
+          if (unit === '$B') return '$' + value + 'B';
+          if (unit === '%') return value + '%';
+          return value + unit;
+        };
+      }
+    });
+
+    return merged;
+  }
+
+  function initCharts() {
+    if (typeof Chart === 'undefined') return;
+    document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+      if (charts.has(canvas)) return;
+      let config;
+      try {
+        config = JSON.parse(canvas.dataset.chart);
+      } catch (e) {
+        console.error('Bad data-chart JSON', e, canvas);
+        return;
+      }
+      // Filter out spacer datasets from the tooltip
+      if (config.data && config.data.datasets) {
+        config.data.datasets.forEach(ds => {
+          if (ds.label === '_spacer') {
+            ds.tooltip = { enabled: false };
+          }
+        });
+      }
+      const userType = config.options && config.options.indexAxis === 'y' ? 'bar-horizontal' : config.type;
+      config.options = buildOptions(config.options, userType);
+      const chart = new Chart(canvas, config);
+      charts.set(canvas, chart);
+    });
+  }
+
+  function resizeAllCharts() {
+    charts.forEach(chart => {
+      try { chart.resize(); chart.update('none'); } catch (e) { /* ignore */ }
+    });
+  }
+
+  // Exposed so the Playwright exporter can call before page.pdf()
+  window.__renderCharts = function () {
+    initCharts();
+    resizeAllCharts();
+  };
+
+  /* ================================================================
+     SLIDE NAVIGATION
+     ================================================================ */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let cur = 0;
+
+  if (location.search.includes('embed')) {
+    document.body.classList.add('embed');
+  }
+
+  document.getElementById('total').textContent = String(total).padStart(2, '0');
+
+  function show(i) {
+    cur = Math.max(0, Math.min(total - 1, i));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === cur));
+    document.getElementById('cur').textContent = String(cur + 1).padStart(2, '0');
+    document.getElementById('progress').style.width = ((cur + 1) / total * 100) + '%';
+    if (history.replaceState) {
+      history.replaceState(null, '', '#' + (cur + 1));
+    }
+    // Re-render any charts on the now-visible slide
+    requestAnimationFrame(() => {
+      slides[cur].querySelectorAll('canvas[data-chart]').forEach(c => {
+        const ch = charts.get(c);
+        if (ch) { try { ch.resize(); ch.update('none'); } catch (e) {} }
+      });
+    });
+  }
+
+  window.next = () => show(cur + 1);
+  window.prev = () => show(cur - 1);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+    else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); window.print(); }
+  });
+
+  // Touch swipe
+  let touchStart = null;
+  document.addEventListener('touchstart', (e) => { touchStart = e.changedTouches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    if (touchStart == null) return;
+    const dx = e.changedTouches[0].clientX - touchStart;
+    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+    touchStart = null;
+  });
+
+  // Resize charts if window resizes (active slide)
+  window.addEventListener('resize', () => {
+    if (slides[cur]) {
+      slides[cur].querySelectorAll('canvas[data-chart]').forEach(c => {
+        const ch = charts.get(c);
+        if (ch) { try { ch.resize(); } catch (e) {} }
+      });
+    }
+  });
+
+  // Boot
+  applyChartDefaults();
+  initCharts();
+
+  // Hash navigation
+  const hashIdx = parseInt(location.hash.slice(1), 10);
+  if (!isNaN(hashIdx) && hashIdx >= 1 && hashIdx <= total) show(hashIdx - 1);
+  else show(0);
+})();
+</script>
+
+</body>
+</html>

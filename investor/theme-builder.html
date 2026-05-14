@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Investor theme builder · Presentable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link id="font-link" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Sora:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --tool-bg: #fafafa;
+  --tool-fg: #0a0a0a;
+  --tool-muted: #525252;
+  --tool-line: #e4e4e7;
+  --tool-card: #ffffff;
+  --tool-accent: #ea580c;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Sora', -apple-system, sans-serif;
+  background: var(--tool-bg);
+  color: var(--tool-fg);
+  min-height: 100vh;
+}
+.shell { max-width: 1400px; margin: 0 auto; padding: 32px 40px 80px; }
+.head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 1px solid var(--tool-line);
+  padding-bottom: 16px; margin-bottom: 32px;
+}
+.head h1 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 30px; font-weight: 600; margin: 0;
+  letter-spacing: -0.02em;
+}
+.head .crumb {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--tool-muted);
+}
+.head .crumb a { color: var(--tool-accent); text-decoration: none; font-weight: 500; }
+.grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: start; }
+.panel {
+  background: var(--tool-card);
+  border: 1px solid var(--tool-line);
+  border-radius: 8px; padding: 24px;
+}
+.panel h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 17px; font-weight: 600; margin: 0 0 16px 0;
+  padding-bottom: 12px; border-bottom: 1px solid var(--tool-line);
+  letter-spacing: -0.01em;
+}
+.panel h2 .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--tool-muted); margin-right: 8px; font-weight: 400;
+}
+
+/* ===== Upload zone ===== */
+.upload-zone {
+  border: 2px dashed var(--tool-line);
+  border-radius: 8px;
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 150ms;
+  background: var(--tool-bg);
+}
+.upload-zone:hover, .upload-zone.dragging {
+  border-color: var(--tool-accent);
+  background: #fff7ed;
+}
+.upload-zone .upload-icon {
+  font-size: 28px;
+  color: var(--tool-accent);
+  margin-bottom: 8px;
+}
+.upload-zone .upload-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+.upload-zone .upload-sub {
+  font-size: 12px;
+  color: var(--tool-muted);
+  margin-top: 4px;
+}
+.upload-zone input { display: none; }
+
+.upload-status {
+  margin-top: 12px;
+  padding: 10px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--tool-muted);
+  background: #f4f4f5;
+  border-radius: 4px;
+  display: none;
+}
+.upload-status.active { display: block; }
+.upload-status.ok { color: #047857; background: #ecfdf5; }
+.upload-status.err { color: #dc2626; background: #fef2f2; }
+
+/* ===== Extracted swatches ===== */
+.extracted {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 16px;
+}
+.swatch-card {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 4px;
+  background: white;
+  transition: border-color 100ms;
+}
+.swatch-card:hover { border-color: var(--tool-line); }
+.swatch-card.selected { border-color: var(--tool-accent); }
+.swatch-color {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.swatch-hex {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-align: center;
+  margin-top: 4px;
+  color: var(--tool-muted);
+}
+
+.role-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 12px;
+}
+.role-buttons button {
+  font-family: 'Sora', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 8px 10px;
+  border: 1px solid var(--tool-line);
+  background: white;
+  color: var(--tool-fg);
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+.role-buttons button:hover { border-color: var(--tool-muted); }
+.role-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.field label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--tool-muted);
+}
+.field input[type="text"], .field select {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px; padding: 8px 10px;
+  border: 1px solid var(--tool-line); border-radius: 4px;
+  background: white; color: var(--tool-fg);
+}
+.field input[type="text"]:focus, .field select:focus {
+  outline: none; border-color: var(--tool-accent);
+}
+.color-row { display: flex; gap: 8px; align-items: center; }
+.color-row input[type="color"] {
+  width: 40px; height: 36px; padding: 0;
+  border: 1px solid var(--tool-line); border-radius: 4px;
+  cursor: pointer; background: white;
+}
+.color-row input[type="text"] {
+  flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+}
+
+/* ===== Preview pane ===== */
+.preview-wrap { display: flex; flex-direction: column; gap: 24px; }
+.mini-deck {
+  border: 1px solid var(--tool-line); border-radius: 8px;
+  background: var(--i-bg, #ffffff); padding: 8px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.mini-slide {
+  aspect-ratio: 16 / 9;
+  background: var(--i-bg, #ffffff);
+  padding: 22px 28px;
+  border: 1px solid var(--i-line1, #ececec);
+  border-radius: 4px;
+  position: relative; overflow: hidden;
+}
+.mini-slide.dark {
+  background: var(--i-bg-dark, #0c0a09);
+  border-color: var(--i-bg-dark, #0c0a09);
+}
+.mini-cover { display: flex; flex-direction: column; justify-content: space-between; }
+.mini-cover .mc-top {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--i-ink3, #525252);
+}
+.mini-cover .mc-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--i-ink3, #525252); margin-bottom: 4px;
+}
+.mini-cover .mc-title {
+  font-family: var(--i-display, 'Bricolage Grotesque'), sans-serif;
+  font-size: 20px; font-weight: 600; line-height: 1.1;
+  color: var(--i-ink1, #0a0a0a); letter-spacing: -0.02em;
+  margin: 0;
+}
+.mini-cover .mc-title em {
+  color: var(--i-accent, #ea580c);
+  font-style: italic;
+  font-weight: 700;
+}
+.mini-cover .mc-sub {
+  font-family: var(--i-body, 'Sora'), sans-serif;
+  font-size: 9px; line-height: 1.4;
+  color: var(--i-ink2, #1f1f1f); margin-top: 6px; max-width: 80%;
+}
+.mini-cover .mc-bottom {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7px; color: var(--i-ink3, #525252);
+}
+.mini-dark {
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 8px; padding: 22px 32px;
+}
+.mini-dark .md-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--i-accent, #ea580c); font-weight: 500;
+}
+.mini-dark .md-title {
+  font-family: var(--i-display, 'Bricolage Grotesque'), sans-serif;
+  font-size: 16px; font-weight: 500; line-height: 1.15;
+  color: var(--i-on-dark-1, #fafaf8);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.mini-dark .md-sub {
+  font-family: var(--i-body, 'Sora'), sans-serif;
+  font-size: 9px; line-height: 1.5;
+  color: var(--i-on-dark-2, #c8ccd1);
+  max-width: 80%;
+}
+
+/* ===== Tokens grid ===== */
+.tokens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px; margin-top: 12px;
+}
+.token-cell {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border: 1px solid var(--tool-line);
+  border-radius: 4px; background: white;
+}
+.token-swatch {
+  width: 20px; height: 20px; border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0;
+}
+.token-info { display: flex; flex-direction: column; min-width: 0; }
+.token-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.04em;
+  color: var(--tool-muted); text-transform: uppercase;
+}
+.token-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--tool-fg);
+}
+
+/* ===== Output ===== */
+.output { margin-top: 24px; }
+.output-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+}
+.output-header h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 17px; font-weight: 600; margin: 0;
+  letter-spacing: -0.01em;
+}
+.btn {
+  font-family: 'Sora', sans-serif;
+  font-size: 12px; font-weight: 500;
+  padding: 8px 16px; border: none;
+  background: var(--tool-fg); color: white; border-radius: 4px;
+  cursor: pointer; letter-spacing: 0.02em; transition: opacity 120ms;
+}
+.btn:hover { opacity: 0.85; }
+.btn.copied { background: #047857; }
+pre.css-block {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; line-height: 1.6;
+  background: #0a0a0a; color: #e4e4e4;
+  padding: 20px; border-radius: 6px;
+  overflow-x: auto; max-height: 480px; overflow-y: auto;
+  margin: 0; white-space: pre;
+}
+pre.css-block .k { color: #fb923c; }
+pre.css-block .v { color: #a7f3d0; }
+pre.css-block .c { color: #6a6a6a; font-style: italic; }
+.how-to {
+  margin-top: 16px; padding: 16px;
+  border-left: 3px solid var(--tool-accent);
+  background: var(--tool-bg); border-radius: 0 4px 4px 0;
+}
+.how-to h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 14px; font-weight: 600; margin: 0 0 8px 0;
+}
+.how-to ol { font-size: 13px; line-height: 1.6; margin: 0; padding-left: 20px; }
+.how-to code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; background: white;
+  padding: 1px 5px; border-radius: 3px;
+  border: 1px solid var(--tool-line);
+}
+.helper-note { font-size: 12px; line-height: 1.5; color: var(--tool-muted); margin-top: 8px; }
+.helper-note strong { color: var(--tool-fg); font-weight: 500; }
+
+.role-display {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--tool-line);
+  border-radius: 4px;
+  margin-bottom: 6px;
+  background: var(--tool-bg);
+}
+.role-display.empty { opacity: 0.5; }
+.role-display .rd-swatch {
+  width: 20px; height: 20px; border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.role-display .rd-label {
+  font-size: 12px; font-weight: 500;
+}
+.role-display .rd-hex {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--tool-muted);
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="head">
+    <h1>Investor · theme builder</h1>
+    <div class="crumb">Presentable · <a href="deck.html">→ open showcase deck</a></div>
+  </div>
+
+  <div class="grid">
+    <!-- ==================== INPUT PANEL ==================== -->
+    <div class="panel">
+      <h2><span class="num">01</span>Upload brand source</h2>
+
+      <label class="upload-zone" id="upload-zone">
+        <input type="file" id="file-input" accept="image/*">
+        <div class="upload-icon">↑</div>
+        <div class="upload-text">Drop a logo, screenshot, or product image</div>
+        <div class="upload-sub">PNG · JPG · SVG · GIF · WebP</div>
+      </label>
+      <div class="upload-status" id="upload-status"></div>
+
+      <div class="helper-note" style="margin-top: 12px;">
+        <strong>Best sources:</strong> brand logo (clearest colors), a screenshot of your existing pitch deck, your product UI, or your website hero image. The bigger and brand-rich the image, the better the extracted palette.
+      </div>
+
+      <h2 style="margin-top: 24px;"><span class="num">02</span>Pick brand role for each color</h2>
+
+      <div id="extracted" class="extracted">
+        <div style="grid-column: 1 / -1; padding: 30px 0; text-align: center; color: var(--tool-muted); font-size: 12px;">
+          Upload an image first — extracted colors appear here.
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <div class="role-display empty" id="role-accent">
+          <div class="rd-swatch" style="background: transparent; border-style: dashed;"></div>
+          <div class="rd-label">Accent (brand color)</div>
+          <div class="rd-hex">—</div>
+        </div>
+        <div class="role-display empty" id="role-ink">
+          <div class="rd-swatch" style="background: transparent; border-style: dashed;"></div>
+          <div class="rd-label">Ink (text)</div>
+          <div class="rd-hex">—</div>
+        </div>
+      </div>
+
+      <div class="helper-note">
+        Click a swatch above, then choose its role. <strong>Accent</strong> drives the orange-like brand pop. <strong>Ink</strong> is the body-text color (usually the darkest extracted color, or near-black).
+      </div>
+
+      <h2 style="margin-top: 24px;"><span class="num">03</span>Or enter manually</h2>
+
+      <div class="field">
+        <label>Accent / brand color</label>
+        <div class="color-row">
+          <input type="color" id="accent-picker" value="#ea580c">
+          <input type="text" id="accent-text" value="#ea580c" maxlength="7">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Display font</label>
+        <select id="font-display">
+          <option value="Bricolage Grotesque" selected>Bricolage Grotesque — variable, with character (default)</option>
+          <option value="Sora">Sora — geometric, modern</option>
+          <option value="Plus Jakarta Sans">Plus Jakarta Sans — friendly geometric</option>
+          <option value="DM Sans">DM Sans — neutral geometric</option>
+          <option value="Space Grotesk">Space Grotesk — distinct, tech</option>
+          <option value="Outfit">Outfit — clean modern</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Body font</label>
+        <select id="font-body">
+          <option value="Sora" selected>Sora — geometric (default)</option>
+          <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+          <option value="DM Sans">DM Sans</option>
+          <option value="Manrope">Manrope</option>
+          <option value="Outfit">Outfit</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ==================== PREVIEW PANEL ==================== -->
+    <div class="preview-wrap">
+      <div class="panel">
+        <h2><span class="num">04</span>Live preview</h2>
+
+        <div class="mini-deck" id="mini-deck">
+          <div class="mini-slide mini-cover">
+            <div class="mc-top">
+              <div>Loop · 2026</div>
+              <div>Series A</div>
+            </div>
+            <div>
+              <div class="mc-eyebrow">Pitch · April 2026</div>
+              <h2 class="mc-title">Design feedback that doesn't <em>break</em> the design.</h2>
+              <p class="mc-sub">A canvas-native annotation layer. 6,400 teams, $1.2M ARR.</p>
+            </div>
+            <div class="mc-bottom">
+              <div>maya@useloop.com</div>
+              <div>Series A · $8M</div>
+            </div>
+          </div>
+
+          <div class="mini-slide dark mini-dark">
+            <div class="md-eyebrow">Mission</div>
+            <h3 class="md-title">We're building the tool the next generation of designers wishes existed today.</h3>
+            <div class="md-sub">Loop turns the messy back-and-forth of design feedback into something that feels like working — not waiting.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="num">05</span>Derived tokens</h2>
+        <div class="tokens" id="tokens"></div>
+      </div>
+
+      <div class="panel output">
+        <div class="output-header">
+          <h3>Generated <code style="font-family: 'JetBrains Mono'; font-size: 14px;">:root</code> block</h3>
+          <button class="btn" id="copy-btn">Copy CSS</button>
+        </div>
+        <pre class="css-block" id="css-output"></pre>
+        <div class="how-to">
+          <h4>How to apply this to your deck</h4>
+          <ol>
+            <li>Open <code>investor/deck.html</code> in your editor.</li>
+            <li>Find the <code>:root {</code> block near the top of the <code>&lt;style&gt;</code> tag.</li>
+            <li>Replace the entire <code>:root { ... }</code> with the generated block.</li>
+            <li>Update the Google Fonts <code>&lt;link&gt;</code> in the <code>&lt;head&gt;</code>. The generated CSS includes the URL.</li>
+            <li>Reload. The cover italic, the mission accent, the chart series color, the ask amount — all retone to your brand.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="extractor-canvas" style="display: none;"></canvas>
+
+<script>
+// =========== COLOR UTILITIES ===========
+function hexToRgb(hex) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c+c).join('');
+  return { r: parseInt(hex.slice(0,2), 16), g: parseInt(hex.slice(2,4), 16), b: parseInt(hex.slice(4,6), 16) };
+}
+function rgbToHex(r, g, b) {
+  const toHex = n => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  return '#' + toHex(r) + toHex(g) + toHex(b);
+}
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+function hslToRgb(h, s, l) {
+  h /= 360; s /= 100; l /= 100;
+  let r, g, b;
+  if (s === 0) { r = g = b = l; }
+  else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return { r: r * 255, g: g * 255, b: b * 255 };
+}
+function hexToHsl(hex) { const { r, g, b } = hexToRgb(hex); return rgbToHsl(r, g, b); }
+function hslToHex(h, s, l) { const { r, g, b } = hslToRgb(h, s, l); return rgbToHex(r, g, b); }
+
+// =========== IMAGE COLOR EXTRACTION ===========
+function extractColorsFromImage(img) {
+  const canvas = document.getElementById('extractor-canvas');
+  const W = 120, H = 120;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, W, H);
+  const data = ctx.getImageData(0, 0, W, H).data;
+
+  // Bucket colors by quantizing to 5-bit channels (32 levels each)
+  const buckets = new Map();
+  const STEP = 24;  // bucket size in 0-255 space
+  for (let i = 0; i < data.length; i += 4) {
+    const a = data[i+3];
+    if (a < 200) continue;  // skip transparent
+    const r = data[i], g = data[i+1], b = data[i+2];
+    // Skip near-black and near-white (background noise)
+    if (r > 245 && g > 245 && b > 245) continue;
+    if (r < 12 && g < 12 && b < 12) continue;
+    const rk = Math.round(r / STEP) * STEP;
+    const gk = Math.round(g / STEP) * STEP;
+    const bk = Math.round(b / STEP) * STEP;
+    const key = `${rk},${gk},${bk}`;
+    if (!buckets.has(key)) {
+      buckets.set(key, { count: 0, r: 0, g: 0, b: 0 });
+    }
+    const b_ = buckets.get(key);
+    b_.count += 1;
+    b_.r += r; b_.g += g; b_.b += b;
+  }
+
+  // Average within each bucket; sort by count
+  const colors = [...buckets.entries()].map(([key, b]) => ({
+    hex: rgbToHex(b.r / b.count, b.g / b.count, b.b / b.count),
+    count: b.count,
+    hsl: rgbToHsl(b.r / b.count, b.g / b.count, b.b / b.count),
+  })).sort((a, b) => b.count - a.count);
+
+  // Dedupe perceptually similar colors (close in hue + lightness)
+  const out = [];
+  for (const c of colors) {
+    if (out.length >= 8) break;
+    const tooClose = out.some(o => {
+      const dh = Math.abs(o.hsl.h - c.hsl.h);
+      const dl = Math.abs(o.hsl.l - c.hsl.l);
+      const ds = Math.abs(o.hsl.s - c.hsl.s);
+      return (dh < 18 || dh > 342) && dl < 12 && ds < 18;
+    });
+    if (!tooClose) out.push(c);
+  }
+  return out.slice(0, 8);
+}
+
+// =========== PALETTE DERIVATION ===========
+function deriveInvestorPalette(accentHex) {
+  // Investor scheme: white bg, dark cool ink, vivid accent
+  // Keep the structure consistent with the investor deck defaults
+  const a = hexToHsl(accentHex);
+  return {
+    bg:           '#ffffff',
+    bgTint:       '#fafafa',
+    bgCard:       '#ffffff',
+    bgCardAlt:    '#f4f4f5',
+    bgDark:       '#0c0a09',
+
+    ink1:         '#0a0a0a',
+    ink2:         '#1f1f1f',
+    ink3:         '#525252',
+    ink4:         '#9a9a9a',
+    ink5:         '#d4d4d4',
+
+    line1:        '#ececec',
+    line2:        '#d4d4d4',
+    line3:        '#0a0a0a',
+
+    accent:       accentHex,
+    accentTint:   hslToHex(a.h, Math.max(20, a.s * 0.25), 96),
+    accentInk:    '#ffffff',
+
+    warn:         hslToHex(a.h, Math.min(80, a.s * 0.9), Math.max(35, Math.min(50, a.l * 0.9))),
+    warnTint:     hslToHex(a.h, 45, 95),
+    positive:     '#047857',
+    positiveTint: '#ecfdf5',
+    risk:         '#dc2626',
+    riskTint:     '#fef2f2',
+
+    onDark1:      '#fafaf8',
+    onDark2:      '#c8ccd1',
+    onDark3:      '#78716c',
+  };
+}
+
+const state = {
+  accent: '#ea580c',
+  ink: null,  // null = use default ink scale
+  fontDisplay: 'Bricolage Grotesque',
+  fontBody: 'Sora',
+  extracted: [],
+  selectedSwatch: null,
+};
+
+const els = {
+  uploadZone: document.getElementById('upload-zone'),
+  fileInput: document.getElementById('file-input'),
+  uploadStatus: document.getElementById('upload-status'),
+  extracted: document.getElementById('extracted'),
+  roleAccent: document.getElementById('role-accent'),
+  roleInk: document.getElementById('role-ink'),
+  accentPicker: document.getElementById('accent-picker'),
+  accentText: document.getElementById('accent-text'),
+  fontDisplay: document.getElementById('font-display'),
+  fontBody: document.getElementById('font-body'),
+  miniDeck: document.getElementById('mini-deck'),
+  tokens: document.getElementById('tokens'),
+  cssOutput: document.getElementById('css-output'),
+  copyBtn: document.getElementById('copy-btn'),
+  fontLink: document.getElementById('font-link'),
+};
+
+function loadFonts(display, body) {
+  const fams = [
+    display.replace(/ /g, '+') + ':opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700',
+    body.replace(/ /g, '+') + ':wght@400;500;600',
+    'JetBrains+Mono:wght@400;500'
+  ];
+  els.fontLink.href = 'https://fonts.googleapis.com/css2?' + fams.map(f => 'family=' + f).join('&') + '&display=swap';
+}
+
+function renderExtractedSwatches() {
+  if (!state.extracted.length) return;
+  els.extracted.innerHTML = state.extracted.map((c, i) => `
+    <div class="swatch-card ${state.selectedSwatch === i ? 'selected' : ''}" data-i="${i}">
+      <div class="swatch-color" style="background: ${c.hex}"></div>
+      <div class="swatch-hex">${c.hex}</div>
+    </div>
+  `).join('');
+
+  // Wire click handlers
+  els.extracted.querySelectorAll('.swatch-card').forEach(card => {
+    card.addEventListener('click', () => {
+      state.selectedSwatch = parseInt(card.dataset.i);
+      renderExtractedSwatches();
+      renderRoleAssignActions();
+    });
+  });
+  renderRoleAssignActions();
+}
+
+function renderRoleAssignActions() {
+  const sel = state.selectedSwatch;
+  if (sel === null) {
+    document.getElementById('role-actions')?.remove();
+    return;
+  }
+  // Add role assignment buttons under the extracted grid
+  let actions = document.getElementById('role-actions');
+  if (!actions) {
+    actions = document.createElement('div');
+    actions.id = 'role-actions';
+    actions.className = 'role-buttons';
+    els.extracted.parentNode.insertBefore(actions, els.extracted.nextSibling);
+  }
+  const selectedHex = state.extracted[sel].hex;
+  actions.innerHTML = `
+    <button data-role="accent">Use as ACCENT</button>
+    <button data-role="ink">Use as INK</button>
+  `;
+  actions.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const role = btn.dataset.role;
+      if (role === 'accent') {
+        state.accent = selectedHex;
+        els.accentPicker.value = selectedHex;
+        els.accentText.value = selectedHex;
+      } else if (role === 'ink') {
+        state.ink = selectedHex;
+      }
+      renderRoleDisplays();
+      render();
+    });
+  });
+}
+
+function renderRoleDisplays() {
+  if (state.accent) {
+    els.roleAccent.classList.remove('empty');
+    els.roleAccent.querySelector('.rd-swatch').style.background = state.accent;
+    els.roleAccent.querySelector('.rd-swatch').style.borderStyle = 'solid';
+    els.roleAccent.querySelector('.rd-hex').textContent = state.accent;
+  }
+  if (state.ink) {
+    els.roleInk.classList.remove('empty');
+    els.roleInk.querySelector('.rd-swatch').style.background = state.ink;
+    els.roleInk.querySelector('.rd-swatch').style.borderStyle = 'solid';
+    els.roleInk.querySelector('.rd-hex').textContent = state.ink;
+  }
+}
+
+function render() {
+  const p = deriveInvestorPalette(state.accent);
+  if (state.ink) {
+    p.ink1 = state.ink;
+    // Derive subsequent ink scale steps from the chosen ink
+    const inkHsl = hexToHsl(state.ink);
+    p.ink2 = hslToHex(inkHsl.h, Math.min(20, inkHsl.s), Math.max(15, Math.min(30, inkHsl.l + 6)));
+    p.ink3 = hslToHex(inkHsl.h, Math.min(12, inkHsl.s), Math.max(30, Math.min(50, inkHsl.l + 20)));
+    p.ink4 = hslToHex(inkHsl.h, Math.min(8, inkHsl.s), Math.max(50, Math.min(70, inkHsl.l + 40)));
+    p.ink5 = hslToHex(inkHsl.h, Math.min(5, inkHsl.s), Math.max(70, Math.min(85, inkHsl.l + 60)));
+  }
+
+  const mini = els.miniDeck;
+  mini.style.setProperty('--i-bg', p.bg);
+  mini.style.setProperty('--i-bg-dark', p.bgDark);
+  mini.style.setProperty('--i-ink1', p.ink1);
+  mini.style.setProperty('--i-ink2', p.ink2);
+  mini.style.setProperty('--i-ink3', p.ink3);
+  mini.style.setProperty('--i-line1', p.line1);
+  mini.style.setProperty('--i-accent', p.accent);
+  mini.style.setProperty('--i-on-dark-1', p.onDark1);
+  mini.style.setProperty('--i-on-dark-2', p.onDark2);
+  mini.style.setProperty('--i-display', `'${state.fontDisplay}'`);
+  mini.style.setProperty('--i-body', `'${state.fontBody}'`);
+  loadFonts(state.fontDisplay, state.fontBody);
+
+  const tokenDefs = [
+    ['--bg', p.bg], ['--bg-tint', p.bgTint], ['--bg-card-alt', p.bgCardAlt],
+    ['--bg-dark', p.bgDark],
+    ['--ink-1', p.ink1], ['--ink-2', p.ink2], ['--ink-3', p.ink3],
+    ['--ink-4', p.ink4], ['--ink-5', p.ink5],
+    ['--line-1', p.line1], ['--line-2', p.line2],
+    ['--accent', p.accent], ['--accent-tint', p.accentTint],
+    ['--positive', p.positive], ['--risk', p.risk],
+  ];
+  els.tokens.innerHTML = tokenDefs.map(([name, value]) => `
+    <div class="token-cell">
+      <div class="token-swatch" style="background: ${value}"></div>
+      <div class="token-info">
+        <div class="token-name">${name}</div>
+        <div class="token-value">${value}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const fontUrl = 'https://fonts.googleapis.com/css2?family=' +
+    state.fontDisplay.replace(/ /g, '+') + ':opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=' +
+    state.fontBody.replace(/ /g, '+') + ':wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap';
+
+  const css = `<span class="c">/* ====================================================
+   Generated investor theme · ${new Date().toISOString().slice(0,10)}
+   Accent: ${state.accent}${state.ink ? ' · Ink: ' + state.ink : ''}
+   Font URL for &lt;head&gt;:
+   ${fontUrl}
+   ==================================================== */</span>
+<span class="k">:root</span> {
+  <span class="c">/* Surfaces */</span>
+  --bg:           <span class="v">${p.bg};</span>
+  --bg-tint:      <span class="v">${p.bgTint};</span>
+  --bg-card:      <span class="v">${p.bgCard};</span>
+  --bg-card-alt:  <span class="v">${p.bgCardAlt};</span>
+  --bg-dark:      <span class="v">${p.bgDark};</span>
+
+  <span class="c">/* Ink scale */</span>
+  --ink-1: <span class="v">${p.ink1};</span>
+  --ink-2: <span class="v">${p.ink2};</span>
+  --ink-3: <span class="v">${p.ink3};</span>
+  --ink-4: <span class="v">${p.ink4};</span>
+  --ink-5: <span class="v">${p.ink5};</span>
+
+  <span class="c">/* Lines */</span>
+  --line-1: <span class="v">${p.line1};</span>
+  --line-2: <span class="v">${p.line2};</span>
+  --line-3: <span class="v">${p.line3};</span>
+
+  <span class="c">/* Accent — your brand color */</span>
+  --accent:       <span class="v">${p.accent};</span>
+  --accent-tint:  <span class="v">${p.accentTint};</span>
+  --accent-ink:   <span class="v">${p.accentInk};</span>
+
+  <span class="c">/* Semantic */</span>
+  --warn:         <span class="v">${p.warn};</span>
+  --warn-tint:    <span class="v">${p.warnTint};</span>
+  --positive:     <span class="v">${p.positive};</span>
+  --positive-tint:<span class="v">${p.positiveTint};</span>
+  --risk:         <span class="v">${p.risk};</span>
+  --risk-tint:    <span class="v">${p.riskTint};</span>
+
+  <span class="c">/* On-dark */</span>
+  --on-dark-1: <span class="v">${p.onDark1};</span>
+  --on-dark-2: <span class="v">${p.onDark2};</span>
+  --on-dark-3: <span class="v">${p.onDark3};</span>
+
+  <span class="c">/* Typography */</span>
+  --font-display: <span class="v">'${state.fontDisplay}', system-ui, sans-serif;</span>
+  --font-body:    <span class="v">'${state.fontBody}', -apple-system, sans-serif;</span>
+  --font-mono:    <span class="v">'JetBrains Mono', 'SF Mono', monospace;</span>
+
+  <span class="c">/* Type scale — bolder than enterprise */</span>
+  --eyebrow-size:   <span class="v">11px;</span>
+  --title-size:     <span class="v">clamp(30px, 4vw, 52px);</span>
+  --title-large:    <span class="v">clamp(40px, 5.5vw, 72px);</span>
+  --subtitle-size:  <span class="v">clamp(15px, 1.5vw, 19px);</span>
+  --body-size:      <span class="v">clamp(13px, 1.15vw, 16px);</span>
+  --body-small:     <span class="v">clamp(11.5px, 0.95vw, 13px);</span>
+  --label-size:     <span class="v">10px;</span>
+  --source-size:    <span class="v">10px;</span>
+  --stat-size:      <span class="v">clamp(48px, 6vw, 88px);</span>
+
+  <span class="c">/* Spacing — more breathing room than enterprise */</span>
+  --slide-pad-y: <span class="v">6vh;</span>
+  --slide-pad-x: <span class="v">6.5vw;</span>
+  --gap-xs: <span class="v">0.5rem;</span>
+  --gap-sm: <span class="v">1rem;</span>
+  --gap-md: <span class="v">1.5rem;</span>
+  --gap-lg: <span class="v">2.5rem;</span>
+  --gap-xl: <span class="v">4rem;</span>
+
+  <span class="c">/* Geometry */</span>
+  --radius-sm: <span class="v">4px;</span>
+  --radius-md: <span class="v">8px;</span>
+  --radius-lg: <span class="v">12px;</span>
+  --hairline: <span class="v">1px;</span>
+}`;
+  els.cssOutput.innerHTML = css;
+}
+
+// ============ events ============
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    els.uploadStatus.textContent = 'Please choose an image file (PNG, JPG, SVG, GIF).';
+    els.uploadStatus.className = 'upload-status active err';
+    return;
+  }
+  els.uploadStatus.textContent = 'Extracting colors…';
+  els.uploadStatus.className = 'upload-status active';
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const colors = extractColorsFromImage(img);
+        state.extracted = colors;
+        state.selectedSwatch = null;
+        renderExtractedSwatches();
+        // Auto-pick the most vivid color as accent suggestion
+        const vivid = [...colors].sort((a, b) =>
+          (b.hsl.s + (b.hsl.l > 30 && b.hsl.l < 70 ? 20 : 0)) -
+          (a.hsl.s + (a.hsl.l > 30 && a.hsl.l < 70 ? 20 : 0))
+        )[0];
+        if (vivid) {
+          state.accent = vivid.hex;
+          els.accentPicker.value = vivid.hex;
+          els.accentText.value = vivid.hex;
+        }
+        els.uploadStatus.textContent = `Extracted ${colors.length} colors. Click a swatch and assign its role.`;
+        els.uploadStatus.className = 'upload-status active ok';
+        renderRoleDisplays();
+        render();
+      } catch (err) {
+        els.uploadStatus.textContent = 'Extraction failed: ' + err.message;
+        els.uploadStatus.className = 'upload-status active err';
+      }
+    };
+    img.onerror = () => {
+      els.uploadStatus.textContent = 'Could not load image. Try another file.';
+      els.uploadStatus.className = 'upload-status active err';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+els.fileInput.addEventListener('change', e => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+els.uploadZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  els.uploadZone.classList.add('dragging');
+});
+els.uploadZone.addEventListener('dragleave', () => {
+  els.uploadZone.classList.remove('dragging');
+});
+els.uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  els.uploadZone.classList.remove('dragging');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+
+els.accentPicker.addEventListener('input', e => {
+  state.accent = e.target.value;
+  els.accentText.value = e.target.value;
+  renderRoleDisplays();
+  render();
+});
+els.accentText.addEventListener('input', e => {
+  let v = e.target.value.trim();
+  if (!v.startsWith('#')) v = '#' + v;
+  if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+    state.accent = v;
+    els.accentPicker.value = v;
+    renderRoleDisplays();
+    render();
+  }
+});
+els.fontDisplay.addEventListener('change', e => { state.fontDisplay = e.target.value; render(); });
+els.fontBody.addEventListener('change', e => { state.fontBody = e.target.value; render(); });
+els.copyBtn.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(els.cssOutput.textContent);
+  els.copyBtn.textContent = '✓ Copied';
+  els.copyBtn.classList.add('copied');
+  setTimeout(() => {
+    els.copyBtn.textContent = 'Copy CSS';
+    els.copyBtn.classList.remove('copied');
+  }, 2000);
+});
+
+render();
+</script>
+</body>
+</html>

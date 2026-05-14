@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio theme builder · Presentable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link id="font-link" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --tool-bg: #fafaf8;
+  --tool-fg: #0a0a0a;
+  --tool-muted: #6a6a6a;
+  --tool-line: #e4e4e4;
+  --tool-card: #ffffff;
+  --tool-accent: #a05a3c;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Instrument Sans', -apple-system, sans-serif;
+  background: var(--tool-bg);
+  color: var(--tool-fg);
+  min-height: 100vh;
+}
+.shell { max-width: 1400px; margin: 0 auto; padding: 32px 40px 80px; }
+.head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 1px solid var(--tool-line);
+  padding-bottom: 16px; margin-bottom: 32px;
+}
+.head h1 {
+  font-family: 'Newsreader', serif;
+  font-size: 28px; font-weight: 500; margin: 0; letter-spacing: -0.01em;
+}
+.head .crumb {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--tool-muted);
+}
+.head .crumb a { color: var(--tool-accent); text-decoration: none; }
+.grid { display: grid; grid-template-columns: 360px 1fr; gap: 32px; align-items: start; }
+.panel {
+  background: var(--tool-card);
+  border: 1px solid var(--tool-line);
+  border-radius: 6px; padding: 24px;
+}
+.panel h2 {
+  font-family: 'Newsreader', serif;
+  font-size: 16px; font-weight: 500; margin: 0 0 16px 0;
+  padding-bottom: 12px; border-bottom: 1px solid var(--tool-line);
+}
+.panel h2 .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--tool-muted); margin-right: 8px;
+}
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.field label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--tool-muted);
+}
+.field input[type="text"], .field select {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px; padding: 8px 10px;
+  border: 1px solid var(--tool-line); border-radius: 4px;
+  background: white; color: var(--tool-fg);
+}
+.field input[type="text"]:focus, .field select:focus {
+  outline: none; border-color: var(--tool-accent);
+}
+.preset-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.preset-list label {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border: 1px solid var(--tool-line);
+  border-radius: 4px; cursor: pointer; transition: border-color 100ms;
+}
+.preset-list label:hover { border-color: var(--tool-muted); }
+.preset-list label.active { border-color: var(--tool-accent); background: #fdf7f3; }
+.preset-list input { margin: 0; }
+.preset-swatch {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.preset-label { flex: 1; font-size: 13px; font-weight: 500; }
+.preset-hint { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--tool-muted); }
+.color-row { display: flex; gap: 8px; align-items: center; }
+.color-row input[type="color"] {
+  width: 40px; height: 36px; padding: 0;
+  border: 1px solid var(--tool-line); border-radius: 4px;
+  cursor: pointer; background: white;
+}
+.color-row input[type="text"] {
+  flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+}
+.tone-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tone-toggle label {
+  padding: 8px 12px; border: 1px solid var(--tool-line);
+  border-radius: 4px; text-align: center; cursor: pointer; font-size: 13px;
+}
+.tone-toggle label.active { border-color: var(--tool-accent); background: #fdf7f3; font-weight: 500; }
+.tone-toggle input { display: none; }
+.preview-wrap { display: flex; flex-direction: column; gap: 24px; }
+.mini-deck {
+  border: 1px solid var(--tool-line); border-radius: 6px;
+  background: var(--p-bg, #f5f1e8); padding: 8px;
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px;
+}
+.mini-slide {
+  aspect-ratio: 16 / 9;
+  background: var(--p-bg, #f5f1e8);
+  padding: 20px 28px;
+  border: 1px solid var(--p-line1, #d8d0bc);
+  border-radius: 3px; position: relative; overflow: hidden;
+}
+.mini-cover { display: flex; flex-direction: column; justify-content: space-between; }
+.mini-cover .mc-top, .mini-cover .mc-bottom {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--p-ink3, #7a6f5f);
+}
+.mini-cover .mc-bottom { font-size: 7px; text-transform: none; letter-spacing: 0.02em; }
+.mini-cover .mc-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--p-ink3, #7a6f5f); margin-bottom: 4px;
+}
+.mini-cover .mc-title {
+  font-family: var(--p-display, 'Newsreader'), serif;
+  font-size: 20px; font-weight: 400; line-height: 1.1;
+  color: var(--p-ink1, #2a241d); letter-spacing: -0.01em; margin: 0;
+}
+.mini-cover .mc-title em { color: var(--p-accent, #a05a3c); font-style: italic; }
+.mini-cover .mc-sub {
+  font-family: var(--p-body, 'Instrument Sans'), sans-serif;
+  font-size: 9px; line-height: 1.4;
+  color: var(--p-ink2, #4a4036); margin-top: 6px; max-width: 80%;
+}
+.mini-content { display: flex; flex-direction: column; gap: 6px; }
+.mini-content .mn-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--p-ink3, #7a6f5f);
+}
+.mini-content .mn-title {
+  font-family: var(--p-display, 'Newsreader'), serif;
+  font-size: 12px; font-weight: 400; line-height: 1.15;
+  color: var(--p-ink1, #2a241d); letter-spacing: -0.01em; margin: 0;
+}
+.mini-content .mn-title em { color: var(--p-accent, #a05a3c); font-style: italic; }
+.mini-content .mn-rule {
+  height: 1px; background: var(--p-line2, #b8b0a0); margin: 4px 0 6px;
+}
+.mini-content .mn-body {
+  font-family: var(--p-body, 'Instrument Sans'), sans-serif;
+  font-size: 7px; line-height: 1.5; color: var(--p-ink2, #4a4036);
+}
+.mini-content .mn-quote {
+  font-family: var(--p-display, 'Newsreader'), serif;
+  font-style: italic; font-size: 8px; line-height: 1.4;
+  color: var(--p-ink2, #4a4036);
+  padding-left: 6px; border-left: 2px solid var(--p-accent, #a05a3c);
+  margin-top: 4px;
+}
+.mini-content .mn-card {
+  flex: 1; background: var(--p-bg-card-alt, #ebe5d3);
+  border: 1px solid var(--p-line1, #d8d0bc);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7px; color: var(--p-ink3, #7a6f5f); margin-top: 4px;
+}
+.tokens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px; margin-top: 12px;
+}
+.token-cell {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border: 1px solid var(--tool-line);
+  border-radius: 4px; background: white;
+}
+.token-swatch {
+  width: 20px; height: 20px; border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0;
+}
+.token-info { display: flex; flex-direction: column; min-width: 0; }
+.token-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.04em;
+  color: var(--tool-muted); text-transform: uppercase;
+}
+.token-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--tool-fg);
+}
+.output { margin-top: 24px; }
+.output-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+}
+.output-header h3 {
+  font-family: 'Newsreader', serif; font-size: 16px; font-weight: 500; margin: 0;
+}
+.btn {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  padding: 7px 14px; border: 1px solid var(--tool-fg);
+  background: var(--tool-fg); color: white; border-radius: 4px;
+  cursor: pointer; letter-spacing: 0.02em; transition: opacity 120ms;
+}
+.btn:hover { opacity: 0.85; }
+.btn.copied { background: #047857; border-color: #047857; }
+pre.css-block {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; line-height: 1.6;
+  background: #0a0a0a; color: #e4e4e4;
+  padding: 20px; border-radius: 6px;
+  overflow-x: auto; max-height: 480px; overflow-y: auto;
+  margin: 0; white-space: pre;
+}
+pre.css-block .k { color: #fbbf24; }
+pre.css-block .v { color: #a7f3d0; }
+pre.css-block .c { color: #6a6a6a; font-style: italic; }
+.how-to {
+  margin-top: 16px; padding: 16px;
+  border-left: 2px solid var(--tool-accent);
+  background: white; border-radius: 0 4px 4px 0;
+}
+.how-to h4 {
+  font-family: 'Newsreader', serif; font-size: 14px; font-weight: 500; margin: 0 0 8px 0;
+}
+.how-to ol { font-size: 13px; line-height: 1.6; color: var(--tool-fg); margin: 0; padding-left: 20px; }
+.how-to code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; background: #f4f4f5;
+  padding: 1px 5px; border-radius: 3px;
+}
+.helper-note { font-size: 12px; line-height: 1.5; color: var(--tool-muted); margin-top: 8px; }
+.helper-note strong { color: var(--tool-fg); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="head">
+    <h1>Portfolio · theme builder</h1>
+    <div class="crumb">Presentable · <a href="deck.html">→ open showcase deck</a></div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2><span class="num">01</span>Choose a starting point</h2>
+      <div class="field">
+        <label>Style preset</label>
+        <div class="preset-list" id="preset-list">
+          <label class="active" data-preset="warm-editorial">
+            <input type="radio" name="preset" value="warm-editorial" checked>
+            <span class="preset-swatch" style="background: #a05a3c"></span>
+            <span class="preset-label">Warm editorial</span>
+            <span class="preset-hint">#a05a3c</span>
+          </label>
+          <label data-preset="monochrome">
+            <input type="radio" name="preset" value="monochrome">
+            <span class="preset-swatch" style="background: #2a2a2a"></span>
+            <span class="preset-label">Monochrome</span>
+            <span class="preset-hint">#2a2a2a</span>
+          </label>
+          <label data-preset="cool-studio">
+            <input type="radio" name="preset" value="cool-studio">
+            <span class="preset-swatch" style="background: #4a6fa5"></span>
+            <span class="preset-label">Cool studio</span>
+            <span class="preset-hint">#4a6fa5</span>
+          </label>
+          <label data-preset="library">
+            <input type="radio" name="preset" value="library">
+            <span class="preset-swatch" style="background: #6b7d3e"></span>
+            <span class="preset-label">Library</span>
+            <span class="preset-hint">#6b7d3e</span>
+          </label>
+          <label data-preset="rose">
+            <input type="radio" name="preset" value="rose">
+            <span class="preset-swatch" style="background: #b5536a"></span>
+            <span class="preset-label">Dusty rose</span>
+            <span class="preset-hint">#b5536a</span>
+          </label>
+          <label data-preset="midnight">
+            <input type="radio" name="preset" value="midnight">
+            <span class="preset-swatch" style="background: #1e3a5f"></span>
+            <span class="preset-label">Midnight</span>
+            <span class="preset-hint">#1e3a5f</span>
+          </label>
+          <label data-preset="custom">
+            <input type="radio" name="preset" value="custom">
+            <span class="preset-swatch" id="custom-swatch" style="background: #a05a3c"></span>
+            <span class="preset-label">Custom</span>
+            <span class="preset-hint">— your color</span>
+          </label>
+        </div>
+      </div>
+
+      <h2><span class="num">02</span>Refine</h2>
+      <div class="field">
+        <label>Accent / base color</label>
+        <div class="color-row">
+          <input type="color" id="accent-picker" value="#a05a3c">
+          <input type="text" id="accent-text" value="#a05a3c" maxlength="7">
+        </div>
+        <div class="helper-note">The single accent color. Used for italicized words, links, and the pull-quote border.</div>
+      </div>
+
+      <div class="field">
+        <label>Neutral tone</label>
+        <div class="tone-toggle">
+          <label class="active" data-tone="warm">
+            <input type="radio" name="tone" value="warm" checked>Warm
+          </label>
+          <label data-tone="cool">
+            <input type="radio" name="tone" value="cool">Cool
+          </label>
+        </div>
+        <div class="helper-note"><strong>Warm</strong> shifts ink and backgrounds toward brown. <strong>Cool</strong> keeps them neutral gray. Most portfolios benefit from warm.</div>
+      </div>
+
+      <div class="field">
+        <label>Display font (titles)</label>
+        <select id="font-display">
+          <option value="Newsreader" selected>Newsreader — variable serif, editorial (default)</option>
+          <option value="Fraunces">Fraunces — variable serif, refined</option>
+          <option value="Source Serif 4">Source Serif 4 — neutral serif</option>
+          <option value="Lora">Lora — calligraphic serif</option>
+          <option value="Crimson Pro">Crimson Pro — book-style serif</option>
+          <option value="EB Garamond">EB Garamond — classical serif</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Body font (prose)</label>
+        <select id="font-body">
+          <option value="Instrument Sans" selected>Instrument Sans — modern grotesque (default)</option>
+          <option value="Manrope">Manrope — refined geometric</option>
+          <option value="DM Sans">DM Sans — neutral geometric</option>
+          <option value="Source Sans 3">Source Sans 3 — humanist</option>
+          <option value="Plus Jakarta Sans">Plus Jakarta Sans — friendly geometric</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="panel">
+        <h2><span class="num">03</span>Live preview</h2>
+        <div class="mini-deck" id="mini-deck">
+          <div class="mini-slide mini-cover">
+            <div class="mc-top">
+              <div>Ana Rivera · Portfolio</div>
+              <div>2026</div>
+            </div>
+            <div>
+              <div class="mc-eyebrow">Brand &amp; Product Designer</div>
+              <h2 class="mc-title">I design for <em>quiet</em> brands that want to be remembered.</h2>
+              <p class="mc-sub">Selected work from the last three years.</p>
+            </div>
+            <div class="mc-bottom">
+              <div>ana@anarivera.studio</div>
+              <div>March 2026</div>
+            </div>
+          </div>
+
+          <div class="mini-slide mini-content">
+            <div class="mn-eyebrow">Patrón Coffee · the brief</div>
+            <h3 class="mn-title">A second-generation roaster trying not to look like every other <em>third-wave</em> brand.</h3>
+            <div class="mn-rule"></div>
+            <div class="mn-body">By 2024, every independent coffee brand in the city looked like the same template. Patrón needed identity that read forty years old, not last Tuesday.</div>
+            <div class="mn-quote">"Make us look like we've been here for forty years."</div>
+            <div class="mn-card">— image · packaging</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2><span class="num">04</span>Derived tokens</h2>
+        <div class="tokens" id="tokens"></div>
+      </div>
+
+      <div class="panel output">
+        <div class="output-header">
+          <h3>Generated <code style="font-family: 'JetBrains Mono'; font-size: 14px;">:root</code> block</h3>
+          <button class="btn" id="copy-btn">Copy CSS</button>
+        </div>
+        <pre class="css-block" id="css-output"></pre>
+        <div class="how-to">
+          <h4>How to apply this to your deck</h4>
+          <ol>
+            <li>Open <code>portfolio/deck.html</code> in your editor.</li>
+            <li>Find the <code>:root {</code> block near the top of the <code>&lt;style&gt;</code> tag.</li>
+            <li>Replace the entire <code>:root { ... }</code> with the generated block above.</li>
+            <li>Update the Google Fonts <code>&lt;link&gt;</code> in <code>&lt;head&gt;</code> to load your chosen fonts. The generated CSS includes the URL.</li>
+            <li>Reload. The whole deck retones to the new theme — every slide, every component.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =========== COLOR UTILITIES ===========
+function hexToRgb(hex) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c+c).join('');
+  return { r: parseInt(hex.slice(0,2), 16), g: parseInt(hex.slice(2,4), 16), b: parseInt(hex.slice(4,6), 16) };
+}
+function rgbToHex(r, g, b) {
+  const toHex = n => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  return '#' + toHex(r) + toHex(g) + toHex(b);
+}
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+function hslToRgb(h, s, l) {
+  h /= 360; s /= 100; l /= 100;
+  let r, g, b;
+  if (s === 0) { r = g = b = l; }
+  else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return { r: r * 255, g: g * 255, b: b * 255 };
+}
+function hexToHsl(hex) { const { r, g, b } = hexToRgb(hex); return rgbToHsl(r, g, b); }
+function hslToHex(h, s, l) { const { r, g, b } = hslToRgb(h, s, l); return rgbToHex(r, g, b); }
+
+// =========== PALETTE DERIVATION ===========
+function derivePalette(baseHex, tone) {
+  const base = hexToHsl(baseHex);
+  const neutral = tone === 'warm'
+    ? { h: 32, sLow: 8, sMid: 14, sHigh: 22 }
+    : { h: 220, sLow: 2, sMid: 5, sHigh: 8 };
+
+  return {
+    bg:          hslToHex(neutral.h, neutral.sMid, tone === 'warm' ? 93 : 100),
+    bgTint:      hslToHex(neutral.h, neutral.sMid, tone === 'warm' ? 89 : 98),
+    bgCard:      hslToHex(neutral.h, neutral.sLow, tone === 'warm' ? 97 : 100),
+    bgCardAlt:   hslToHex(neutral.h, neutral.sMid, tone === 'warm' ? 84 : 96),
+    bgDark:      hslToHex(neutral.h, neutral.sHigh, 13),
+    ink1:        hslToHex(neutral.h, neutral.sHigh,  tone === 'warm' ? 14 : 6),
+    ink2:        hslToHex(neutral.h, neutral.sMid,   tone === 'warm' ? 23 : 18),
+    ink3:        hslToHex(neutral.h, neutral.sMid,   tone === 'warm' ? 42 : 42),
+    ink4:        hslToHex(neutral.h, neutral.sLow,   tone === 'warm' ? 58 : 60),
+    ink5:        hslToHex(neutral.h, neutral.sLow,   tone === 'warm' ? 71 : 77),
+    line1:       hslToHex(neutral.h, neutral.sLow,   tone === 'warm' ? 82 : 92),
+    line2:       hslToHex(neutral.h, neutral.sMid,   tone === 'warm' ? 68 : 83),
+    line3:       hslToHex(neutral.h, neutral.sHigh,  tone === 'warm' ? 14 : 6),
+    accent:      baseHex,
+    accentTint:  hslToHex(base.h, Math.max(15, base.s * 0.35), 88),
+    accentInk:   hslToHex(neutral.h, neutral.sLow,   tone === 'warm' ? 97 : 100),
+    warn:        hslToHex(28,                   55, 45),
+    warnTint:    hslToHex(28,                   45, 90),
+    positive:    hslToHex(80,                   35, 38),
+    positiveTint:hslToHex(80,                   30, 91),
+    risk:        hslToHex(8,                    40, 42),
+    riskTint:    hslToHex(8,                    45, 90),
+    onDark1:     hslToHex(neutral.h, neutral.sMid, tone === 'warm' ? 89 : 98),
+    onDark2:     hslToHex(neutral.h, neutral.sLow, tone === 'warm' ? 71 : 78),
+    onDark3:     hslToHex(neutral.h, neutral.sLow, tone === 'warm' ? 51 : 56),
+  };
+}
+
+const PRESETS = {
+  'warm-editorial': { color: '#a05a3c', tone: 'warm', display: 'Newsreader', body: 'Instrument Sans' },
+  'monochrome':     { color: '#2a2a2a', tone: 'cool', display: 'Newsreader', body: 'Instrument Sans' },
+  'cool-studio':    { color: '#4a6fa5', tone: 'cool', display: 'Source Serif 4', body: 'DM Sans' },
+  'library':        { color: '#6b7d3e', tone: 'warm', display: 'EB Garamond', body: 'Source Sans 3' },
+  'rose':           { color: '#b5536a', tone: 'warm', display: 'Crimson Pro', body: 'Instrument Sans' },
+  'midnight':       { color: '#1e3a5f', tone: 'cool', display: 'Newsreader', body: 'Manrope' },
+  'custom':         { color: '#a05a3c', tone: 'warm', display: 'Newsreader', body: 'Instrument Sans' },
+};
+
+const state = {
+  preset: 'warm-editorial',
+  accent: '#a05a3c',
+  tone: 'warm',
+  fontDisplay: 'Newsreader',
+  fontBody: 'Instrument Sans',
+};
+
+const els = {
+  presetList: document.getElementById('preset-list'),
+  customSwatch: document.getElementById('custom-swatch'),
+  accentPicker: document.getElementById('accent-picker'),
+  accentText: document.getElementById('accent-text'),
+  toneToggle: document.querySelector('.tone-toggle'),
+  fontDisplay: document.getElementById('font-display'),
+  fontBody: document.getElementById('font-body'),
+  miniDeck: document.getElementById('mini-deck'),
+  tokens: document.getElementById('tokens'),
+  cssOutput: document.getElementById('css-output'),
+  copyBtn: document.getElementById('copy-btn'),
+  fontLink: document.getElementById('font-link'),
+};
+
+function applyPreset(name) {
+  const p = PRESETS[name]; if (!p) return;
+  state.preset = name;
+  if (name !== 'custom') {
+    state.accent = p.color; state.tone = p.tone;
+    state.fontDisplay = p.display; state.fontBody = p.body;
+  }
+  els.accentPicker.value = state.accent;
+  els.accentText.value = state.accent;
+  els.fontDisplay.value = state.fontDisplay;
+  els.fontBody.value = state.fontBody;
+  document.querySelectorAll('.tone-toggle label').forEach(lbl => {
+    lbl.classList.toggle('active', lbl.dataset.tone === state.tone);
+    lbl.querySelector('input').checked = lbl.dataset.tone === state.tone;
+  });
+  document.querySelectorAll('#preset-list label').forEach(lbl => {
+    lbl.classList.toggle('active', lbl.dataset.preset === name);
+  });
+  render();
+}
+
+function loadFonts(display, body) {
+  const fams = [
+    display.replace(/ /g, '+') + ':ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400',
+    body.replace(/ /g, '+') + ':wght@400;500;600',
+    'JetBrains+Mono:wght@400;500'
+  ];
+  els.fontLink.href = 'https://fonts.googleapis.com/css2?' + fams.map(f => 'family=' + f).join('&') + '&display=swap';
+}
+
+function render() {
+  const p = derivePalette(state.accent, state.tone);
+  const mini = els.miniDeck;
+  mini.style.setProperty('--p-bg', p.bg);
+  mini.style.setProperty('--p-bg-card-alt', p.bgCardAlt);
+  mini.style.setProperty('--p-ink1', p.ink1);
+  mini.style.setProperty('--p-ink2', p.ink2);
+  mini.style.setProperty('--p-ink3', p.ink3);
+  mini.style.setProperty('--p-line1', p.line1);
+  mini.style.setProperty('--p-line2', p.line2);
+  mini.style.setProperty('--p-accent', p.accent);
+  mini.style.setProperty('--p-display', `'${state.fontDisplay}'`);
+  mini.style.setProperty('--p-body', `'${state.fontBody}'`);
+  loadFonts(state.fontDisplay, state.fontBody);
+
+  const tokenDefs = [
+    ['--bg', p.bg], ['--bg-tint', p.bgTint], ['--bg-card', p.bgCard],
+    ['--bg-card-alt', p.bgCardAlt], ['--bg-dark', p.bgDark],
+    ['--ink-1', p.ink1], ['--ink-2', p.ink2], ['--ink-3', p.ink3],
+    ['--ink-4', p.ink4], ['--ink-5', p.ink5],
+    ['--line-1', p.line1], ['--line-2', p.line2],
+    ['--accent', p.accent], ['--accent-tint', p.accentTint],
+  ];
+  els.tokens.innerHTML = tokenDefs.map(([name, value]) => `
+    <div class="token-cell">
+      <div class="token-swatch" style="background: ${value}"></div>
+      <div class="token-info">
+        <div class="token-name">${name}</div>
+        <div class="token-value">${value}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const fontUrl = 'https://fonts.googleapis.com/css2?family=' +
+    state.fontDisplay.replace(/ /g, '+') + ':ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=' +
+    state.fontBody.replace(/ /g, '+') + ':wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap';
+
+  const css = `<span class="c">/* ====================================================
+   Generated portfolio theme · ${new Date().toISOString().slice(0,10)}
+   Preset: ${state.preset} · Tone: ${state.tone} · Accent: ${state.accent}
+   Font URL for &lt;head&gt;:
+   ${fontUrl}
+   ==================================================== */</span>
+<span class="k">:root</span> {
+  <span class="c">/* Surfaces */</span>
+  --bg:           <span class="v">${p.bg};</span>
+  --bg-tint:      <span class="v">${p.bgTint};</span>
+  --bg-card:      <span class="v">${p.bgCard};</span>
+  --bg-card-alt:  <span class="v">${p.bgCardAlt};</span>
+  --bg-dark:      <span class="v">${p.bgDark};</span>
+
+  <span class="c">/* Ink scale */</span>
+  --ink-1: <span class="v">${p.ink1};</span>
+  --ink-2: <span class="v">${p.ink2};</span>
+  --ink-3: <span class="v">${p.ink3};</span>
+  --ink-4: <span class="v">${p.ink4};</span>
+  --ink-5: <span class="v">${p.ink5};</span>
+
+  <span class="c">/* Lines */</span>
+  --line-1: <span class="v">${p.line1};</span>
+  --line-2: <span class="v">${p.line2};</span>
+  --line-3: <span class="v">${p.line3};</span>
+
+  <span class="c">/* Accent */</span>
+  --accent:       <span class="v">${p.accent};</span>
+  --accent-tint:  <span class="v">${p.accentTint};</span>
+  --accent-ink:   <span class="v">${p.accentInk};</span>
+
+  <span class="c">/* Semantic */</span>
+  --warn:         <span class="v">${p.warn};</span>
+  --warn-tint:    <span class="v">${p.warnTint};</span>
+  --positive:     <span class="v">${p.positive};</span>
+  --positive-tint:<span class="v">${p.positiveTint};</span>
+  --risk:         <span class="v">${p.risk};</span>
+  --risk-tint:    <span class="v">${p.riskTint};</span>
+
+  <span class="c">/* On-dark */</span>
+  --on-dark-1: <span class="v">${p.onDark1};</span>
+  --on-dark-2: <span class="v">${p.onDark2};</span>
+  --on-dark-3: <span class="v">${p.onDark3};</span>
+
+  <span class="c">/* Typography */</span>
+  --font-display: <span class="v">'${state.fontDisplay}', Georgia, serif;</span>
+  --font-body:    <span class="v">'${state.fontBody}', -apple-system, sans-serif;</span>
+  --font-mono:    <span class="v">'JetBrains Mono', 'SF Mono', monospace;</span>
+
+  <span class="c">/* Type scale */</span>
+  --eyebrow-size:   <span class="v">11px;</span>
+  --title-size:     <span class="v">clamp(26px, 3.2vw, 40px);</span>
+  --title-large:    <span class="v">clamp(36px, 5vw, 64px);</span>
+  --subtitle-size:  <span class="v">clamp(15px, 1.5vw, 18px);</span>
+  --body-size:      <span class="v">clamp(13px, 1.1vw, 15.5px);</span>
+  --body-small:     <span class="v">clamp(11.5px, 0.95vw, 13px);</span>
+  --label-size:     <span class="v">10px;</span>
+  --source-size:    <span class="v">10px;</span>
+  --stat-size:      <span class="v">clamp(40px, 5vw, 72px);</span>
+
+  <span class="c">/* Spacing */</span>
+  --slide-pad-y: <span class="v">5.5vh;</span>
+  --slide-pad-x: <span class="v">7vw;</span>
+  --gap-xs: <span class="v">0.5rem;</span>
+  --gap-sm: <span class="v">1rem;</span>
+  --gap-md: <span class="v">1.5rem;</span>
+  --gap-lg: <span class="v">2.5rem;</span>
+  --gap-xl: <span class="v">4rem;</span>
+
+  <span class="c">/* Geometry */</span>
+  --radius-sm: <span class="v">4px;</span>
+  --radius-md: <span class="v">8px;</span>
+  --radius-lg: <span class="v">14px;</span>
+  --hairline: <span class="v">1px;</span>
+}`;
+  els.cssOutput.innerHTML = css;
+  els.customSwatch.style.background = state.accent;
+}
+
+// ============ events ============
+els.presetList.addEventListener('change', e => applyPreset(e.target.value));
+els.accentPicker.addEventListener('input', e => {
+  state.accent = e.target.value;
+  els.accentText.value = e.target.value;
+  state.preset = 'custom';
+  document.querySelector('input[value="custom"]').checked = true;
+  document.querySelectorAll('#preset-list label').forEach(lbl =>
+    lbl.classList.toggle('active', lbl.dataset.preset === 'custom'));
+  render();
+});
+els.accentText.addEventListener('input', e => {
+  let v = e.target.value.trim();
+  if (!v.startsWith('#')) v = '#' + v;
+  if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+    state.accent = v;
+    els.accentPicker.value = v;
+    state.preset = 'custom';
+    document.querySelector('input[value="custom"]').checked = true;
+    document.querySelectorAll('#preset-list label').forEach(lbl =>
+      lbl.classList.toggle('active', lbl.dataset.preset === 'custom'));
+    render();
+  }
+});
+els.toneToggle.addEventListener('change', e => {
+  state.tone = e.target.value;
+  document.querySelectorAll('.tone-toggle label').forEach(lbl =>
+    lbl.classList.toggle('active', lbl.dataset.tone === e.target.value));
+  render();
+});
+els.fontDisplay.addEventListener('change', e => { state.fontDisplay = e.target.value; render(); });
+els.fontBody.addEventListener('change', e => { state.fontBody = e.target.value; render(); });
+els.copyBtn.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(els.cssOutput.textContent);
+  els.copyBtn.textContent = '✓ Copied';
+  els.copyBtn.classList.add('copied');
+  setTimeout(() => {
+    els.copyBtn.textContent = 'Copy CSS';
+    els.copyBtn.classList.remove('copied');
+  }, 2000);
+});
+
+render();
+</script>
+</body>
+</html>
