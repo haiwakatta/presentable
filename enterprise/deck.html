@@ -966,7 +966,6 @@ ul.bullets li .lead { color: var(--ink-1); font-weight: 500; }
 
 /* --- Risk key — descriptions alongside the matrix ------------------- */
 .risk-key {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -3899,7 +3898,7 @@ body.embed .progress { display: none; }
       <h2 class="title">Six risks track to the plan; three require active mitigation in the first 90 days.</h2>
       <div class="title-rule"></div>
       <div style="display: flex; flex: 1 1 auto; min-height: 0; gap: var(--gap-xl); align-items: stretch;">
-        <div class="risk-matrix" style="flex: 0 0 auto;">
+        <div class="risk-matrix" style="flex: 1 1 auto;">
           <div class="y-axis-label">Impact →</div>
           <div class="risk-grid">
             <!-- Row 1: high impact — .risk-legend is now outside risk-grid so nth-child(3n) is correct -->
@@ -3927,7 +3926,7 @@ body.embed .progress { display: none; }
             <div class="item"><span class="swatch" style="background: var(--risk-tint);"></span>High</div>
           </div>
         </div>
-        <div class="risk-key">
+        <div class="risk-key" style="flex: 0 0 260px;">
           <div class="rk-item">
             <div class="risk-dot">R1</div>
             <div>
