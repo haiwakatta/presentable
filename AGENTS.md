@@ -24,6 +24,8 @@ presentable/
 ├── AGENTS.md                    ← this file (the foundation)
 ├── export-pdf.js                ← Playwright headless PDF exporter
 ├── package.json                 ← Playwright dependency + per-case PDF scripts
+├── csv-to-chart.js              ← CLI: parse a .csv and emit a chart slide (8 types, auto-detects)
+├── brand-lock.js                ← CLI: validate a deck against brand.lock; generate lock from :root
 │
 ├── enterprise/
 │   ├── deck.html                ← showcase: 50 slides, 46 components, 7 chart types

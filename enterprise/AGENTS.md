@@ -401,6 +401,8 @@ When reviewing a slide you've written: ask whether the content area reads as ful
 4. **Pick components from the reference.** Match component to content type. Don't invent new layouts unless the standard set genuinely doesn't fit.
 5. **Iterate slide-by-slide.** Don't bulk-generate twenty slides and ask for feedback. Show one, get a reaction, refine, move on.
 6. **Source everything.** If you don't know the source, write `[Source: ...]` as a placeholder and flag it to the human. Don't invent a source.
+7. **If the human provides a .csv or Excel export** — don't hand-write chart JSON. Run `csv-to-chart.js` and paste the output. Always update the generated action title before handing off. See the root `AGENTS.md` CSV → chart bridge section for supported types and flags.
+8. **Validate brand compliance before reporting done.** If a `brand.lock` exists in the repo, run `npm run brand-check -- <deck.html>` and resolve any violations. If there is no lock file, skip this step — the validator is opt-in.
 
 When the human says:
 
@@ -412,6 +414,7 @@ When the human says:
 - "Show the process / who does what / onboarding flow / handoffs" → **swimlane** (component 40); four phases maximum; hero lane = the primary owning team
 - "Show the business case / costs vs benefits / ROI / TCO" → **TCO table** (component 41) for full breakdown + **fin-tiles** (component 31) or **cumulative cash flow** chart (component 33) on adjacent slides for the headline summary; never put the full table and the cash flow on the same slide
 - "Show the timeline / deployment plan / rollout phasing / workstreams" → **Gantt-lite** (component 42) for executive view; **Gantt task list** (component 38) for operational detail; one Gantt-lite per deck is the rule
+- "Here's the data / I have a spreadsheet / here's a CSV" → run `csv-to-chart.js` (see root AGENTS.md). Don't hand-write chart JSON when source data exists.
 - "Add a chart of X" → match to one of the seven chart types: line (trajectory), horizontal bar (ranked comparison), stacked column (composition over time), waterfall (bridge between two states), cost-benefit (project economics by year), cumulative cash flow (running balance), tornado (sensitivity). If none fit the finding, the finding probably isn't a chart — it's a stat grid or comparison table. **Always write the action title before picking the chart type.** The title describes the finding; the chart type is whatever makes the finding most visible.
 - "Make this sharper" → start with the action title. If the title is a sentence stating the conclusion, the slide is probably fine. If it's a topic label, rewrite the title and the rest will follow.
 - "Add a quote slide" → insight/quote, but ask "do we really need it?" — these are the most over-used component in amateur decks.

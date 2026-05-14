@@ -1,6 +1,6 @@
 # Presentable — Portfolio case agent
 
-You are helping a human build a **personal portfolio, designer's website-as-deck, or single-project case study** using the framework. Read the root `AGENTS.md` first for the foundation (components, charts, design tokens, PDF export). This file is the **portfolio case overlay** — what makes portfolio work different from enterprise or investor decks.
+You are helping a human build a **personal portfolio, designer's website-as-deck, or single-project case study** using the framework. Read the root `AGENTS.md` first for the foundation (components, charts, design tokens, PDF export, and CLI tools). This file is the **portfolio case overlay** — what makes portfolio work different from enterprise or investor decks.
 
 ## What this case is for
 
@@ -221,7 +221,7 @@ This storyline is the shortest and most personal. It's appropriate for a designe
 
 ## Components — what to use, what to avoid
 
-Most of the framework's 38 components were built for enterprise and investor cases. For portfolio, the disciplined list is much shorter.
+Most of the framework's 46 components were built for enterprise and investor cases. For portfolio, the disciplined list is much shorter.
 
 **Heavy use:**
 - Cover, thanks

@@ -1,6 +1,6 @@
 # Presentable — Investor case agent
 
-You are helping a human build a **startup investor pitch deck** using the framework. Read the root `AGENTS.md` first for the foundation (components, charts, design tokens, PDF export). This file is the **investor case overlay** — what's different about pitch decks vs the enterprise case, and how to do them well.
+You are helping a human build a **startup investor pitch deck** using the framework. Read the root `AGENTS.md` first for the foundation (components, charts, design tokens, PDF export, and CLI tools). This file is the **investor case overlay** — what makes pitch decks different from the enterprise case, and how to execute them well.
 
 ## What this case is for
 
@@ -468,6 +468,8 @@ When reviewing a slide you've written: look at the bottom half. If it's blank, e
 5. **Numbers first.** For each slide that needs a number, ask for the real one. Do not invent placeholder numbers; mark them `[NUMBER NEEDED]` and flag.
 6. **Iterate on action titles** before any body copy. The titles, read in order, should tell the whole story even if the body never gets read.
 7. **Refuse to bloat.** If the user wants slide 16, push back. The investor case rewards discipline. Tell the user the slide they want to add is probably an appendix slide.
+8. **If the human provides traction data in a .csv** — don't hand-write chart JSON. Run `csv-to-chart.js` (line chart or stat-grid depending on shape). See root `AGENTS.md` for usage.
+9. **Validate brand compliance before hand-off.** If a `brand.lock` exists in the repo, run `npm run brand-check -- investor/deck.html` and fix violations. No lock file = skip.
 
 ## Final note
 
