@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Presentable — HTML slide framework for Claude</title>
-  <meta name="description" content="A self-contained HTML slide framework for AI-assisted deck creation. Three cases — enterprise, investor, portfolio — with 46 components, 7 chart types, theme builders, and PDF export. No build step." />
+  <meta name="description" content="A self-contained HTML slide framework for the AI-assisted workflow. Raw HTML output — no framework, no component API. Works with Claude, GPT-4o, Gemini, and any capable LLM. 46 components, 7 chart types, CSV bridge, PDF export." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -772,6 +772,99 @@
       letter-spacing: 0.06em;
     }
 
+    /* ------------------------------------------------------------------ DATA / CSV */
+    #data { background: var(--bg-tint); }
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .data-types {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--line-1);
+      border: 1px solid var(--line-1);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 1.25rem;
+    }
+    .dt-row {
+      background: var(--bg);
+      padding: 0.55rem 1rem;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0.75rem;
+      align-items: baseline;
+    }
+    .dt-flag {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--ink-2);
+      letter-spacing: 0.04em;
+    }
+    .dt-desc {
+      font-size: 12px;
+      color: var(--ink-3);
+      line-height: 1.5;
+    }
+    .dt-desc code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--bg-tint);
+      padding: 0 4px;
+      border-radius: 3px;
+      color: var(--ink-2);
+    }
+    .data-code {
+      background: #111;
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+    }
+    .dc-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 1.25rem;
+    }
+    .dc-note {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.6;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .dc-note code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+    }
+    .data-body-text {
+      font-size: 14px;
+      color: var(--ink-2);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .data-body-text code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--line-1);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: var(--ink-2);
+    }
+    .data-footnote {
+      font-size: 12px;
+      color: var(--ink-4);
+      margin-top: 0.85rem;
+      line-height: 1.6;
+    }
+
     /* ------------------------------------------------------------------ RESPONSIVE */
     @media (max-width: 900px) {
       :root { --section-pad: 3.5rem 5vw; }
@@ -780,6 +873,7 @@
       .workflow-grid { grid-template-columns: 1fr; }
       .components-grid { grid-template-columns: 1fr 1fr; }
       .qs-grid { grid-template-columns: 1fr; }
+      .data-grid { grid-template-columns: 1fr; }
       .agents-grid { grid-template-columns: 1fr; gap: 2rem; }
       .footer-top { grid-template-columns: 1fr 1fr; }
       .nav-links li:not(:last-child) { display: none; }
@@ -802,6 +896,7 @@
   <ul class="nav-links">
     <li><a href="#cases">Cases</a></li>
     <li><a href="#quickstart">Get started</a></li>
+    <li><a href="#data">Data</a></li>
     <li><a href="#agents">AI workflow</a></li>
     <li><a href="https://github.com/haiwakatta/presentable" target="_blank" class="nav-gh">GitHub ↗</a></li>
   </ul>
@@ -814,11 +909,12 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">Open source · MIT licensed</div>
-    <h1>Professional slide decks,<br><em>built by Claude.</em></h1>
+    <h1>Professional slide decks,<br><em>built by your AI.</em></h1>
     <p class="hero-sub">
-      A self-contained HTML framework for AI-assisted deck creation.
-      Tell Claude what you need — it writes the slides. No build step,
-      no JavaScript framework, no slide app.
+      A self-contained HTML framework for the AI-assisted deck workflow.
+      Every deck is raw HTML — no framework, no component API, no build step.
+      LLMs are trained on HTML; they write it more accurately than any DSL.
+      Works with Claude, GPT-4o, Gemini, or any capable model.
     </p>
     <div class="hero-stats">
       <span class="stat-pill">46 components</span>
@@ -985,10 +1081,10 @@
 <section id="workflow">
   <div class="section-inner">
     <div class="section-eyebrow">How it works</div>
-    <h2 class="section-title">Describe it. <em>Claude builds it.</em></h2>
+    <h2 class="section-title">Describe it. <em>Your LLM builds it.</em></h2>
     <p class="section-sub">
-      The framework is designed around a tight loop between human judgement
-      and AI execution. You supply the story; Claude writes the slides.
+      A tight loop between human judgment and AI execution. You supply the
+      story; the agent writes the HTML. Any capable frontier model can drive it.
     </p>
     <div class="workflow-grid">
       <div class="workflow-step">
@@ -1003,11 +1099,12 @@
       </div>
       <div class="workflow-step">
         <div class="ws-no">02</div>
-        <div class="ws-title">Claude writes the slides directly</div>
+        <div class="ws-title">The agent writes the slides directly</div>
         <div class="ws-body">
           The agent reads the foundation file plus the case overlay, picks
           the right storyline and components, and writes HTML directly into
-          your <code>deck.html</code>. Run <code>npm run dev</code> and watch
+          your <code>deck.html</code>. Raw HTML — no intermediate format,
+          no hallucinated props. Run <code>npm run dev</code> and watch
           the browser refresh on every save.
         </div>
       </div>
@@ -1249,15 +1346,128 @@
 
 
 <!-- ====================================================================
+     DATA / CSV BRIDGE
+     ==================================================================== -->
+<section id="data">
+  <div class="section-inner">
+    <div class="section-eyebrow">CSV &amp; Excel bridge</div>
+    <h2 class="section-title">Spreadsheet data, <em>instantly as chart slides.</em></h2>
+    <p class="section-sub">
+      Consultants and PMs live in spreadsheets. Drop a <code style="font-family:var(--font-mono);font-size:13px;background:var(--line-1);padding:2px 6px;border-radius:3px;">.csv</code> into the repo,
+      run one command, and get a fully formatted chart slide ready to paste directly
+      into your deck. No JSON to write, no chart config to figure out.
+    </p>
+
+    <div class="data-grid">
+
+      <div>
+        <p class="data-body-text">
+          <code>csv-to-chart.js</code> reads your file, infers the right chart type from
+          column names and value shapes, and emits a complete
+          <code>&lt;section class="slide"&gt;</code> block to stdout. Review it,
+          update the action title placeholder, then paste it in — or pipe directly
+          to append. Detection info prints to stderr so it doesn't contaminate the output.
+        </p>
+        <p class="data-body-text">
+          Eight chart types are supported, covering the full range of consulting and
+          pitch-deck data scenarios. The type is auto-detected from column headers:
+          words like <code>down / up / pessim / optim</code> trigger tornado;
+          <code>cumul</code> triggers cumulative; mixed-sign values with bridge words
+          trigger waterfall. Pass <code>--chart TYPE</code> to override.
+        </p>
+
+        <div class="section-eyebrow" style="margin-bottom:0.6rem;">Supported chart types</div>
+        <div class="data-types">
+          <div class="dt-row">
+            <span class="dt-flag">bar</span>
+            <span class="dt-desc">Horizontal bars — label, value columns. Ranked comparison, league tables.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">column</span>
+            <span class="dt-desc">Vertical grouped or stacked — period + series columns. Add <code>--stacked</code>.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">line</span>
+            <span class="dt-desc">Time-series — period + one or more series. Growth curves, two-scenario comparisons.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">waterfall</span>
+            <span class="dt-desc">EBITDA bridge — label, value. First and last rows auto-detected as totals.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">tornado</span>
+            <span class="dt-desc">Sensitivity analysis — label, downside, upside. Sorted by magnitude automatically.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">cost-benefit</span>
+            <span class="dt-desc">Mixed-sign stacked — label, cost columns, benefit columns. Project economics by year.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">cumulative</span>
+            <span class="dt-desc">Running total — period, cumulative value. Break-even line auto-detected at zero crossing.</span>
+          </div>
+          <div class="dt-row">
+            <span class="dt-flag">stat-grid</span>
+            <span class="dt-desc">CSS stat tiles — label, value, delta, description. Max 4 rows. No Chart.js required.</span>
+          </div>
+        </div>
+
+        <p class="data-footnote">
+          <strong>Excel files:</strong> export to CSV first — <em>File → Save As → CSV</em> in Excel,
+          or <em>File → Download → CSV</em> in Google Sheets. Column header names drive
+          auto-detection; see <code>AGENTS.md</code> for the full detection rules.
+        </p>
+      </div>
+
+      <div class="data-code">
+        <div class="dc-title">Usage · npm run csv</div>
+        <div class="code-block">
+          <span class="comment"># Auto-detect chart type from column names</span>
+          <span class="cmd">npm run csv -- growth.csv</span>
+          <div class="blank"></div>
+          <span class="comment"># Specify type + add slide metadata</span>
+          <span class="cmd">npm run csv -- ebitda.csv --chart waterfall \</span>
+          <span class="output">  --title "Three drivers move EBITDA $240M→$480M." \</span>
+          <span class="output">  --eyebrow "EBITDA bridge · FY2024–2029" \</span>
+          <span class="output">  --source "Financial model v3.2"</span>
+          <div class="blank"></div>
+          <span class="comment"># Stacked column chart</span>
+          <span class="cmd">npm run csv -- revenue.csv --chart column --stacked \</span>
+          <span class="output">  --title "Enterprise mix shifts to 70% by 2027."</span>
+          <div class="blank"></div>
+          <span class="comment"># Pipe directly to append the slide</span>
+          <span class="cmd">npm run csv -- pipeline.csv >> enterprise/deck.html</span>
+          <div class="blank"></div>
+          <span class="comment"># All supported chart types</span>
+          <span class="cmd">npm run csv -- data.csv --chart [TYPE]</span>
+          <span class="output">  bar | column | line | waterfall | tornado</span>
+          <span class="output">  cost-benefit | cumulative | stat-grid</span>
+        </div>
+        <div class="dc-note">
+          Output goes to stdout — review it, sharpen the action title, then
+          paste into <code>deck.html</code>. Or pipe to append directly.
+          The <code>--title</code>, <code>--eyebrow</code>, <code>--note</code>,
+          and <code>--source</code> flags add the standard slide furniture.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+
+<!-- ====================================================================
      AI AGENT WORKFLOW
      ==================================================================== -->
 <section id="agents">
   <div class="section-inner">
     <div class="section-eyebrow">AI workflow</div>
-    <h2 class="section-title">Built for Claude. <em>Works with any LLM.</em></h2>
+    <h2 class="section-title">Designed for Claude. <em>Runs on any LLM.</em></h2>
     <p class="section-sub">
       Every case ships with an <code style="font-family:var(--font-mono);font-size:13px;background:var(--line-1);padding:2px 6px;border-radius:3px;">AGENTS.md</code> — a complete instruction set that tells
-      the AI exactly how to build that type of deck, which components to use,
+      the model exactly how to build that type of deck, which components to use,
       and which mistakes to avoid.
     </p>
 
@@ -1338,10 +1548,17 @@
           and writes the HTML directly into your deck file.
         </p>
         <p>
+          The output is <strong>raw HTML</strong> — not a DSL, not a framework
+          abstraction, not generated JSON for a renderer to interpret. Every
+          frontier model has been trained on billions of HTML pages and reasons
+          about it natively. There is no component API to hallucinate, no prop
+          types to get wrong, no build step that can fail. What the model writes
+          is exactly what renders in the browser.
+        </p>
+        <p>
           What matters most is <strong>context length</strong>. The root
           AGENTS.md is ~1,500 lines; each case overlay adds 300–500 more.
-          Any modern frontier model handles it. Smaller or older models may
-          lose discipline mid-session.
+          Any modern frontier model handles it comfortably.
         </p>
         <a class="btn-primary" href="https://github.com/haiwakatta/presentable/blob/main/AGENTS.md" target="_blank" style="background:var(--ink-1);color:#fff;display:inline-flex;margin-top:0.5rem;">Read AGENTS.md →</a>
       </div>
@@ -1470,6 +1687,8 @@
           <li><a href="https://github.com/haiwakatta/presentable/blob/main/README.md" target="_blank">README</a></li>
           <li><a href="https://github.com/haiwakatta/presentable/blob/main/LOCAL_SETUP.md" target="_blank">Local setup guide</a></li>
           <li><a href="https://github.com/haiwakatta/presentable/blob/main/NEW_DECK.md" target="_blank">New deck guide</a></li>
+          <li><a href="https://github.com/haiwakatta/presentable/blob/main/csv-to-chart.js" target="_blank">csv-to-chart.js</a></li>
+          <li><a href="https://github.com/haiwakatta/presentable/blob/main/brand-lock.js" target="_blank">brand-lock.js</a></li>
         </ul>
       </div>
     </div>
