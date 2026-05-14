@@ -18,6 +18,8 @@
     "theme:investor": "node -e \"require('child_process').exec((process.platform === 'darwin' ? 'open ' : process.platform === 'win32' ? 'start ' : 'xdg-open ') + 'investor/theme-builder.html')\"",
     "theme:portfolio": "node -e \"require('child_process').exec((process.platform === 'darwin' ? 'open ' : process.platform === 'win32' ? 'start ' : 'xdg-open ') + 'portfolio/theme-builder.html')\"",
     "csv": "node csv-to-chart.js",
+    "brand-check": "node brand-lock.js",
+    "brand-init": "node brand-lock.js --init",
     "postinstall": "playwright install chromium"
   },
   "engines": {

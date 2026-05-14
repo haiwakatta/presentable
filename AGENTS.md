@@ -90,6 +90,49 @@ Chrome behavior:
 
 The framework is **screen-first** but exports cleanly to PDF via `window.print()` (in-page button) or the headless Playwright exporter (`export-pdf.js`).
 
+## Brand Lock — guardrails against style drift
+
+When a company's brand team has locked a `brand.lock` file into the repo, **run the validator after writing slides and fix any violations before reporting the task complete**.
+
+```bash
+node brand-lock.js enterprise/deck.html        # validate
+npm run brand-check -- investor/deck.html       # npm alias
+```
+
+**Generating a brand.lock (done once by the brand team):**
+
+```bash
+# From an already-themed deck (recommended):
+node brand-lock.js --init enterprise/deck.html   # writes brand.lock
+
+# Or open the theme builder and click "🔒 Brand Lock" in the output panel
+# to generate and download the JSON.
+```
+
+**brand.lock format:**
+```json
+{
+  "name": "Acme Corp",
+  "locked_at": "2026-05-14",
+  "fonts": ["Fraunces", "Manrope", "JetBrains Mono"],
+  "accent": "#1a4d7a",
+  "palette": ["#0a0a0a", "#2a2a2a", "#6a6a6a", "#9a9a9a", "#c4c4c4", "#ebebeb", "#ffffff", "#1a4d7a", "#eef3f8"]
+}
+```
+
+**What the validator catches (and what you should fix):**
+
+| Violation | Example | Fix |
+|---|---|---|
+| Hardcoded color not in palette | `style="color:#ff4444"` | Remove inline style; colour not in brand |
+| Palette color hardcoded | `style="color:#1a4d7a"` | Replace with `style="color:var(--accent)"` |
+| Unapproved font in inline style | `style="font-family:Arial"` | Replace with `style="font-family:var(--font-body)"` |
+| `<style>` block inside a slide | `<section><style>…</style>` | Move rules to the main `<style>` block |
+
+**If there is no brand.lock in the repo:** proceed normally. The validator is opt-in and only activates when a lock file exists.
+
+**On logo placement:** The validator cannot check image or logo position programmatically. If the brand.lock includes a note about logo placement (e.g., in a `notes` field), read it and follow it manually when building cover slides.
+
 ## CSV → chart bridge
 
 When the human has spreadsheet data in a `.csv` file, **do not write chart JSON by hand**. Run `csv-to-chart.js` instead — it parses the file, infers or accepts a chart type, and emits a ready-to-paste `<section class="slide">` block.

@@ -578,9 +578,21 @@ SOURCE: https://..."></textarea>
           <div style="display:flex;gap:8px;">
             <button class="btn" id="download-btn">Apply to deck</button>
             <button class="btn secondary" id="copy-btn">Copy CSS</button>
+            <button class="btn secondary" id="lock-btn" title="Generate brand.lock for this theme">🔒 Brand Lock</button>
           </div>
         </div>
         <pre class="css-block" id="css-output"></pre>
+        <div id="lock-panel" style="display:none;margin-top:1.25rem;padding:1rem;background:#f9f9f7;border:1px solid #e0e0e0;border-radius:6px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:#2a2a2a;">brand.lock</span>
+            <div style="display:flex;gap:6px;">
+              <button class="btn secondary btn-sm" id="copy-lock-btn">Copy JSON</button>
+              <button class="btn secondary btn-sm" id="download-lock-btn">Download</button>
+            </div>
+          </div>
+          <pre id="lock-output" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.6;color:#2a2a2a;white-space:pre;overflow-x:auto;margin:0;"></pre>
+          <p style="font-size:11px;color:#9a9a9a;margin-top:0.6rem;margin-bottom:0;">Save as <code>brand.lock</code> in the repo root. Validate any deck: <code>node brand-lock.js portfolio/deck.html</code></p>
+        </div>
         <p class="helper-note">Writes the theme directly to <code>portfolio/deck.html</code> and triggers a live reload. Requires <strong>npm run dev</strong> to be running.</p>
       </div>
     </div>
@@ -1247,6 +1259,41 @@ els.copyBtn.addEventListener('click', async () => {
   await navigator.clipboard.writeText(els.cssOutput.textContent);
   els.copyBtn.textContent = '✓ Copied'; els.copyBtn.classList.add('copied');
   setTimeout(() => { els.copyBtn.textContent = 'Copy CSS'; els.copyBtn.classList.remove('copied'); }, 2000);
+});
+
+// ── Brand Lock ────────────────────────────────────────────────────────────────
+function generateBrandLock() {
+  const css = els.cssOutput.textContent;
+  if (!css.trim()) return null;
+  const get = re => (css.match(re) || [])[1] || '';
+  const normHex = h => h.toLowerCase().replace(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/, '#$1$1$2$2$3$3');
+  const fonts   = [get(/--font-display:\s*'([^']+)'/), get(/--font-body:\s*'([^']+)'/), get(/--font-mono:\s*'([^']+)'/)] .filter(Boolean);
+  const accent  = get(/--accent:\s*(#[0-9a-fA-F]{6})/i);
+  const palette = [...new Set((css.match(/#[0-9a-fA-F]{6}/gi) || []).map(normHex))];
+  const name    = (typeof state !== 'undefined' && state.company) ? state.company : 'Brand';
+  return { name, locked_at: new Date().toISOString().slice(0,10), fonts, accent: normHex(accent || '#000000'), palette };
+}
+
+document.getElementById('lock-btn').addEventListener('click', () => {
+  const lock = generateBrandLock();
+  if (!lock) { alert('Generate a theme first, then click Brand Lock.'); return; }
+  document.getElementById('lock-output').textContent = JSON.stringify(lock, null, 2);
+  const panel = document.getElementById('lock-panel');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+document.getElementById('copy-lock-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('copy-lock-btn');
+  await navigator.clipboard.writeText(document.getElementById('lock-output').textContent);
+  btn.textContent = '✓ Copied'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy JSON'; btn.classList.remove('copied'); }, 2000);
+});
+
+document.getElementById('download-lock-btn').addEventListener('click', () => {
+  const json = document.getElementById('lock-output').textContent;
+  const a = Object.assign(document.createElement('a'), { href: 'data:application/json,' + encodeURIComponent(json), download: 'brand.lock' });
+  a.click();
 });
 
 document.getElementById('download-btn').addEventListener('click', async () => {
