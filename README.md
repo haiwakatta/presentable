@@ -6,7 +6,7 @@ An HTML deck framework built for the LLM-with-human workflow. **One foundation. 
 >
 > **Want to build a deck for your situation?** See **[NEW_DECK.md](./NEW_DECK.md)** — the manual and Claude Code workflows, the storyline picker, and a fully worked example (13-slide business case for an analytics team in a warehousing company, using a deliberately different component mix than the generic business case).
 
-The same component library — 38 layouts and 7 chart types — serves three very different audiences:
+The same component library — 46 components and 7 chart types — serves three very different audiences:
 
 - **Enterprise** decks for executives, boards, and clients (consulting-grade strategy work)
 - **Investor** decks for startup pitches (seed, Series A/B)
@@ -29,7 +29,7 @@ Each case has its own visual theme, its own storyline conventions, its own tone 
 | **Accent** | Deep blue `#1a4d7a` (rare) | Vivid orange `#ea580c` (confident) | Muted terracotta `#a05a3c` (typographic only) |
 | **Density** | High — text and tables | Low — one moment per slide | Low-medium — image-led |
 | **Typical length** | 15–25 slides | 12–15 slides | 8–12 slides |
-| **Showcase deck** | 46 slides demonstrating every component | 13-slide Loop Series A pitch | 10-slide Ana Rivera portfolio |
+| **Showcase deck** | 50 slides demonstrating every component | 17-slide Loop Series A pitch | 10-slide Ana Rivera portfolio |
 
 ## Folder map
 
@@ -41,7 +41,7 @@ presentable/
 ├── package.json                 ← npm scripts: pdf:enterprise / pdf:investor / pdf:portfolio
 │
 ├── enterprise/
-│   ├── deck.html                ← 46-slide showcase: every component, every chart
+│   ├── deck.html                ← 50-slide showcase: every component, every chart
 │   ├── theme-builder.html       ← brand-research theme tool with AI prompt helper
 │   ├── AGENTS.md                ← enterprise case overlay
 │   └── examples/
@@ -51,7 +51,7 @@ presentable/
 │                                                       tornado, financial tiles, workstreams, scored risks)
 │
 ├── investor/
-│   ├── deck.html                ← 13-slide Series A pitch (Loop · B2B SaaS demo)
+│   ├── deck.html                ← 17-slide Series A pitch (Loop · B2B SaaS demo)
 │   ├── theme-builder.html       ← image-upload theme tool with color extraction
 │   ├── AGENTS.md                ← investor case overlay
 │   └── examples/
@@ -81,14 +81,14 @@ Every case has its own dedicated **theme builder** (`<case>/theme-builder.html`)
 | **Investor** | Drag-drop logo, deck screenshot, or product image | Canvas extracts the dominant colors from the image; you assign roles (accent / ink) by clicking the swatches |
 | **Portfolio** | Base color + style preset + warm/cool toggle | Algorithmic palette derivation via HSL math; six presets (warm editorial, monochrome, cool studio, library, dusty rose, midnight) plus custom |
 
-All three builders include a live preview, a derived-tokens panel showing every variable, and a copy-paste `:root` block. The output drops into the case's `deck.html` — the whole deck retones to the new theme, all 38 components, every chart.
+All three builders include a live preview, a derived-tokens panel showing every variable, and a copy-paste `:root` block. The output drops into the case's `deck.html` — the whole deck retones to the new theme, all 46 components, every chart.
 
 Open each tool by double-clicking the HTML file (or `open enterprise/theme-builder.html` from a terminal). Detailed per-case theming guidance is in each case's `AGENTS.md`.
 
 ## What's shared, what isn't
 
 **Shared (foundation):**
-- 38 components — covers, section dividers, exec summary, SCR, action titles, stat grids, 2×2 matrix, Strategy House, MECE tree, roadmap, options assessment, risk matrix, Harvey Balls, stakeholder directory, SWOT, persona, TAM/SAM/SOM, financial tiles, RAG dashboard, image gallery, project hero, and more
+- 46 components — covers, section dividers, exec summary, SCR, action titles, stat grids, 2×2 matrix, Strategy House, MECE tree, roadmap, options assessment, risk matrix, Harvey Balls, stakeholder directory, SWOT, persona, TAM/SAM/SOM, financial tiles, RAG dashboard, SaaS metrics, pricing tiers, system topology, BPMN swimlane, mockup frames, image gallery, project hero, and more
 - 7 chart types — line, horizontal bar, stacked column, waterfall, cost-benefit (mixed-sign stacked), cumulative cash flow (with break-even marker), tornado / sensitivity
 - Navigation, progress bar, keyboard shortcuts, deep links via `#3`
 - PDF export (browser print dialog + headless Playwright)

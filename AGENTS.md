@@ -6,7 +6,7 @@ You are an AI assistant helping a human work with this slide framework. **This i
 - `investor/AGENTS.md` — startup pitch decks: seed, Series A/B
 - `portfolio/AGENTS.md` — designer portfolios, project case studies, personal-brand decks
 
-This foundation file covers what is **shared across all three cases**: how slides work, the design-token system, the full component library (38 components + 7 chart types), and the PDF export. Things that **vary** by case — principles, storylines, tone, and which components to favor — live in the case files.
+This foundation file covers what is **shared across all three cases**: how slides work, the design-token system, the full component library (46 components + 7 chart types), and the PDF export. Things that **vary** by case — principles, storylines, tone, and which components to favor — live in the case files.
 
 ## What this framework is
 
@@ -26,7 +26,7 @@ presentable/
 ├── package.json                 ← Playwright dependency + per-case PDF scripts
 │
 ├── enterprise/
-│   ├── deck.html                ← showcase: 46 slides, 38 components, 7 chart types
+│   ├── deck.html                ← showcase: 50 slides, 46 components, 7 chart types
 │   ├── theme-builder.html       ← form-based theme tool with AI brand-research prompt
 │   ├── AGENTS.md                ← enterprise case overlay (consulting principles, storylines, tone)
 │   └── examples/

@@ -338,7 +338,7 @@ Diagnostic of a market or competitor. Usually a build to a strategic recommendat
 
 ## Components — what to use, what to avoid
 
-The enterprise case uses the **broadest palette** of the three cases. Most of the framework's 38 components were designed for enterprise work and fit naturally.
+The enterprise case uses the **broadest palette** of the three cases. Most of the framework's 46 components were designed for enterprise work and fit naturally.
 
 **Heavy use:**
 - Executive summary (Pyramid), SCR, section dividers (Roman)
