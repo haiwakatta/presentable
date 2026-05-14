@@ -86,14 +86,22 @@ async function main() {
   await page.emulateMedia({ media: 'print' });
 
   // Resize all Chart.js instances so they pick up their now-real
-  // parent dimensions, then give the browser a moment to paint.
+  // parent dimensions, then poll until all canvases have painted
+  // (or give up after 8 seconds to avoid hanging on broken charts).
   console.log(`→ Rendering charts…`);
   await page.evaluate(() => {
     if (typeof window.__renderCharts === 'function') {
       window.__renderCharts();
     }
   });
-  await page.waitForTimeout(600);
+  await page.waitForFunction(() => {
+    const canvases = [...document.querySelectorAll('canvas[data-chart]')];
+    if (canvases.length === 0) return true;
+    return canvases.every(c => c.width > 0 && c.height > 0);
+  }, { timeout: 8000 }).catch(() => {
+    console.warn('  [warn] chart render timed out — continuing with partial output');
+  });
+  await page.waitForTimeout(200);
 
   console.log(`→ Writing PDF…`);
   await page.pdf({

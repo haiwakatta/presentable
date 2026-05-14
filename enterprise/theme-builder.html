@@ -76,10 +76,13 @@ body {
 }
 .color-row { display: flex; gap: 8px; align-items: center; }
 .color-row input[type="color"] {
-  width: 40px; height: 38px; padding: 0;
+  width: 40px; height: 38px; padding: 2px;
   border: 1px solid var(--tool-line); border-radius: 3px;
   cursor: pointer; background: white;
+  -webkit-appearance: none; appearance: none;
 }
+.color-row input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.color-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
 .color-row input[type="text"] {
   flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 13px;
 }
@@ -449,7 +452,10 @@ pre.css-block .c { color: #6a6a6a; font-style: italic; }
       <div class="panel output">
         <div class="output-header">
           <h3>Generated <code style="font-family: 'JetBrains Mono'; font-size: 14px;">:root</code> block</h3>
-          <button class="btn" id="copy-btn">Copy CSS</button>
+          <div style="display:flex;gap:8px;">
+            <button class="btn secondary" id="download-btn">Download deck</button>
+            <button class="btn" id="copy-btn">Copy CSS</button>
+          </div>
         </div>
         <pre class="css-block" id="css-output"></pre>
         <div class="how-to">
@@ -788,6 +794,34 @@ els.copyBtn.addEventListener('click', async () => {
     els.copyBtn.textContent = 'Copy CSS';
     els.copyBtn.classList.remove('copied');
   }, 2000);
+});
+
+document.getElementById('download-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('download-btn');
+  btn.textContent = 'Preparing…';
+  btn.disabled = true;
+  try {
+    const resp = await fetch('deck.html');
+    if (!resp.ok) throw new Error('fetch failed');
+    let html = await resp.text();
+    const plainCss = els.cssOutput.textContent;
+    html = html.replace(/:root \{[\s\S]*?\n\}/, plainCss);
+    html = html.replace(/(<link id="font-link" href=")[^"]*"/, `$1${getFontUrlForOutput()}"`);
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const co = (state.company || 'deck').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    a.download = `${co}-enterprise-deck.html`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    btn.textContent = '✓ Downloaded';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Download deck'; btn.classList.remove('copied'); btn.disabled = false; }, 2000);
+  } catch {
+    btn.textContent = 'Download deck';
+    btn.disabled = false;
+    alert('Run "npm run dev" first — file:// fetch is blocked by the browser.');
+  }
 });
 
 renderPrompt();

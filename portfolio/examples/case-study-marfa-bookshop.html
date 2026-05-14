@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" onerror="document.querySelectorAll('[data-chart]').forEach(c=>{const w=c.parentElement;w.style.display='flex';w.style.alignItems='center';w.style.justifyContent='center';w.style.color='var(--ink-3)';w.style.fontSize='13px';w.textContent='chart unavailable (offline)'})"></script>
 <style>
 /* ================================================================
    DESIGN TOKENS — Portfolio theme
@@ -169,7 +169,7 @@ html, body {
 
 .title em {
   font-style: italic;
-  color: var(--ink-3);
+  color: var(--accent);
   font-variation-settings: "opsz" 36;
 }
 

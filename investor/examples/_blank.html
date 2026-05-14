@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sundial Health · Seed Pitch · 2026</title>
+<title>Loop · Series A pitch deck</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -2804,14 +2804,59 @@ body.embed .progress { display: none; }
   font-weight: 500;
 }
 
+/* ===== Keyboard shortcut overlay ===== */
+#shortcut-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.15s;
+}
+#shortcut-overlay.visible { opacity: 1; pointer-events: auto; }
+#shortcut-overlay .so-card {
+  background: white; border-radius: 8px; padding: 2rem 2.5rem;
+  min-width: 300px; box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+}
+#shortcut-overlay .so-title {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 1.2rem;
+}
+#shortcut-overlay table { border-collapse: collapse; width: 100%; }
+#shortcut-overlay td { padding: 0.3rem 0; font-size: 14px; vertical-align: top; }
+#shortcut-overlay td:first-child {
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-1);
+  padding-right: 1.5rem; white-space: nowrap;
+}
+#shortcut-overlay td:last-child { color: var(--ink-3); }
+
+/* ===== Slide count warning ===== */
+#slide-counter {
+  position: fixed; bottom: 14px; right: 18px; z-index: 100;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+  pointer-events: none; transition: color 0.2s;
+}
+#slide-counter.warn { color: #d97706; }
+#slide-counter.over { color: #dc2626; }
+@media print { #shortcut-overlay, #slide-counter { display: none !important; } }
 </style>
 </head>
 <body>
 
 <div class="progress" id="progress"></div>
+<div id="shortcut-overlay">
+  <div class="so-card">
+    <div class="so-title">Keyboard shortcuts</div>
+    <table>
+      <tr><td>→ / Space</td><td>Next slide</td></tr>
+      <tr><td>←</td><td>Previous slide</td></tr>
+      <tr><td>Home / End</td><td>First / last slide</td></tr>
+      <tr><td>P</td><td>Print / export PDF</td></tr>
+      <tr><td>?</td><td>Toggle this overlay</td></tr>
+      <tr><td>Esc</td><td>Close overlay</td></tr>
+    </table>
+  </div>
+</div>
+<div id="slide-counter"></div>
 
 <div class="deck" id="deck">
-
 
   <!-- =================================================================
        SLIDE 1 — COVER
@@ -2819,44 +2864,40 @@ body.embed .progress { display: none; }
   <section class="slide active">
     <div class="cover">
       <div class="cover-top">
-        <div class="cover-mark">Sundial Health · 2026</div>
-        <div class="cover-confid">Seed · For investors</div>
+        <div class="cover-mark">Company Name</div>
+        <div class="cover-confid">Seed Round · Confidential</div>
       </div>
       <div class="cover-center">
-        <div class="cover-eyebrow">Pitch · April 2026</div>
-        <h1 class="cover-title">Primary care <em>without</em> the no-show problem.</h1>
-        <p class="cover-sub">An AI scheduling layer that brings primary-care no-show rates from 38% to under 10%. 12 clinics in conversation, 2 paying. Raising $2M seed.</p>
+        <div class="cover-eyebrow">Series · Year</div>
+        <h1 class="cover-title">One sentence that captures <em>the opportunity</em> you're pursuing.</h1>
+        <p class="cover-sub">A brief supporting sentence that frames the market and your entry point.</p>
       </div>
       <div class="cover-bottom">
         <div class="cover-meta">
-          <div class="meta-label">Contact</div>
-          <div>founders@sundialhealth.com</div>
+          <div class="meta-label">Founders</div>
+          <div>Founder Name · Co-Founder Name</div>
         </div>
         <div class="cover-meta" style="text-align: right;">
-          <div class="meta-label">Round</div>
-          <div>Seed · $2M target</div>
+          <div class="meta-label">Date</div>
+          <div>Month Year</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- =================================================================
-       SLIDE 2 — PROBLEM (dark moment with big-stat)
+       SLIDE 2 — PROBLEM (dark moment or big-stat)
        ================================================================= -->
   <section class="slide dark">
-    <div class="slide-inner" style="justify-content: center; gap: 1.5rem;">
-      <div class="eyebrow" style="color: var(--accent);">The problem</div>
-      <h2 class="title large" style="color: var(--on-dark-1); max-width: 90%; font-weight: 500;">
-        Primary care clinics lose <em>38% of appointments</em> and 4 admin-hours a day trying to fix it.
-      </h2>
-      <p class="subtitle" style="color: var(--on-dark-2); max-width: 65%; margin-top: 0.5rem;">
-        Independent clinics — the 22,000 that don't belong to a hospital system — carry this loss alone. There's no tool built for them. Most use a part-time admin and a phone.
-      </p>
-      <div style="display: flex; gap: 3rem; margin-top: 2rem; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--on-dark-3);">
-        <div>38% no-show rate</div>
-        <div>$73K avg annual loss per clinic</div>
-        <div>22,000 independent clinics</div>
-      </div>
+    <div class="slide-inner">
+      <div class="eyebrow">The Problem</div>
+      <h2 class="title">Describe the painful status quo your customers live in.</h2>
+      <div class="title-rule"></div>
+      <ul class="bullets">
+        <li>Specific evidence of the problem — quantify the pain if you can.</li>
+        <li>Why existing solutions fail to solve it completely.</li>
+        <li>Who is most affected and what it costs them.</li>
+      </ul>
     </div>
   </section>
 
@@ -2865,332 +2906,22 @@ body.embed .progress { display: none; }
        ================================================================= -->
   <section class="slide">
     <div class="slide-inner">
-      <div class="eyebrow">The solution</div>
-      <h2 class="title">Sundial is the <em>AI layer</em> that calls patients back, fills cancellations, and learns each clinic's population.</h2>
+      <div class="eyebrow">The Solution</div>
+      <h2 class="title">What you've built and why it works where others haven't.</h2>
       <div class="title-rule"></div>
       <ul class="bullets">
-        <li><span class="lead">Voice-AI confirmations and re-scheduling.</span> Sundial calls every appointment 24 hours ahead — actual conversational AI, not robocalls. 78% of patients pick up; 64% confirm or rebook in under 90 seconds.</li>
-        <li><span class="lead">Real-time cancellation backfill.</span> When a slot opens, Sundial calls the right patient from the waitlist — selected by clinical priority, not by who asked first. Average fill time: 11 minutes.</li>
-        <li><span class="lead">Population learning.</span> The model learns each clinic's no-show patterns by patient cohort, time of day, weather, season. A clinic in El Paso gets a different model than one in Portland — automatically.</li>
-        <li><span class="lead">Sits on top of every EHR.</span> Reads from Epic, Cerner, athenahealth, and DrChrono via standard APIs. No clinical workflow changes; admin sees Sundial as a feed of confirmed appointments.</li>
+        <li>Core product insight — the thing that makes your approach different.</li>
+        <li>How it solves the problem stated in the previous slide.</li>
+        <li>Early proof: a metric, a customer quote, or a pilot result.</li>
       </ul>
-      <div class="source">
-        <div class="source-label">Solution scope from product spec v1.4, March 2026.</div>
-        <div class="page-no">03</div>
-      </div>
+    </div>
+    <div class="slide-footer">
+      <div class="source-label">Source: Your data</div>
+      <div class="page-no">3</div>
     </div>
   </section>
 
-  <!-- =================================================================
-       SLIDE 4 — WHY NOW (three-column)
-       ================================================================= -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="eyebrow">Why now</div>
-      <h2 class="title">Three forces have converged that didn't exist 24 months ago.</h2>
-      <div class="title-rule"></div>
-      <div class="three-col">
-        <div>
-          <div class="colno">— 01 Capability</div>
-          <h3>Voice AI crossed the believability line in late 2024.</h3>
-          <p>The combination of low-latency speech models, retrieval-augmented dialogue, and natural turn-taking made AI phone calls indistinguishable from human ones for routine scheduling. Two years ago this was a research demo; today it's a product layer.</p>
-        </div>
-        <div>
-          <div class="colno">— 02 Pain</div>
-          <h3>Care-staff shortage has become structural, not cyclical.</h3>
-          <p>Healthcare admin labor is 17% short and projected to widen through 2028. The 22K independent clinics can't compete with hospital systems on wages. Every clinic we've talked to has tried — and failed — to hire admin help.</p>
-        </div>
-        <div>
-          <div class="colno">— 03 Buyer readiness</div>
-          <h3>Telehealth normalized the "scheduling layer" as a buying category.</h3>
-          <p>Before 2020, primary-care clinics didn't buy software outside their EHR. The telehealth wave taught them that scheduling and EHR are separable. We're entering a market that now has a checking account for our category.</p>
-        </div>
-      </div>
-      <div class="source">
-        <div class="source-label">BLS healthcare employment data 2024 · McKinsey Global Institute care-workforce 2024 · interview synthesis Q1 2026.</div>
-        <div class="page-no">04</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 5 — EARLY SIGNAL (stat grid — NOT "traction"; seed-stage framing)
-       ================================================================= -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="eyebrow">Early signal</div>
-      <h2 class="title">Twelve clinic conversations, two paying pilots, six weeks of live data.</h2>
-      <div class="title-rule"></div>
-      <div class="stat-grid">
-        <div class="stat">
-          <div class="stat-label">Clinic conversations</div>
-          <div class="stat-num">12</div>
-          <div class="stat-desc">90-min interviews with practice managers in 5 states. 11 of 12 named no-shows as their #1 operational pain.</div>
-          <div class="stat-delta">— Discovery</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Paying pilots</div>
-          <div class="stat-num">2</div>
-          <div class="stat-desc">$1,200/mo each, signed Feb 2026. Both clinics are independent 4–6 provider primary-care groups.</div>
-          <div class="stat-delta">— Validation</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">No-show reduction</div>
-          <div class="stat-num">47<span class="unit">%</span></div>
-          <div class="stat-desc">Live pilot data, Mar–Apr 2026. Baseline 38% → measured 20% across 1,840 appointments.</div>
-          <div class="stat-delta">▲ Above target</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Revenue per clinic</div>
-          <div class="stat-num">$3.2<span class="unit">K</span></div>
-          <div class="stat-desc">Average additional monthly revenue captured per clinic — 2.7× the subscription price.</div>
-          <div class="stat-delta">▲ 2.7× of price</div>
-        </div>
-      </div>
-      <p class="body" style="margin-top: 1.2rem; max-width: 70%;">
-        This is signal, not traction. Two paying pilots aren't a business. They are evidence the wedge works in production — and a credible launch point for the build that the seed funds.
-      </p>
-      <div class="source">
-        <div class="source-label">Pilot data Mar–Apr 2026, Tucson Family Health and Greenwood Primary Care · interviews Jan–Mar 2026.</div>
-        <div class="page-no">05</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 6 — FOUNDER ORIGIN (dark moment with team grid)
-       ================================================================= -->
-  <section class="slide dark">
-    <div class="slide-inner">
-      <div class="eyebrow" style="color: var(--accent);">Why us</div>
-      <h2 class="title large" style="color: var(--on-dark-1); max-width: 95%; font-weight: 500;">
-        Three founders. One was a primary-care physician. One built scheduling at Epic. One ran ops at Cedar.
-      </h2>
-      <div class="title-rule" style="background: var(--on-dark-3);"></div>
-      <div class="team-grid" style="margin-top: 1rem;">
-        <div class="team-card hero" style="background: rgba(255,255,255,0.04); border-color: var(--accent); color: var(--on-dark-1);">
-          <div class="team-avatar">PR</div>
-          <div class="team-role" style="color: var(--on-dark-3);">— Co-founder · CEO</div>
-          <h4 style="color: var(--on-dark-1);">Priya Raman, MD</h4>
-          <div class="team-prior" style="color: var(--on-dark-2);">Primary-care physician 2017–2024 at <strong style="color: var(--on-dark-1);">One Medical</strong> and an indie clinic in Tucson. Stanford med; ran the clinic's scheduling pilot that became Sundial's wedge.</div>
-        </div>
-        <div class="team-card" style="background: transparent; border-color: var(--on-dark-3); color: var(--on-dark-1);">
-          <div class="team-avatar" style="background: var(--on-dark-1); color: var(--bg-dark);">DM</div>
-          <div class="team-role" style="color: var(--on-dark-3);">— Co-founder · CTO</div>
-          <h4 style="color: var(--on-dark-1);">Dan Maeda</h4>
-          <div class="team-prior" style="color: var(--on-dark-2);">Built outbound-call scheduling at <strong style="color: var(--on-dark-1);">Epic</strong> 2019–2024. Earlier: voice infra at <strong style="color: var(--on-dark-1);">Twilio</strong>. Knows Epic FHIR APIs by heart.</div>
-        </div>
-        <div class="team-card" style="background: transparent; border-color: var(--on-dark-3); color: var(--on-dark-1);">
-          <div class="team-avatar" style="background: var(--on-dark-1); color: var(--bg-dark);">SO</div>
-          <div class="team-role" style="color: var(--on-dark-3);">— Co-founder · COO</div>
-          <h4 style="color: var(--on-dark-1);">Sara Okonkwo</h4>
-          <div class="team-prior" style="color: var(--on-dark-2);">Ran clinic-ops vertical at <strong style="color: var(--on-dark-1);">Cedar</strong> 2020–2024 (patient financial engagement). Earlier: McKinsey healthcare practice.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 7 — MARKET (TAM/SAM/SOM)
-       ================================================================= -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="eyebrow">Market</div>
-      <h2 class="title">22,000 independent primary-care clinics in the US. We need 800 to make this a $12M ARR seed-to-A bridge.</h2>
-      <div class="title-rule"></div>
-      <div class="market-funnel">
-        <div class="mf-row">
-          <div class="mf-tier">Total · TAM<span class="mf-tier-name">All US ambulatory care</span></div>
-          <div class="mf-bar"><div class="mf-bar-track"></div><div class="mf-bar-fill" style="width: 100%;">$6.4B</div></div>
-          <div class="mf-value">$6.4B</div>
-          <div class="mf-desc">Total US spend on ambulatory scheduling, intake, and patient-engagement software, 2026.</div>
-        </div>
-        <div class="mf-row">
-          <div class="mf-tier">Serviceable · SAM<span class="mf-tier-name">Independent primary care, 4–20 providers</span></div>
-          <div class="mf-bar"><div class="mf-bar-track"></div><div class="mf-bar-fill mid" style="width: 12%;">$780M</div></div>
-          <div class="mf-value">$780M</div>
-          <div class="mf-desc">22,000 clinics that don't belong to a hospital system and can buy independent of system procurement.</div>
-        </div>
-        <div class="mf-row">
-          <div class="mf-tier">Obtainable · SOM<span class="mf-tier-name">3-year realistic target</span></div>
-          <div class="mf-bar"><div class="mf-bar-track"></div><div class="mf-bar-fill tight" style="width: 1.5%;">$11.5M</div></div>
-          <div class="mf-value">$11.5M</div>
-          <div class="mf-desc">800 clinics at $1,200/mo by Year 3 = $11.5M ARR. The seed-to-A bridge.</div>
-        </div>
-      </div>
-      <div class="source">
-        <div class="source-label">CMS NPPES practitioner registry 2024 · IBISWorld primary-care market 2025 · Sundial internal model v1.1.</div>
-        <div class="page-no">07</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 8 — PATH TO VALIDATION (workstreams — NOT a typical pitch component)
-       ================================================================= -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="eyebrow">What the seed buys</div>
-      <h2 class="title">Three workstreams over 18 months — by Series A we will have proved each one.</h2>
-      <div class="title-rule"></div>
-      <div class="workstreams">
-        <div class="ws-row">
-          <div class="ws-num">01</div>
-          <div class="ws-body">
-            <h4>Build voice-AI scheduling at clinic scale</h4>
-            <p>Move from the pilot architecture (which works at 2 clinics) to a multi-tenant platform that supports 50+ clinics with per-population model tuning.</p>
-            <div class="ws-meta"><span><strong>Owner</strong> Dan</span><span><strong>Duration</strong> M0 — M6</span><span><strong>Spend</strong> $0.9M</span></div>
-          </div>
-          <div class="ws-success">Gate · 50 clinics live, &lt; 1.4s mean call latency</div>
-        </div>
-        <div class="ws-row">
-          <div class="ws-num">02</div>
-          <div class="ws-body">
-            <h4>Build the indie-clinic sales motion</h4>
-            <p>Go from inbound pilot conversations to a repeatable sales motion: 2 clinic-vertical AEs, content-led pipeline, partnerships with two practice-management associations.</p>
-            <div class="ws-meta"><span><strong>Owner</strong> Sara</span><span><strong>Duration</strong> M3 — M15</span><span><strong>Spend</strong> $0.7M</span></div>
-          </div>
-          <div class="ws-success">Gate · 200 paying clinics by M15, $290K MRR</div>
-        </div>
-        <div class="ws-row">
-          <div class="ws-num">03</div>
-          <div class="ws-body">
-            <h4>Prove clinical efficacy in a published study</h4>
-            <p>Partner with an academic medical center to run a 6-clinic prospective study on no-show reduction and downstream care continuity. Submit to JAMIA Open by M18.</p>
-            <div class="ws-meta"><span><strong>Owner</strong> Priya</span><span><strong>Duration</strong> M6 — M18</span><span><strong>Spend</strong> $0.2M</span></div>
-          </div>
-          <div class="ws-success">Gate · Study accepted; effect size p&lt;0.01</div>
-        </div>
-      </div>
-      <div class="source">
-        <div class="source-label">Sundial 18-month operating plan v1.0 · gates correspond to Series A storyline milestones.</div>
-        <div class="page-no">08</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 9 — COMPETITION (comparison table — NOT a 2x2 matrix)
-       ================================================================= -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="eyebrow">Where we play</div>
-      <h2 class="title">Generic schedulers fight cost; we fight <em>no-shows</em>. Different problem, different buyer.</h2>
-      <div class="title-rule"></div>
-      <table class="ctable">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="hero">Sundial</th>
-            <th>Zocdoc</th>
-            <th>Phreesia</th>
-            <th>Status quo (phone admin)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Targets no-shows as primary KPI</td>
-            <td class="hero">Yes — core metric</td>
-            <td>No — booking volume</td>
-            <td>Partial — check-in flow</td>
-            <td>No — manual reminders</td>
-          </tr>
-          <tr>
-            <td>Voice-AI native</td>
-            <td class="hero">Yes — built on it</td>
-            <td>No</td>
-            <td>No</td>
-            <td>n/a</td>
-          </tr>
-          <tr>
-            <td>Built for independent clinics</td>
-            <td class="hero">Yes — primary buyer</td>
-            <td>Patient-facing marketplace</td>
-            <td>Hospital systems</td>
-            <td>n/a</td>
-          </tr>
-          <tr>
-            <td>Population-aware model</td>
-            <td class="hero">Yes — per-clinic</td>
-            <td>No</td>
-            <td>No</td>
-            <td>No</td>
-          </tr>
-          <tr>
-            <td>Price (typical 5-provider clinic)</td>
-            <td class="hero">$1,200/mo</td>
-            <td>$3,000+/mo</td>
-            <td>$4,000+/mo</td>
-            <td>$3,500/mo (part-time admin)</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="source">
-        <div class="source-label">Competitive analysis Apr 2026 · pricing from public sources and customer interviews.</div>
-        <div class="page-no">09</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 10 — THE ASK
-       ================================================================= -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="eyebrow">The ask</div>
-      <h2 class="title">Raising $2M seed to reach a 200-clinic, $290K MRR Series A in 18 months.</h2>
-      <div class="title-rule"></div>
-      <div class="ask">
-        <div class="ask-amount">
-          <div class="a-label">Round · Seed</div>
-          <div class="a-number">$2<span class="unit">M</span></div>
-          <div class="a-sub">At $12M post-money. Lead investor with healthcare or vertical SaaS focus. Existing angels participating up to $300K.</div>
-        </div>
-        <div class="ask-use">
-          <div class="au-title">Use of funds · 18-month runway</div>
-          <div class="ask-row">
-            <div><div class="au-label">Engineering &amp; product</div><div class="au-bar"><div class="au-bar-fill" style="width: 50%;"></div></div></div>
-            <div class="au-pct">50% · $1.0M</div>
-          </div>
-          <div class="ask-row">
-            <div><div class="au-label">Clinical + sales</div><div class="au-bar"><div class="au-bar-fill" style="width: 35%;"></div></div></div>
-            <div class="au-pct">35% · $0.7M</div>
-          </div>
-          <div class="ask-row">
-            <div><div class="au-label">Operations &amp; G&amp;A</div><div class="au-bar"><div class="au-bar-fill" style="width: 10%;"></div></div></div>
-            <div class="au-pct">10% · $0.2M</div>
-          </div>
-          <div class="ask-row" style="border-bottom: none;">
-            <div><div class="au-label">Reserve</div><div class="au-bar"><div class="au-bar-fill" style="width: 5%;"></div></div></div>
-            <div class="au-pct">5% · $0.1M</div>
-          </div>
-        </div>
-      </div>
-      <div class="source">
-        <div class="source-label">Aligned to 18-month operating plan; Series A trigger at 200 clinics &amp; published efficacy study.</div>
-        <div class="page-no">10</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       SLIDE 11 — CLOSING (dark hero — vision restated)
-       ================================================================= -->
-  <section class="slide dark">
-    <div class="slide-inner" style="justify-content: center; gap: 1.5rem;">
-      <div class="eyebrow" style="color: var(--accent);">Where this goes</div>
-      <h2 class="title large" style="color: var(--on-dark-1); max-width: 92%; font-weight: 500;">
-        The operating layer for the 22,000 clinics that don't have one.
-      </h2>
-      <p class="subtitle" style="color: var(--on-dark-2); max-width: 65%; margin-top: 0.5rem;">
-        Scheduling is the wedge. The same voice-AI infrastructure that handles confirmations will, in time, handle intake forms, billing follow-up, and care-gap outreach. We start where the pain is sharpest.
-      </p>
-      <div style="display: flex; gap: 3rem; margin-top: 3rem; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--on-dark-3);">
-        <div>founders@sundialhealth.com</div>
-        <div>sundialhealth.com/seed</div>
-      </div>
-    </div>
-  </section>
+  <!-- Add more slides here. See deck.html for the full component library. -->
 
 </div>
 
@@ -3198,7 +2929,7 @@ body.embed .progress { display: none; }
      CHROME — counter, nav, PDF
      ================================================================ -->
 <div class="chrome">
-  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">11</span></div>
+  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">13</span></div>
   <div class="nav-btns">
     <button class="nav-btn" onclick="prev()" aria-label="Previous slide">← Prev</button>
     <button class="nav-btn" onclick="next()" aria-label="Next slide">Next →</button>
@@ -3364,13 +3095,30 @@ body.embed .progress { display: none; }
   window.next = () => show(cur + 1);
   window.prev = () => show(cur - 1);
 
+  const overlay = document.getElementById('shortcut-overlay');
+  const counter = document.getElementById('slide-counter');
+  const WARN_AT = 15, OVER_AT = 20;
+
+  function updateCounter(idx) {
+    const n = idx + 1;
+    counter.textContent = `${n} / ${total}`;
+    counter.className = total > OVER_AT ? 'over' : total > WARN_AT ? 'warn' : '';
+  }
+
+  const _show = show;
+  show = (idx) => { _show(idx); updateCounter(Math.max(0, Math.min(idx, total - 1))); };
+  updateCounter(0);
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
     else if (e.key === 'Home') { e.preventDefault(); show(0); }
     else if (e.key === 'End') { e.preventDefault(); show(total - 1); }
     else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); window.print(); }
+    else if (e.key === '?') { e.preventDefault(); overlay.classList.toggle('visible'); }
+    else if (e.key === 'Escape') { overlay.classList.remove('visible'); }
   });
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('visible'); });
 
   // Touch swipe
   let touchStart = null;
