@@ -38,7 +38,9 @@ presentable/
 ├── README.md                    ← this file
 ├── AGENTS.md                    ← foundation agent (shared by all cases)
 ├── export-pdf.js                ← Playwright PDF exporter
-├── package.json                 ← npm scripts: pdf:enterprise / pdf:investor / pdf:portfolio
+├── package.json                 ← npm scripts: pdf / csv / brand-check / brand-init / theme / dev
+├── csv-to-chart.js              ← CLI: parse a .csv and emit a chart slide (8 types, auto-detects)
+├── brand-lock.js                ← CLI: validate a deck against brand.lock; generate lock from :root
 │
 ├── enterprise/
 │   ├── deck.html                ← 50-slide showcase: every component, every chart
@@ -93,6 +95,8 @@ Open each tool by double-clicking the HTML file (or `open enterprise/theme-build
 - Navigation, progress bar, keyboard shortcuts, deep links via `#3`
 - PDF export (browser print dialog + headless Playwright)
 - The CSS-variable design-token system (the *names* of the tokens)
+- `csv-to-chart.js` — CLI that parses a `.csv` and emits a ready-to-paste `<section>` chart slide (8 types, auto-detection)
+- `brand-lock.js` — CLI validator that checks a deck against a `brand.lock` file for color, font, and style drift
 
 **Per case:**
 - Theme token *values* (fonts, background, ink, accent)
@@ -116,6 +120,8 @@ Each case has its own `AGENTS.md` file. The recommended workflow:
 6. Agent picks the case-appropriate storyline
 7. Agent drafts the strongest slide first (exec summary, vision, or cover line)
 8. Iterate on action titles before body content. Always.
+9. If the human has data in a .csv file, run csv-to-chart.js — don't hand-write chart JSON
+10. Before hand-off: npm run brand-check -- <deck.html> (if a brand.lock exists in the repo)
 ```
 
 When working with Cursor, Claude Code, or any agentic LLM, the agent reads the foundation file plus the case file and produces case-appropriate output. The case files differ enough that an enterprise agent will produce a different deck than an investor agent given the same brief — that's the design.
@@ -125,8 +131,8 @@ When working with Cursor, Claude Code, or any agentic LLM, the agent reads the f
 Open any case's showcase deck in a browser:
 
 ```
-enterprise/deck.html       # 46-slide enterprise showcase
-investor/deck.html         # 13-slide investor pitch (Loop)
+enterprise/deck.html       # 50-slide enterprise showcase
+investor/deck.html         # 17-slide investor pitch (Loop)
 portfolio/deck.html        # 10-slide designer portfolio (Ana Rivera)
 ```
 

@@ -825,6 +825,8 @@
       <span class="stat-pill">7 chart types</span>
       <span class="stat-pill">3 cases</span>
       <span class="stat-pill">PDF export</span>
+      <span class="stat-pill">CSV → chart bridge</span>
+      <span class="stat-pill">Brand lock validator</span>
       <span class="stat-pill">Hot-reload dev server</span>
     </div>
     <div class="hero-ctas">
@@ -1011,12 +1013,14 @@
       </div>
       <div class="workflow-step">
         <div class="ws-no">03</div>
-        <div class="ws-title">Iterate, theme, and export</div>
+        <div class="ws-title">Iterate, theme, validate, and export</div>
         <div class="ws-body">
           Navigate with arrow keys. Open the case's theme builder to apply
-          your brand colors in one click. Hit <code>P</code> to export via
-          the browser, or <code>npm run pdf:enterprise</code> for
-          production-grade PDF output via Playwright.
+          your brand colors in one click. If you have spreadsheet data, run
+          <code>npm run csv -- data.csv</code> to auto-generate chart slides.
+          Run <code>npm run brand-check</code> before hand-off to catch any
+          style drift. Hit <code>P</code> or <code>npm run pdf:enterprise</code>
+          for production PDF output via Playwright.
         </div>
       </div>
     </div>
@@ -1230,6 +1234,12 @@
         <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.25);">Export portfolio deck</div>
         <div style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.45);"><span style="color:rgba(255,255,255,0.25)">npm run </span>theme:enterprise</div>
         <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.25);">Open enterprise theme builder</div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.45);"><span style="color:rgba(255,255,255,0.25)">npm run </span>csv -- data.csv --chart waterfall</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.25);">Parse CSV → emit chart slide to stdout</div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.45);"><span style="color:rgba(255,255,255,0.25)">npm run </span>brand-check -- enterprise/deck.html</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.25);">Validate deck against brand.lock</div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.45);"><span style="color:rgba(255,255,255,0.25)">npm run </span>brand-init -- enterprise/deck.html</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.25);">Generate brand.lock from deck's :root tokens</div>
       </div>
     </div>
   </div>
@@ -1257,7 +1267,7 @@
           <div class="agent-file" style="background:var(--bg-tint);">
             <div>
               <div class="af-path">AGENTS.md</div>
-              <div class="af-desc">Foundation — shared component reference, design tokens, PDF export</div>
+              <div class="af-desc">Foundation — shared component reference, design tokens, CLI tools, PDF export</div>
             </div>
             <div class="af-badge foundation">Foundation</div>
           </div>
@@ -1281,6 +1291,20 @@
               <div class="af-desc">Visual storytelling, case study structure, image pacing</div>
             </div>
             <div class="af-badge portfolio">Portfolio</div>
+          </div>
+          <div class="agent-file" style="background:var(--bg-tint);">
+            <div>
+              <div class="af-path">csv-to-chart.js</div>
+              <div class="af-desc">CLI: parse a .csv and emit a chart slide — 8 types, auto-detects format</div>
+            </div>
+            <div class="af-badge foundation">CLI</div>
+          </div>
+          <div class="agent-file" style="background:var(--bg-tint);">
+            <div>
+              <div class="af-path">brand-lock.js</div>
+              <div class="af-desc">CLI: validate a deck against brand.lock for color, font, and style drift</div>
+            </div>
+            <div class="af-badge foundation">CLI</div>
           </div>
         </div>
 
