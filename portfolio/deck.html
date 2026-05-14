@@ -38,6 +38,17 @@
   --accent-tint:  #ede0d4;
   --accent-ink:   #faf7ef;
 
+  /* Secondary brand color */
+  --secondary:      #6b7d3e;
+  --secondary-tint: #edf0e2;
+
+  /* Data visualization palette (5 series) */
+  --c1: #a05a3c;
+  --c2: #c4896a;
+  --c3: #6b7d3e;
+  --c4: #9aaf6a;
+  --c5: #7a6a4a;
+
   /* Semantic — warm-shifted */
   --warn:         #b87333;
   --warn-tint:    #f0e3cf;
@@ -3348,10 +3359,13 @@ ul.bullets li::before { background: var(--accent); }
   function applyChartDefaults() {
     if (typeof Chart === 'undefined') return;
     const C = Chart;
+    const _s = getComputedStyle(document.documentElement);
+    const _get = (v, fb) => _s.getPropertyValue(v).trim() || fb;
     C.defaults.font.family = '"Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
     C.defaults.font.size = 11;
-    C.defaults.color = '#6a6a6a';
-    C.defaults.borderColor = '#ececec';
+    C.defaults.color = _get('--ink-3', '#6a6a6a');
+    C.defaults.borderColor = _get('--line-1', '#ececec');
+    window.DECK_PALETTE = [1,2,3,4,5].map(i => _get(`--c${i}`, '')).filter(Boolean);
     C.defaults.elements.line.borderWidth = 2;
     C.defaults.elements.line.tension = 0.15;
     C.defaults.elements.point.radius = 0;

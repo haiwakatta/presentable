@@ -33,8 +33,7 @@ body {
 }
 .head h1 {
   font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 30px; font-weight: 600; margin: 0;
-  letter-spacing: -0.02em;
+  font-size: 30px; font-weight: 600; margin: 0; letter-spacing: -0.02em;
 }
 .head .crumb {
   font-family: 'JetBrains Mono', monospace;
@@ -42,12 +41,13 @@ body {
   color: var(--tool-muted);
 }
 .head .crumb a { color: var(--tool-accent); text-decoration: none; font-weight: 500; }
-.grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: start; }
+.grid { display: grid; grid-template-columns: 400px 1fr; gap: 32px; align-items: start; }
 .panel {
   background: var(--tool-card);
   border: 1px solid var(--tool-line);
   border-radius: 8px; padding: 24px;
 }
+.panel + .panel { margin-top: 20px; }
 .panel h2 {
   font-family: 'Bricolage Grotesque', sans-serif;
   font-size: 17px; font-weight: 600; margin: 0 0 16px 0;
@@ -59,106 +59,7 @@ body {
   font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--tool-muted); margin-right: 8px; font-weight: 400;
 }
-
-/* ===== Upload zone ===== */
-.upload-zone {
-  border: 2px dashed var(--tool-line);
-  border-radius: 8px;
-  padding: 32px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 150ms;
-  background: var(--tool-bg);
-}
-.upload-zone:hover, .upload-zone.dragging {
-  border-color: var(--tool-accent);
-  background: #fff7ed;
-}
-.upload-zone .upload-icon {
-  font-size: 28px;
-  color: var(--tool-accent);
-  margin-bottom: 8px;
-}
-.upload-zone .upload-text {
-  font-size: 14px;
-  font-weight: 500;
-}
-.upload-zone .upload-sub {
-  font-size: 12px;
-  color: var(--tool-muted);
-  margin-top: 4px;
-}
-.upload-zone input { display: none; }
-
-.upload-status {
-  margin-top: 12px;
-  padding: 10px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--tool-muted);
-  background: #f4f4f5;
-  border-radius: 4px;
-  display: none;
-}
-.upload-status.active { display: block; }
-.upload-status.ok { color: #047857; background: #ecfdf5; }
-.upload-status.err { color: #dc2626; background: #fef2f2; }
-
-/* ===== Extracted swatches ===== */
-.extracted {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-top: 16px;
-}
-.swatch-card {
-  cursor: pointer;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  padding: 4px;
-  background: white;
-  transition: border-color 100ms;
-}
-.swatch-card:hover { border-color: var(--tool-line); }
-.swatch-card.selected { border-color: var(--tool-accent); }
-.swatch-color {
-  aspect-ratio: 1;
-  border-radius: 4px;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-.swatch-hex {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  text-align: center;
-  margin-top: 4px;
-  color: var(--tool-muted);
-}
-
-.role-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-top: 12px;
-}
-.role-buttons button {
-  font-family: 'Sora', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  padding: 8px 10px;
-  border: 1px solid var(--tool-line);
-  background: white;
-  color: var(--tool-fg);
-  border-radius: 4px;
-  cursor: pointer;
-  letter-spacing: 0.02em;
-}
-.role-buttons button:hover { border-color: var(--tool-muted); }
-.role-buttons button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
 .field label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
@@ -166,28 +67,130 @@ body {
 }
 .field input[type="text"], .field select {
   font-family: 'Sora', sans-serif;
-  font-size: 14px; padding: 8px 10px;
-  border: 1px solid var(--tool-line); border-radius: 4px;
+  font-size: 14px; padding: 9px 12px;
+  border: 1px solid var(--tool-line); border-radius: 6px;
   background: white; color: var(--tool-fg);
 }
 .field input[type="text"]:focus, .field select:focus {
   outline: none; border-color: var(--tool-accent);
 }
+
+/* ===== color inputs ===== */
 .color-row { display: flex; gap: 8px; align-items: center; }
 .color-row input[type="color"] {
-  width: 40px; height: 36px; padding: 2px;
-  border: 1px solid var(--tool-line); border-radius: 4px;
+  width: 40px; height: 38px; padding: 2px;
+  border: 1px solid var(--tool-line); border-radius: 6px;
   cursor: pointer; background: white;
   -webkit-appearance: none; appearance: none;
 }
 .color-row input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-.color-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
+.color-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
 .color-row input[type="text"] {
   flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 13px;
 }
 
-/* ===== Preview pane ===== */
-.preview-wrap { display: flex; flex-direction: column; gap: 24px; }
+/* ===== tone buttons ===== */
+.tone-row { display: flex; gap: 6px; }
+.tone-btn {
+  flex: 1; padding: 7px 4px;
+  border: 1px solid var(--tool-line); background: white;
+  border-radius: 6px; cursor: pointer;
+  font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.06em; color: var(--tool-fg); transition: all 100ms;
+}
+.tone-btn:hover { border-color: var(--tool-accent); }
+.tone-btn.active { background: var(--tool-fg); color: white; border-color: var(--tool-fg); }
+
+/* ===== data palette row ===== */
+.palette-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.palette-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.palette-cell .p-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--tool-muted); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.palette-cell input[type="color"] {
+  width: 100%; height: 32px; padding: 2px;
+  border: 1px solid var(--tool-line); border-radius: 6px;
+  cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.palette-cell input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.palette-cell input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+.palette-cell input[type="text"] {
+  width: 100%; font-size: 9px; font-family: 'JetBrains Mono', monospace;
+  padding: 3px 4px; border: 1px solid var(--tool-line); border-radius: 4px;
+  text-align: center; background: white; color: var(--tool-fg);
+}
+.palette-cell input[type="text"]:focus { outline: none; border-color: var(--tool-accent); }
+
+/* ===== logo upload ===== */
+.logo-zone {
+  border: 2px dashed var(--tool-line); border-radius: 8px;
+  padding: 18px 12px; text-align: center; cursor: pointer;
+  transition: border-color 120ms; background: var(--tool-bg);
+}
+.logo-zone:hover, .logo-zone.drag-over { border-color: var(--tool-accent); }
+.logo-zone .lz-hint { font-size: 12px; color: var(--tool-muted); line-height: 1.5; }
+.logo-zone .lz-link {
+  color: var(--tool-accent); cursor: pointer; text-decoration: underline;
+  background: none; border: none; font-size: 12px;
+  font-family: 'Sora', sans-serif; padding: 0;
+}
+.logo-result {
+  display: flex; align-items: center; gap: 12px; margin-top: 10px;
+  padding: 10px; background: white; border: 1px solid var(--tool-line); border-radius: 8px;
+}
+.logo-result img { height: 36px; max-width: 80px; object-fit: contain; }
+.logo-result .lr-colors { display: flex; gap: 4px; flex-wrap: wrap; }
+.logo-result .lr-swatch {
+  width: 22px; height: 22px; border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.1); cursor: pointer;
+  position: relative; flex-shrink: 0;
+}
+.logo-result .lr-swatch:hover::after {
+  content: attr(title); position: absolute; bottom: 26px; left: 50%;
+  transform: translateX(-50%); background: #0a0a0a; color: white;
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  padding: 2px 5px; border-radius: 4px; white-space: nowrap; pointer-events: none; z-index: 10;
+}
+.logo-result .lr-note { font-size: 11px; color: var(--tool-muted); flex: 1; }
+
+/* ===== paste response ===== */
+.paste-zone textarea {
+  width: 100%; height: 110px; resize: vertical;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; line-height: 1.6;
+  padding: 10px 12px;
+  border: 1px solid var(--tool-line); border-radius: 6px;
+  background: var(--tool-bg); color: var(--tool-fg);
+}
+.paste-zone textarea:focus { outline: none; border-color: var(--tool-accent); }
+.parse-feedback { font-size: 12px; color: #047857; margin-top: 6px; display: none; }
+
+/* ===== research helper ===== */
+.research-card {
+  border: 1px solid var(--tool-line); border-radius: 8px;
+  padding: 20px; background: var(--tool-bg); margin-bottom: 24px;
+}
+.research-card h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 16px; font-weight: 600; margin: 0 0 8px 0; letter-spacing: -0.01em;
+}
+.research-card .rc-intro { font-size: 13px; line-height: 1.55; color: var(--tool-muted); margin-bottom: 14px; }
+.research-card .rc-intro strong { color: var(--tool-fg); }
+.prompt-block {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; line-height: 1.6;
+  background: #0a0a0a; color: #e4e4e4;
+  padding: 16px; border-radius: 6px;
+  white-space: pre-wrap; margin: 0;
+  max-height: 320px; overflow-y: auto;
+}
+.prompt-block .ph { color: #fb923c; }
+.prompt-block .lbl { color: #93c5fd; }
+.prompt-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+/* ===== mini preview ===== */
+.preview-wrap { display: flex; flex-direction: column; gap: 20px; }
 .mini-deck {
   border: 1px solid var(--tool-line); border-radius: 8px;
   background: var(--i-bg, #ffffff); padding: 8px;
@@ -198,20 +201,20 @@ body {
   background: var(--i-bg, #ffffff);
   padding: 22px 28px;
   border: 1px solid var(--i-line1, #ececec);
-  border-radius: 4px;
-  position: relative; overflow: hidden;
+  border-radius: 6px; position: relative; overflow: hidden;
 }
 .mini-slide.dark {
   background: var(--i-bg-dark, #0c0a09);
   border-color: var(--i-bg-dark, #0c0a09);
 }
 .mini-cover { display: flex; flex-direction: column; justify-content: space-between; }
-.mini-cover .mc-top {
+.mini-cover .mc-top, .mini-cover .mc-bottom {
   display: flex; justify-content: space-between;
   font-family: 'JetBrains Mono', monospace;
   font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--i-ink3, #525252);
 }
+.mini-cover .mc-bottom { font-size: 7px; text-transform: none; letter-spacing: 0.02em; }
 .mini-cover .mc-eyebrow {
   font-family: 'JetBrains Mono', monospace;
   font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
@@ -220,23 +223,13 @@ body {
 .mini-cover .mc-title {
   font-family: var(--i-display, 'Bricolage Grotesque'), sans-serif;
   font-size: 20px; font-weight: 600; line-height: 1.1;
-  color: var(--i-ink1, #0a0a0a); letter-spacing: -0.02em;
-  margin: 0;
+  color: var(--i-ink1, #0a0a0a); letter-spacing: -0.02em; margin: 0;
 }
-.mini-cover .mc-title em {
-  color: var(--i-accent, #ea580c);
-  font-style: italic;
-  font-weight: 700;
-}
+.mini-cover .mc-title em { color: var(--i-accent, #ea580c); font-style: italic; font-weight: 700; }
 .mini-cover .mc-sub {
   font-family: var(--i-body, 'Sora'), sans-serif;
   font-size: 9px; line-height: 1.4;
   color: var(--i-ink2, #1f1f1f); margin-top: 6px; max-width: 80%;
-}
-.mini-cover .mc-bottom {
-  display: flex; justify-content: space-between;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 7px; color: var(--i-ink3, #525252);
 }
 .mini-dark {
   display: flex; flex-direction: column;
@@ -250,30 +243,35 @@ body {
 .mini-dark .md-title {
   font-family: var(--i-display, 'Bricolage Grotesque'), sans-serif;
   font-size: 16px; font-weight: 500; line-height: 1.15;
-  color: var(--i-on-dark-1, #fafaf8);
-  letter-spacing: -0.01em;
-  margin: 0;
+  color: var(--i-on-dark-1, #fafaf8); letter-spacing: -0.01em; margin: 0;
 }
 .mini-dark .md-sub {
   font-family: var(--i-body, 'Sora'), sans-serif;
   font-size: 9px; line-height: 1.5;
-  color: var(--i-on-dark-2, #c8ccd1);
-  max-width: 80%;
+  color: var(--i-on-dark-2, #c8ccd1); max-width: 80%;
 }
 
-/* ===== Tokens grid ===== */
+/* ===== mini chart bars ===== */
+.mini-chart-row {
+  display: flex; gap: 3px; height: 28px; align-items: flex-end;
+  margin-top: 8px; padding: 6px; border: 1px solid var(--tool-line);
+  border-radius: 6px; background: #ffffff;
+}
+.mini-bar { flex: 1; border-radius: 2px 2px 0 0; transition: background 0.2s; }
+
+/* ===== token grid ===== */
 .tokens {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 8px; margin-top: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 6px; margin-top: 12px;
 }
 .token-cell {
   display: flex; align-items: center; gap: 8px;
   padding: 6px 8px; border: 1px solid var(--tool-line);
-  border-radius: 4px; background: white;
+  border-radius: 6px; background: white;
 }
 .token-swatch {
-  width: 20px; height: 20px; border-radius: 3px;
+  width: 20px; height: 20px; border-radius: 4px;
   border: 1px solid rgba(0,0,0,0.08); flex-shrink: 0;
 }
 .token-info { display: flex; flex-direction: column; min-width: 0; }
@@ -282,36 +280,33 @@ body {
   font-size: 9px; letter-spacing: 0.04em;
   color: var(--tool-muted); text-transform: uppercase;
 }
-.token-value {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--tool-fg);
-}
+.token-value { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--tool-fg); }
 
-/* ===== Output ===== */
-.output { margin-top: 24px; }
+/* ===== output ===== */
 .output-header {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
 }
 .output-header h3 {
   font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 17px; font-weight: 600; margin: 0;
-  letter-spacing: -0.01em;
+  font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -0.01em;
 }
 .btn {
   font-family: 'Sora', sans-serif;
   font-size: 12px; font-weight: 500;
-  padding: 8px 16px; border: none;
-  background: var(--tool-fg); color: white; border-radius: 4px;
+  padding: 8px 16px; border: 1px solid var(--tool-fg);
+  background: var(--tool-fg); color: white; border-radius: 6px;
   cursor: pointer; letter-spacing: 0.02em; transition: opacity 120ms;
 }
 .btn:hover { opacity: 0.85; }
-.btn.copied { background: #047857; }
+.btn.copied { background: #047857; border-color: #047857; }
+.btn.secondary { background: white; color: var(--tool-fg); }
+.btn-sm { font-size: 11px; padding: 5px 10px; }
 pre.css-block {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px; line-height: 1.6;
   background: #0a0a0a; color: #e4e4e4;
-  padding: 20px; border-radius: 6px;
-  overflow-x: auto; max-height: 480px; overflow-y: auto;
+  padding: 20px; border-radius: 8px;
+  overflow-x: auto; max-height: 520px; overflow-y: auto;
   margin: 0; white-space: pre;
 }
 pre.css-block .k { color: #fb923c; }
@@ -320,7 +315,7 @@ pre.css-block .c { color: #6a6a6a; font-style: italic; }
 .how-to {
   margin-top: 16px; padding: 16px;
   border-left: 3px solid var(--tool-accent);
-  background: var(--tool-bg); border-radius: 0 4px 4px 0;
+  background: var(--tool-bg); border-radius: 0 6px 6px 0;
 }
 .how-to h4 {
   font-family: 'Bricolage Grotesque', sans-serif;
@@ -330,35 +325,12 @@ pre.css-block .c { color: #6a6a6a; font-style: italic; }
 .how-to code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px; background: white;
-  padding: 1px 5px; border-radius: 3px;
+  padding: 1px 5px; border-radius: 4px;
   border: 1px solid var(--tool-line);
 }
-.helper-note { font-size: 12px; line-height: 1.5; color: var(--tool-muted); margin-top: 8px; }
+.helper-note { font-size: 12px; line-height: 1.5; color: var(--tool-muted); margin-top: 6px; }
 .helper-note strong { color: var(--tool-fg); font-weight: 500; }
-
-.role-display {
-  display: grid;
-  grid-template-columns: 24px 1fr auto;
-  gap: 8px;
-  align-items: center;
-  padding: 6px 10px;
-  border: 1px solid var(--tool-line);
-  border-radius: 4px;
-  margin-bottom: 6px;
-  background: var(--tool-bg);
-}
-.role-display.empty { opacity: 0.5; }
-.role-display .rd-swatch {
-  width: 20px; height: 20px; border-radius: 3px;
-  border: 1px solid rgba(0,0,0,0.1);
-}
-.role-display .rd-label {
-  font-size: 12px; font-weight: 500;
-}
-.role-display .rd-hex {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; color: var(--tool-muted);
-}
+.section-sep { border: none; border-top: 1px solid var(--tool-line); margin: 20px 0; }
 </style>
 </head>
 <body>
@@ -370,90 +342,133 @@ pre.css-block .c { color: #6a6a6a; font-style: italic; }
   </div>
 
   <div class="grid">
-    <!-- ==================== INPUT PANEL ==================== -->
-    <div class="panel">
-      <h2><span class="num">01</span>Upload brand source</h2>
+    <!-- ==================== LEFT: INPUT PANEL ==================== -->
+    <div>
+      <div class="panel">
+        <h2><span class="num">01</span>Brand colors</h2>
 
-      <label class="upload-zone" id="upload-zone">
-        <input type="file" id="file-input" accept="image/*">
-        <div class="upload-icon">↑</div>
-        <div class="upload-text">Drop a logo, screenshot, or product image</div>
-        <div class="upload-sub">PNG · JPG · SVG · GIF · WebP</div>
-      </label>
-      <div class="upload-status" id="upload-status"></div>
+        <div class="field">
+          <label>Company name</label>
+          <input type="text" id="company-name" value="Loop" placeholder="e.g. Stripe, Figma, Notion">
+          <div class="helper-note">Updates the AI research prompt in real time.</div>
+        </div>
 
-      <div class="helper-note" style="margin-top: 12px;">
-        <strong>Best sources:</strong> brand logo (clearest colors), a screenshot of your existing pitch deck, your product UI, or your website hero image. The bigger and brand-rich the image, the better the extracted palette.
-      </div>
+        <div class="field">
+          <label>Primary brand color</label>
+          <div class="color-row">
+            <input type="color" id="accent-picker" value="#ea580c">
+            <input type="text" id="accent-text" value="#ea580c" maxlength="7">
+          </div>
+          <div class="helper-note">Main logo/CTA color. Used for cover italics and chart series 1.</div>
+        </div>
 
-      <h2 style="margin-top: 24px;"><span class="num">02</span>Pick brand role for each color</h2>
+        <div class="field">
+          <label>Secondary brand color</label>
+          <div class="color-row">
+            <input type="color" id="secondary-picker" value="#1a6b8a">
+            <input type="text" id="secondary-text" value="#1a6b8a" maxlength="7">
+          </div>
+          <div class="helper-note">Second brand color, drives chart series 3. Repeat primary if the brand is single-color.</div>
+        </div>
 
-      <div id="extracted" class="extracted">
-        <div style="grid-column: 1 / -1; padding: 30px 0; text-align: center; color: var(--tool-muted); font-size: 12px;">
-          Upload an image first — extracted colors appear here.
+        <div class="field">
+          <label>Background tone</label>
+          <div class="tone-row">
+            <button class="tone-btn active" data-tone="white">White</button>
+            <button class="tone-btn" data-tone="warm">Warm</button>
+            <button class="tone-btn" data-tone="cool">Cool</button>
+            <button class="tone-btn" data-tone="tinted">Tinted</button>
+          </div>
+          <div class="helper-note">Light slides only — dark slides always use the near-black surface. Tinted adds a faint hue wash from the primary color.</div>
+        </div>
+
+        <div class="field">
+          <label>Data visualization palette</label>
+          <div class="helper-note">Five colors for chart series, bars, and lines. Auto-generated from your brand colors — override any individually.</div>
+          <div class="palette-row" id="chart-palette-row"></div>
+          <button class="btn secondary btn-sm" id="regen-palette-btn" style="margin-top:2px;">↺ Regenerate from brand colors</button>
+        </div>
+
+        <hr class="section-sep">
+
+        <div class="field">
+          <label>Display font (titles)</label>
+          <select id="font-display">
+            <option value="Bricolage Grotesque" selected>Bricolage Grotesque — variable, bold character (default)</option>
+            <option value="Sora">Sora — geometric, modern</option>
+            <option value="Plus Jakarta Sans">Plus Jakarta Sans — friendly geometric</option>
+            <option value="Space Grotesk">Space Grotesk — distinct, techy</option>
+            <option value="DM Sans">DM Sans — neutral geometric</option>
+            <option value="Outfit">Outfit — clean modern</option>
+            <option value="Inter">Inter — neutral, ubiquitous</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Body font (prose)</label>
+          <select id="font-body">
+            <option value="Sora" selected>Sora — geometric (default)</option>
+            <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+            <option value="DM Sans">DM Sans</option>
+            <option value="Manrope">Manrope</option>
+            <option value="Outfit">Outfit</option>
+            <option value="Inter">Inter</option>
+          </select>
         </div>
       </div>
 
-      <div style="margin-top: 16px;">
-        <div class="role-display empty" id="role-accent">
-          <div class="rd-swatch" style="background: transparent; border-style: dashed;"></div>
-          <div class="rd-label">Accent (brand color)</div>
-          <div class="rd-hex">—</div>
+      <div class="panel" style="margin-top:20px;">
+        <h2><span class="num">02</span>Extract from logo</h2>
+        <div class="helper-note" style="margin-top:0;margin-bottom:12px;">Drop your company logo to auto-extract the primary, secondary, and all five chart colors. Click any extracted swatch to select, then use the buttons to assign it.</div>
+        <div class="logo-zone" id="logo-zone">
+          <input type="file" id="logo-file" accept="image/*" style="display:none">
+          <div class="lz-hint">Drop logo here or <button class="lz-link" id="logo-browse">browse files</button></div>
         </div>
-        <div class="role-display empty" id="role-ink">
-          <div class="rd-swatch" style="background: transparent; border-style: dashed;"></div>
-          <div class="rd-label">Ink (text)</div>
-          <div class="rd-hex">—</div>
-        </div>
-      </div>
-
-      <div class="helper-note">
-        Click a swatch above, then choose its role. <strong>Accent</strong> drives the orange-like brand pop. <strong>Ink</strong> is the body-text color (usually the darkest extracted color, or near-black).
-      </div>
-
-      <h2 style="margin-top: 24px;"><span class="num">03</span>Or enter manually</h2>
-
-      <div class="field">
-        <label>Accent / brand color</label>
-        <div class="color-row">
-          <input type="color" id="accent-picker" value="#ea580c">
-          <input type="text" id="accent-text" value="#ea580c" maxlength="7">
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Display font</label>
-        <select id="font-display">
-          <option value="Bricolage Grotesque" selected>Bricolage Grotesque — variable, with character (default)</option>
-          <option value="Sora">Sora — geometric, modern</option>
-          <option value="Plus Jakarta Sans">Plus Jakarta Sans — friendly geometric</option>
-          <option value="DM Sans">DM Sans — neutral geometric</option>
-          <option value="Space Grotesk">Space Grotesk — distinct, tech</option>
-          <option value="Outfit">Outfit — clean modern</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Body font</label>
-        <select id="font-body">
-          <option value="Sora" selected>Sora — geometric (default)</option>
-          <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
-          <option value="DM Sans">DM Sans</option>
-          <option value="Manrope">Manrope</option>
-          <option value="Outfit">Outfit</option>
-        </select>
+        <div id="logo-result" style="display:none"></div>
       </div>
     </div>
 
-    <!-- ==================== PREVIEW PANEL ==================== -->
+    <!-- ==================== RIGHT: HELPERS + OUTPUT ==================== -->
     <div class="preview-wrap">
-      <div class="panel">
-        <h2><span class="num">04</span>Live preview</h2>
 
+      <!-- AI RESEARCH PROMPT -->
+      <div class="panel">
+        <h2><span class="num">A</span>AI research prompt</h2>
+        <div class="research-card">
+          <h3>Ask Claude (or any LLM) to research this brand</h3>
+          <div class="rc-intro">
+            <strong>Copy this prompt, paste it into Claude</strong> (or any model with web search). It returns a structured block you can paste into section B below to auto-fill every field.
+          </div>
+          <pre class="prompt-block" id="prompt-block"></pre>
+          <div class="prompt-actions">
+            <button class="btn secondary" id="copy-prompt-btn">Copy prompt</button>
+          </div>
+        </div>
+
+        <h2 style="margin-top:0;"><span class="num">B</span>Paste the LLM response</h2>
+        <div class="helper-note" style="margin-top:0;margin-bottom:10px;">Paste the response here and click Auto-fill — every color, palette, and font field will update at once.</div>
+        <div class="paste-zone">
+          <textarea id="llm-paste" placeholder="PRIMARY: #ea580c
+SECONDARY: #1a6b8a
+BACKGROUND: white
+DATA_COLORS: #ea580c #f4965a #1a6b8a #5a9bb5 #7a6b8a
+DISPLAY_FONT: Bricolage Grotesque
+BODY_FONT: Sora
+SOURCE: https://..."></textarea>
+        </div>
+        <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:8px;">
+          <div class="parse-feedback" id="parse-feedback">✓ Fields updated</div>
+          <button class="btn" id="parse-response-btn">Auto-fill from response</button>
+        </div>
+      </div>
+
+      <!-- LIVE PREVIEW -->
+      <div class="panel">
+        <h2><span class="num">C</span>Live preview</h2>
         <div class="mini-deck" id="mini-deck">
           <div class="mini-slide mini-cover">
             <div class="mc-top">
-              <div>Loop · 2026</div>
+              <div id="prev-co">Loop · 2026</div>
               <div>Series A</div>
             </div>
             <div>
@@ -473,16 +488,25 @@ pre.css-block .c { color: #6a6a6a; font-style: italic; }
             <div class="md-sub">Loop turns the messy back-and-forth of design feedback into something that feels like working — not waiting.</div>
           </div>
         </div>
+        <div class="mini-chart-row" id="mini-chart-preview">
+          <div class="mini-bar" id="mb1" style="height:80%"></div>
+          <div class="mini-bar" id="mb2" style="height:55%"></div>
+          <div class="mini-bar" id="mb3" style="height:95%"></div>
+          <div class="mini-bar" id="mb4" style="height:40%"></div>
+          <div class="mini-bar" id="mb5" style="height:70%"></div>
+        </div>
       </div>
 
+      <!-- DERIVED TOKENS -->
       <div class="panel">
-        <h2><span class="num">05</span>Derived tokens</h2>
+        <h2><span class="num">D</span>Derived tokens</h2>
         <div class="tokens" id="tokens"></div>
       </div>
 
-      <div class="panel output">
+      <!-- CSS OUTPUT -->
+      <div class="panel">
         <div class="output-header">
-          <h3>Generated <code style="font-family: 'JetBrains Mono'; font-size: 14px;">:root</code> block</h3>
+          <h3>Generated <code style="font-family:'JetBrains Mono';font-size:14px;">:root</code> block</h3>
           <div style="display:flex;gap:8px;">
             <button class="btn secondary" id="download-btn">Download deck</button>
             <button class="btn" id="copy-btn">Copy CSS</button>
@@ -494,20 +518,20 @@ pre.css-block .c { color: #6a6a6a; font-style: italic; }
           <ol>
             <li>Open <code>investor/deck.html</code> in your editor.</li>
             <li>Find the <code>:root {</code> block near the top of the <code>&lt;style&gt;</code> tag.</li>
-            <li>Replace the entire <code>:root { ... }</code> with the generated block.</li>
-            <li>Update the Google Fonts <code>&lt;link&gt;</code> in the <code>&lt;head&gt;</code>. The generated CSS includes the URL.</li>
-            <li>Reload. The cover italic, the mission accent, the chart series color, the ask amount — all retone to your brand.</li>
+            <li>Replace the entire <code>:root { ... }</code> with the generated block above.</li>
+            <li>Update the Google Fonts <code>&lt;link&gt;</code> in <code>&lt;head&gt;</code>. The comment at the top includes the URL.</li>
+            <li>Reload. Every component and chart series retones to the brand.</li>
           </ol>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<canvas id="extractor-canvas" style="display: none;"></canvas>
+    </div><!-- /preview-wrap -->
+  </div><!-- /grid -->
+</div><!-- /shell -->
 
 <script>
 let currentFontUrl = '';
+
 // =========== COLOR UTILITIES ===========
 function hexToRgb(hex) {
   hex = hex.replace('#', '');
@@ -557,217 +581,334 @@ function hslToRgb(h, s, l) {
 }
 function hexToHsl(hex) { const { r, g, b } = hexToRgb(hex); return rgbToHsl(r, g, b); }
 function hslToHex(h, s, l) { const { r, g, b } = hslToRgb(h, s, l); return rgbToHex(r, g, b); }
+function isValidHex(v) { return /^#[0-9a-fA-F]{6}$/.test(v); }
 
-// =========== IMAGE COLOR EXTRACTION ===========
-function extractColorsFromImage(img) {
-  const canvas = document.getElementById('extractor-canvas');
-  const W = 120, H = 120;
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(img, 0, 0, W, H);
-  const data = ctx.getImageData(0, 0, W, H).data;
+// =========== CHART PALETTE DERIVATION ===========
+function deriveChartPalette(primaryHex, secondaryHex) {
+  const p = hexToHsl(primaryHex);
+  const sec = secondaryHex || primaryHex;
+  const s = hexToHsl(sec);
+  const isSame = primaryHex.toLowerCase() === sec.toLowerCase();
 
-  // Bucket colors by quantizing to 5-bit channels (32 levels each)
-  const buckets = new Map();
-  const STEP = 24;  // bucket size in 0-255 space
-  for (let i = 0; i < data.length; i += 4) {
-    const a = data[i+3];
-    if (a < 200) continue;  // skip transparent
-    const r = data[i], g = data[i+1], b = data[i+2];
-    // Skip near-black and near-white (background noise)
-    if (r > 245 && g > 245 && b > 245) continue;
-    if (r < 12 && g < 12 && b < 12) continue;
-    const rk = Math.round(r / STEP) * STEP;
-    const gk = Math.round(g / STEP) * STEP;
-    const bk = Math.round(b / STEP) * STEP;
-    const key = `${rk},${gk},${bk}`;
-    if (!buckets.has(key)) {
-      buckets.set(key, { count: 0, r: 0, g: 0, b: 0 });
-    }
-    const b_ = buckets.get(key);
-    b_.count += 1;
-    b_.r += r; b_.g += g; b_.b += b;
-  }
-
-  // Average within each bucket; sort by count
-  const colors = [...buckets.entries()].map(([key, b]) => ({
-    hex: rgbToHex(b.r / b.count, b.g / b.count, b.b / b.count),
-    count: b.count,
-    hsl: rgbToHsl(b.r / b.count, b.g / b.count, b.b / b.count),
-  })).sort((a, b) => b.count - a.count);
-
-  // Dedupe perceptually similar colors (close in hue + lightness)
-  const out = [];
-  for (const c of colors) {
-    if (out.length >= 8) break;
-    const tooClose = out.some(o => {
-      const dh = Math.abs(o.hsl.h - c.hsl.h);
-      const dl = Math.abs(o.hsl.l - c.hsl.l);
-      const ds = Math.abs(o.hsl.s - c.hsl.s);
-      return (dh < 18 || dh > 342) && dl < 12 && ds < 18;
-    });
-    if (!tooClose) out.push(c);
-  }
-  return out.slice(0, 8);
+  const c1 = primaryHex;
+  const c2 = hslToHex(p.h, Math.max(20, p.s * 0.55), Math.min(72, p.l + 22));
+  const c3 = isSame
+    ? hslToHex((p.h + 120) % 360, Math.max(35, p.s * 0.75), Math.max(35, Math.min(55, p.l)))
+    : sec;
+  const c4 = hslToHex(s.h, Math.max(15, s.s * 0.5), Math.min(75, s.l + 20));
+  const c5 = hslToHex((p.h + 195) % 360, Math.max(20, p.s * 0.38), Math.max(38, Math.min(56, p.l)));
+  return [c1, c2, c3, c4, c5];
 }
 
-// =========== PALETTE DERIVATION ===========
-function deriveInvestorPalette(accentHex) {
-  // Investor scheme: white bg, dark cool ink, vivid accent
-  // Keep the structure consistent with the investor deck defaults
+// =========== FULL PALETTE DERIVATION ===========
+function deriveInvestorPalette(accentHex, secondaryHex, bgTone, chartOverride) {
   const a = hexToHsl(accentHex);
+  const sec = secondaryHex || accentHex;
+  const sa = hexToHsl(sec);
+
+  const bgMap = {
+    white:  { bg: '#ffffff',               bgTint: '#fafafa',               bgCard: '#ffffff',   bgCardAlt: '#f4f4f5' },
+    warm:   { bg: '#fdf9f6',               bgTint: '#f8f2eb',               bgCard: '#fdfbf8',   bgCardAlt: '#f0e8db' },
+    cool:   { bg: '#f5f7fa',               bgTint: '#eef1f6',               bgCard: '#f8f9fb',   bgCardAlt: '#e4e9f0' },
+    tinted: { bg: hslToHex(a.h, 12, 97),  bgTint: hslToHex(a.h, 16, 94),  bgCard: '#ffffff',   bgCardAlt: hslToHex(a.h, 10, 91) },
+  };
+  const bg = bgMap[bgTone] || bgMap.white;
+
+  const derived = deriveChartPalette(accentHex, sec);
+  const chart = derived.map((d, i) => {
+    const ov = chartOverride && chartOverride[i];
+    return (ov && isValidHex(ov)) ? ov : d;
+  });
+
   return {
-    bg:           '#ffffff',
-    bgTint:       '#fafafa',
-    bgCard:       '#ffffff',
-    bgCardAlt:    '#f4f4f5',
-    bgDark:       '#0c0a09',
-
-    ink1:         '#0a0a0a',
-    ink2:         '#1f1f1f',
-    ink3:         '#525252',
-    ink4:         '#9a9a9a',
-    ink5:         '#d4d4d4',
-
-    line1:        '#ececec',
-    line2:        '#d4d4d4',
-    line3:        '#0a0a0a',
-
-    accent:       accentHex,
-    accentTint:   hslToHex(a.h, Math.max(20, a.s * 0.25), 96),
-    accentInk:    '#ffffff',
-
-    warn:         hslToHex(a.h, Math.min(80, a.s * 0.9), Math.max(35, Math.min(50, a.l * 0.9))),
-    warnTint:     hslToHex(a.h, 45, 95),
-    positive:     '#047857',
-    positiveTint: '#ecfdf5',
-    risk:         '#dc2626',
-    riskTint:     '#fef2f2',
-
-    onDark1:      '#fafaf8',
-    onDark2:      '#c8ccd1',
-    onDark3:      '#78716c',
+    ...bg,
+    bgDark: '#0c0a09',
+    ink1: '#0a0a0a', ink2: '#1f1f1f', ink3: '#525252', ink4: '#9a9a9a', ink5: '#d4d4d4',
+    line1: '#ececec', line2: '#d4d4d4', line3: '#0a0a0a',
+    accent: accentHex,
+    accentTint: hslToHex(a.h, Math.max(20, a.s * 0.25), 96),
+    accentInk: '#ffffff',
+    secondary: sec,
+    secondaryTint: hslToHex(sa.h, Math.max(12, sa.s * 0.3), 95),
+    warn: hslToHex(a.h, Math.min(80, a.s * 0.9), Math.max(35, Math.min(50, a.l * 0.9))),
+    warnTint: hslToHex(a.h, 45, 95),
+    positive: '#047857', positiveTint: '#ecfdf5',
+    risk: '#dc2626', riskTint: '#fef2f2',
+    onDark1: '#fafaf8', onDark2: '#c8ccd1', onDark3: '#78716c',
+    c1: chart[0], c2: chart[1], c3: chart[2], c4: chart[3], c5: chart[4],
   };
 }
 
+// =========== STATE ===========
 const state = {
+  company: 'Loop',
   accent: '#ea580c',
-  ink: null,  // null = use default ink scale
+  secondary: '#1a6b8a',
+  bgTone: 'white',
+  chartColors: ['', '', '', '', ''],
   fontDisplay: 'Bricolage Grotesque',
   fontBody: 'Sora',
-  extracted: [],
-  selectedSwatch: null,
 };
 
+// =========== ELEMENTS ===========
 const els = {
-  uploadZone: document.getElementById('upload-zone'),
-  fileInput: document.getElementById('file-input'),
-  uploadStatus: document.getElementById('upload-status'),
-  extracted: document.getElementById('extracted'),
-  roleAccent: document.getElementById('role-accent'),
-  roleInk: document.getElementById('role-ink'),
-  accentPicker: document.getElementById('accent-picker'),
-  accentText: document.getElementById('accent-text'),
-  fontDisplay: document.getElementById('font-display'),
-  fontBody: document.getElementById('font-body'),
-  miniDeck: document.getElementById('mini-deck'),
-  tokens: document.getElementById('tokens'),
-  cssOutput: document.getElementById('css-output'),
-  copyBtn: document.getElementById('copy-btn'),
-  fontLink: document.getElementById('font-link'),
+  companyName:     document.getElementById('company-name'),
+  accentPicker:    document.getElementById('accent-picker'),
+  accentText:      document.getElementById('accent-text'),
+  secondaryPicker: document.getElementById('secondary-picker'),
+  secondaryText:   document.getElementById('secondary-text'),
+  fontDisplay:     document.getElementById('font-display'),
+  fontBody:        document.getElementById('font-body'),
+  promptBlock:     document.getElementById('prompt-block'),
+  copyPromptBtn:   document.getElementById('copy-prompt-btn'),
+  llmPaste:        document.getElementById('llm-paste'),
+  parseBtn:        document.getElementById('parse-response-btn'),
+  parseFeedback:   document.getElementById('parse-feedback'),
+  miniDeck:        document.getElementById('mini-deck'),
+  prevCo:          document.getElementById('prev-co'),
+  tokens:          document.getElementById('tokens'),
+  cssOutput:       document.getElementById('css-output'),
+  copyBtn:         document.getElementById('copy-btn'),
+  fontLink:        document.getElementById('font-link'),
 };
 
+// =========== FONTS ===========
 function loadFonts(display, body) {
-  const fams = [
-    display.replace(/ /g, '+') + ':opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700',
-    body.replace(/ /g, '+') + ':wght@400;500;600',
-    'JetBrains+Mono:wght@400;500'
-  ];
-  els.fontLink.href = 'https://fonts.googleapis.com/css2?' + fams.map(f => 'family=' + f).join('&') + '&display=swap';
+  const isVariable = n => ['Bricolage Grotesque'].includes(n);
+  const dFam = display.replace(/ /g, '+') + (isVariable(display) ? ':opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700' : ':wght@400;500;600;700');
+  const bFam = body.replace(/ /g, '+') + ':wght@400;500;600';
+  currentFontUrl = 'https://fonts.googleapis.com/css2?family=' + dFam + '&family=' + bFam + '&family=JetBrains+Mono:wght@400;500&display=swap';
+  els.fontLink.href = currentFontUrl;
 }
 
-function renderExtractedSwatches() {
-  if (!state.extracted.length) return;
-  els.extracted.innerHTML = state.extracted.map((c, i) => `
-    <div class="swatch-card ${state.selectedSwatch === i ? 'selected' : ''}" data-i="${i}">
-      <div class="swatch-color" style="background: ${c.hex}"></div>
-      <div class="swatch-hex">${c.hex}</div>
+// =========== CHART PALETTE UI ===========
+function renderChartPalette() {
+  const p = deriveInvestorPalette(state.accent, state.secondary, state.bgTone, state.chartColors);
+  const resolved = [p.c1, p.c2, p.c3, p.c4, p.c5];
+  const row = document.getElementById('chart-palette-row');
+  row.innerHTML = resolved.map((c, i) => `
+    <div class="palette-cell">
+      <div class="p-label">C${i+1}</div>
+      <input type="color" data-idx="${i}" value="${c}">
+      <input type="text" data-idx="${i}" value="${c}" maxlength="7">
     </div>
   `).join('');
-
-  // Wire click handlers
-  els.extracted.querySelectorAll('.swatch-card').forEach(card => {
-    card.addEventListener('click', () => {
-      state.selectedSwatch = parseInt(card.dataset.i);
-      renderExtractedSwatches();
-      renderRoleAssignActions();
-    });
-  });
-  renderRoleAssignActions();
-}
-
-function renderRoleAssignActions() {
-  const sel = state.selectedSwatch;
-  if (sel === null) {
-    document.getElementById('role-actions')?.remove();
-    return;
-  }
-  // Add role assignment buttons under the extracted grid
-  let actions = document.getElementById('role-actions');
-  if (!actions) {
-    actions = document.createElement('div');
-    actions.id = 'role-actions';
-    actions.className = 'role-buttons';
-    els.extracted.parentNode.insertBefore(actions, els.extracted.nextSibling);
-  }
-  const selectedHex = state.extracted[sel].hex;
-  actions.innerHTML = `
-    <button data-role="accent">Use as ACCENT</button>
-    <button data-role="ink">Use as INK</button>
-  `;
-  actions.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const role = btn.dataset.role;
-      if (role === 'accent') {
-        state.accent = selectedHex;
-        els.accentPicker.value = selectedHex;
-        els.accentText.value = selectedHex;
-      } else if (role === 'ink') {
-        state.ink = selectedHex;
-      }
-      renderRoleDisplays();
+  row.querySelectorAll('input[type="color"]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const i = +e.target.dataset.idx;
+      state.chartColors[i] = e.target.value;
+      row.querySelector(`input[type="text"][data-idx="${i}"]`).value = e.target.value;
       render();
     });
   });
+  row.querySelectorAll('input[type="text"]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      let v = e.target.value.trim();
+      if (!v.startsWith('#')) v = '#' + v;
+      if (isValidHex(v)) {
+        const i = +e.target.dataset.idx;
+        state.chartColors[i] = v;
+        row.querySelector(`input[type="color"][data-idx="${i}"]`).value = v;
+        render();
+      }
+    });
+  });
+  resolved.forEach((c, i) => {
+    const bar = document.getElementById('mb' + (i + 1));
+    if (bar) bar.style.background = c;
+  });
 }
 
-function renderRoleDisplays() {
-  if (state.accent) {
-    els.roleAccent.classList.remove('empty');
-    els.roleAccent.querySelector('.rd-swatch').style.background = state.accent;
-    els.roleAccent.querySelector('.rd-swatch').style.borderStyle = 'solid';
-    els.roleAccent.querySelector('.rd-hex').textContent = state.accent;
-  }
-  if (state.ink) {
-    els.roleInk.classList.remove('empty');
-    els.roleInk.querySelector('.rd-swatch').style.background = state.ink;
-    els.roleInk.querySelector('.rd-swatch').style.borderStyle = 'solid';
-    els.roleInk.querySelector('.rd-hex').textContent = state.ink;
-  }
+// =========== AI PROMPT ===========
+function generatePrompt() {
+  const co = state.company.trim() || '[COMPANY NAME]';
+  return `<span class="lbl">Task:</span> research the brand identity for <span class="ph">${co}</span> and reply with values I can paste into a pitch deck theme builder.
+
+<span class="lbl">What to find</span> (use web search — check their website, press/brand page, design system, and recent investor materials):
+
+1. <span class="lbl">Primary brand color</span> — single hex most associated with the brand (logo, dominant CTA)
+2. <span class="lbl">Secondary brand color</span> — a second brand color if one exists; otherwise repeat the primary
+3. <span class="lbl">Background</span> — the brand's typical background feel: <span class="ph">white</span> (pure white), <span class="ph">warm</span> (cream/off-white), <span class="ph">cool</span> (grey-blue), or <span class="ph">tinted</span> (light wash of brand color)
+4. <span class="lbl">Data colors</span> — five hex codes for chart series (diverse, avoid pure red/green pairs, must contrast against white)
+5. <span class="lbl">Display font</span> — headline typeface. If custom/paid, suggest closest Google Fonts substitute and mark [substitute]
+6. <span class="lbl">Body font</span> — body/prose typeface. Same substitute rule.
+
+<span class="lbl">Reply format</span> — exactly this block, no preamble:
+
+PRIMARY: #XXXXXX
+SECONDARY: #XXXXXX
+BACKGROUND: white|warm|cool|tinted
+DATA_COLORS: #XX1 #XX2 #XX3 #XX4 #XX5
+DISPLAY_FONT: [name]
+BODY_FONT: [name]
+SOURCE: [URL]
+
+If anything is unknown after searching, mark it [GUESS] with a short note.`;
 }
 
+function renderPrompt() { els.promptBlock.innerHTML = generatePrompt(); }
+function plainPrompt() { return els.promptBlock.textContent; }
+
+// =========== LLM RESPONSE PARSER ===========
+function parseLLMResponse(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const get = key => {
+    const line = lines.find(l => l.toUpperCase().startsWith(key + ':'));
+    return line ? line.slice(key.length + 1).trim() : null;
+  };
+
+  let changed = false;
+
+  const primary = get('PRIMARY');
+  if (primary && isValidHex(primary)) {
+    state.accent = primary;
+    els.accentPicker.value = primary; els.accentText.value = primary;
+    changed = true;
+  }
+
+  const secondary = get('SECONDARY');
+  if (secondary && isValidHex(secondary)) {
+    state.secondary = secondary;
+    els.secondaryPicker.value = secondary; els.secondaryText.value = secondary;
+    changed = true;
+  }
+
+  const bg = get('BACKGROUND');
+  if (bg) {
+    const tone = bg.toLowerCase().replace(/[^a-z]/g, '');
+    if (['white','warm','cool','tinted'].includes(tone)) {
+      state.bgTone = tone;
+      document.querySelectorAll('.tone-btn').forEach(b => b.classList.toggle('active', b.dataset.tone === tone));
+      changed = true;
+    }
+  }
+
+  const dataColors = get('DATA_COLORS');
+  if (dataColors) {
+    const hexes = dataColors.match(/#[0-9a-fA-F]{6}/g) || [];
+    hexes.slice(0, 5).forEach((h, i) => { state.chartColors[i] = h; });
+    if (hexes.length) changed = true;
+  }
+
+  const displayFont = get('DISPLAY_FONT');
+  if (displayFont) {
+    const name = displayFont.split(/[\s[(]/)[0];
+    const opt = Array.from(els.fontDisplay.options).find(o => o.value.startsWith(name));
+    if (opt) { els.fontDisplay.value = opt.value; state.fontDisplay = opt.value; changed = true; }
+  }
+
+  const bodyFont = get('BODY_FONT');
+  if (bodyFont) {
+    const name = bodyFont.split(/[\s[(]/)[0];
+    const opt = Array.from(els.fontBody.options).find(o => o.value.startsWith(name));
+    if (opt) { els.fontBody.value = opt.value; state.fontBody = opt.value; changed = true; }
+  }
+
+  if (changed) { render(); renderChartPalette(); }
+  return changed;
+}
+
+// =========== LOGO COLOR EXTRACTION ===========
+function kMeansColors(pixels, k, maxIter) {
+  const step = Math.max(1, Math.floor(pixels.length / k));
+  let centers = Array.from({length: k}, (_, i) => [...pixels[Math.min(i * step, pixels.length - 1)]]);
+  for (let iter = 0; iter < maxIter; iter++) {
+    const clusters = Array.from({length: k}, () => []);
+    for (const p of pixels) {
+      let best = 0, bestD = Infinity;
+      for (let i = 0; i < k; i++) {
+        const d = (p[0]-centers[i][0])**2 + (p[1]-centers[i][1])**2 + (p[2]-centers[i][2])**2;
+        if (d < bestD) { bestD = d; best = i; }
+      }
+      clusters[best].push(p);
+    }
+    const next = clusters.map((cl, i) => cl.length
+      ? [cl.reduce((s,p) => s+p[0], 0)/cl.length, cl.reduce((s,p) => s+p[1], 0)/cl.length, cl.reduce((s,p) => s+p[2], 0)/cl.length]
+      : centers[i]);
+    const moved = next.some((c, i) => Math.abs(c[0]-centers[i][0]) > 1 || Math.abs(c[1]-centers[i][1]) > 1 || Math.abs(c[2]-centers[i][2]) > 1);
+    centers = next;
+    if (!moved) break;
+  }
+  return centers.sort((a, b) => (Math.max(...b) - Math.min(...b)) - (Math.max(...a) - Math.min(...a)));
+}
+
+async function extractColorsFromLogo(file) {
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.src = url;
+  await new Promise((res, rej) => { img.onload = res; img.onerror = rej; });
+  const MAX = 160;
+  let w = img.naturalWidth, h = img.naturalHeight;
+  if (w > MAX || h > MAX) { const r = Math.min(MAX/w, MAX/h); w = Math.round(w*r); h = Math.round(h*r); }
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+  URL.revokeObjectURL(url);
+  const data = canvas.getContext('2d').getImageData(0, 0, w, h).data;
+  const pixels = [];
+  for (let i = 0; i < data.length; i += 16) {
+    const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+    if (a < 128) continue;
+    const bright = (r+g+b) / 3;
+    if (bright > 235 || bright < 18) continue;
+    if (Math.max(r,g,b) - Math.min(r,g,b) < 18) continue;
+    pixels.push([r, g, b]);
+  }
+  if (pixels.length < 5) return null;
+  const centers = kMeansColors(pixels, 5, 18);
+  return centers.map(([r,g,b]) => '#' + [r,g,b].map(v => Math.round(v).toString(16).padStart(2,'0')).join(''));
+}
+
+function showLogoResult(file, colors) {
+  const url = URL.createObjectURL(file);
+  const el = document.getElementById('logo-result');
+  el.style.display = 'flex';
+  el.innerHTML = `
+    <img src="${url}" alt="Logo">
+    <div>
+      <div class="lr-note">Click a swatch to select, then use the buttons to assign it:</div>
+      <div class="lr-colors" style="margin-top:6px;">
+        ${colors.map((c, i) => `<div class="lr-swatch" style="background:${c}" title="${c}" data-color="${c}" data-idx="${i}"></div>`).join('')}
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px;">
+        <button class="btn secondary btn-sm" id="logo-fill-primary">Set as primary</button>
+        <button class="btn secondary btn-sm" id="logo-fill-secondary">Set as secondary</button>
+        <button class="btn secondary btn-sm" id="logo-fill-all">Fill all palette</button>
+      </div>
+    </div>
+  `;
+  let selected = 0;
+  el.querySelectorAll('.lr-swatch').forEach((sw, i) => {
+    sw.addEventListener('click', () => {
+      el.querySelectorAll('.lr-swatch').forEach(s => s.style.outline = 'none');
+      sw.style.outline = '2px solid var(--tool-accent)';
+      sw.style.outlineOffset = '2px';
+      selected = i;
+    });
+  });
+  document.getElementById('logo-fill-primary').onclick = () => {
+    const c = colors[selected];
+    state.accent = c; els.accentPicker.value = c; els.accentText.value = c;
+    render(); renderChartPalette();
+  };
+  document.getElementById('logo-fill-secondary').onclick = () => {
+    const c = colors[selected];
+    state.secondary = c; els.secondaryPicker.value = c; els.secondaryText.value = c;
+    render(); renderChartPalette();
+  };
+  document.getElementById('logo-fill-all').onclick = () => {
+    state.accent = colors[0] || state.accent;
+    state.secondary = colors[1] || state.secondary;
+    state.chartColors = colors.map(c => c || '');
+    els.accentPicker.value = state.accent; els.accentText.value = state.accent;
+    els.secondaryPicker.value = state.secondary; els.secondaryText.value = state.secondary;
+    render(); renderChartPalette();
+  };
+}
+
+// =========== MAIN RENDER ===========
 function render() {
-  const p = deriveInvestorPalette(state.accent);
-  if (state.ink) {
-    p.ink1 = state.ink;
-    // Derive subsequent ink scale steps from the chosen ink
-    const inkHsl = hexToHsl(state.ink);
-    p.ink2 = hslToHex(inkHsl.h, Math.min(20, inkHsl.s), Math.max(15, Math.min(30, inkHsl.l + 6)));
-    p.ink3 = hslToHex(inkHsl.h, Math.min(12, inkHsl.s), Math.max(30, Math.min(50, inkHsl.l + 20)));
-    p.ink4 = hslToHex(inkHsl.h, Math.min(8, inkHsl.s), Math.max(50, Math.min(70, inkHsl.l + 40)));
-    p.ink5 = hslToHex(inkHsl.h, Math.min(5, inkHsl.s), Math.max(70, Math.min(85, inkHsl.l + 60)));
-  }
-
+  const p = deriveInvestorPalette(state.accent, state.secondary, state.bgTone, state.chartColors);
   const mini = els.miniDeck;
   mini.style.setProperty('--i-bg', p.bg);
   mini.style.setProperty('--i-bg-dark', p.bgDark);
@@ -782,18 +923,24 @@ function render() {
   mini.style.setProperty('--i-body', `'${state.fontBody}'`);
   loadFonts(state.fontDisplay, state.fontBody);
 
+  els.prevCo.textContent = (state.company || 'Loop') + ' · 2026';
+
+  [p.c1, p.c2, p.c3, p.c4, p.c5].forEach((c, i) => {
+    const bar = document.getElementById('mb' + (i+1));
+    if (bar) bar.style.background = c;
+  });
+
   const tokenDefs = [
-    ['--bg', p.bg], ['--bg-tint', p.bgTint], ['--bg-card-alt', p.bgCardAlt],
-    ['--bg-dark', p.bgDark],
-    ['--ink-1', p.ink1], ['--ink-2', p.ink2], ['--ink-3', p.ink3],
-    ['--ink-4', p.ink4], ['--ink-5', p.ink5],
-    ['--line-1', p.line1], ['--line-2', p.line2],
+    ['--bg', p.bg], ['--bg-tint', p.bgTint], ['--bg-card-alt', p.bgCardAlt], ['--bg-dark', p.bgDark],
+    ['--ink-1', p.ink1], ['--ink-3', p.ink3], ['--ink-5', p.ink5],
     ['--accent', p.accent], ['--accent-tint', p.accentTint],
+    ['--secondary', p.secondary], ['--secondary-tint', p.secondaryTint],
+    ['--c1', p.c1], ['--c2', p.c2], ['--c3', p.c3], ['--c4', p.c4], ['--c5', p.c5],
     ['--positive', p.positive], ['--risk', p.risk],
   ];
   els.tokens.innerHTML = tokenDefs.map(([name, value]) => `
     <div class="token-cell">
-      <div class="token-swatch" style="background: ${value}"></div>
+      <div class="token-swatch" style="background:${value}"></div>
       <div class="token-info">
         <div class="token-name">${name}</div>
         <div class="token-value">${value}</div>
@@ -801,16 +948,11 @@ function render() {
     </div>
   `).join('');
 
-  const fontUrl = 'https://fonts.googleapis.com/css2?family=' +
-    state.fontDisplay.replace(/ /g, '+') + ':opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=' +
-    state.fontBody.replace(/ /g, '+') + ':wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap';
-  currentFontUrl = fontUrl;
-
   const css = `<span class="c">/* ====================================================
    Generated investor theme · ${new Date().toISOString().slice(0,10)}
-   Accent: ${state.accent}${state.ink ? ' · Ink: ' + state.ink : ''}
+   Company: ${state.company || '[unknown]'} · Primary: ${state.accent} · Secondary: ${state.secondary}
    Font URL for &lt;head&gt;:
-   ${fontUrl}
+   ${currentFontUrl}
    ==================================================== */</span>
 <span class="k">:root</span> {
   <span class="c">/* Surfaces */</span>
@@ -832,10 +974,21 @@ function render() {
   --line-2: <span class="v">${p.line2};</span>
   --line-3: <span class="v">${p.line3};</span>
 
-  <span class="c">/* Accent — your brand color */</span>
+  <span class="c">/* Primary accent — brand color */</span>
   --accent:       <span class="v">${p.accent};</span>
   --accent-tint:  <span class="v">${p.accentTint};</span>
   --accent-ink:   <span class="v">${p.accentInk};</span>
+
+  <span class="c">/* Secondary brand color */</span>
+  --secondary:      <span class="v">${p.secondary};</span>
+  --secondary-tint: <span class="v">${p.secondaryTint};</span>
+
+  <span class="c">/* Data visualization palette */</span>
+  --c1: <span class="v">${p.c1};</span>
+  --c2: <span class="v">${p.c2};</span>
+  --c3: <span class="v">${p.c3};</span>
+  --c4: <span class="v">${p.c4};</span>
+  --c5: <span class="v">${p.c5};</span>
 
   <span class="c">/* Semantic */</span>
   --warn:         <span class="v">${p.warn};</span>
@@ -866,7 +1019,7 @@ function render() {
   --source-size:    <span class="v">10px;</span>
   --stat-size:      <span class="v">clamp(48px, 6vw, 88px);</span>
 
-  <span class="c">/* Spacing — more breathing room than enterprise */</span>
+  <span class="c">/* Spacing */</span>
   --slide-pad-y: <span class="v">6vh;</span>
   --slide-pad-x: <span class="v">6.5vw;</span>
   --gap-xs: <span class="v">0.5rem;</span>
@@ -884,101 +1037,91 @@ function render() {
   els.cssOutput.innerHTML = css;
 }
 
-// ============ events ============
-function handleFile(file) {
-  if (!file || !file.type.startsWith('image/')) {
-    els.uploadStatus.textContent = 'Please choose an image file (PNG, JPG, SVG, GIF).';
-    els.uploadStatus.className = 'upload-status active err';
-    return;
-  }
-  els.uploadStatus.textContent = 'Extracting colors…';
-  els.uploadStatus.className = 'upload-status active';
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = new Image();
-    img.onload = () => {
-      try {
-        const colors = extractColorsFromImage(img);
-        state.extracted = colors;
-        state.selectedSwatch = null;
-        renderExtractedSwatches();
-        // Auto-pick the most vivid color as accent suggestion
-        const vivid = [...colors].sort((a, b) =>
-          (b.hsl.s + (b.hsl.l > 30 && b.hsl.l < 70 ? 20 : 0)) -
-          (a.hsl.s + (a.hsl.l > 30 && a.hsl.l < 70 ? 20 : 0))
-        )[0];
-        if (vivid) {
-          state.accent = vivid.hex;
-          els.accentPicker.value = vivid.hex;
-          els.accentText.value = vivid.hex;
-        }
-        els.uploadStatus.textContent = `Extracted ${colors.length} colors. Click a swatch and assign its role.`;
-        els.uploadStatus.className = 'upload-status active ok';
-        renderRoleDisplays();
-        render();
-      } catch (err) {
-        els.uploadStatus.textContent = 'Extraction failed: ' + err.message;
-        els.uploadStatus.className = 'upload-status active err';
-      }
-    };
-    img.onerror = () => {
-      els.uploadStatus.textContent = 'Could not load image. Try another file.';
-      els.uploadStatus.className = 'upload-status active err';
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-els.fileInput.addEventListener('change', e => {
-  if (e.target.files.length) handleFile(e.target.files[0]);
-});
-els.uploadZone.addEventListener('dragover', e => {
-  e.preventDefault();
-  els.uploadZone.classList.add('dragging');
-});
-els.uploadZone.addEventListener('dragleave', () => {
-  els.uploadZone.classList.remove('dragging');
-});
-els.uploadZone.addEventListener('drop', e => {
-  e.preventDefault();
-  els.uploadZone.classList.remove('dragging');
-  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-});
+// =========== EVENTS ===========
+els.companyName.addEventListener('input', e => { state.company = e.target.value; renderPrompt(); render(); });
 
 els.accentPicker.addEventListener('input', e => {
-  state.accent = e.target.value;
-  els.accentText.value = e.target.value;
-  renderRoleDisplays();
-  render();
+  state.accent = e.target.value; els.accentText.value = e.target.value; render(); renderChartPalette();
 });
 els.accentText.addEventListener('input', e => {
-  let v = e.target.value.trim();
-  if (!v.startsWith('#')) v = '#' + v;
-  if (/^#[0-9a-fA-F]{6}$/.test(v)) {
-    state.accent = v;
-    els.accentPicker.value = v;
-    renderRoleDisplays();
-    render();
-  }
+  let v = e.target.value.trim(); if (!v.startsWith('#')) v = '#' + v;
+  if (isValidHex(v)) { state.accent = v; els.accentPicker.value = v; render(); renderChartPalette(); }
 });
+
+els.secondaryPicker.addEventListener('input', e => {
+  state.secondary = e.target.value; els.secondaryText.value = e.target.value; render(); renderChartPalette();
+});
+els.secondaryText.addEventListener('input', e => {
+  let v = e.target.value.trim(); if (!v.startsWith('#')) v = '#' + v;
+  if (isValidHex(v)) { state.secondary = v; els.secondaryPicker.value = v; render(); renderChartPalette(); }
+});
+
+document.querySelectorAll('.tone-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.bgTone = btn.dataset.tone;
+    render();
+  });
+});
+
+document.getElementById('regen-palette-btn').addEventListener('click', () => {
+  state.chartColors = ['', '', '', '', ''];
+  renderChartPalette(); render();
+});
+
 els.fontDisplay.addEventListener('change', e => { state.fontDisplay = e.target.value; render(); });
 els.fontBody.addEventListener('change', e => { state.fontBody = e.target.value; render(); });
+
+els.copyPromptBtn.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(plainPrompt());
+  els.copyPromptBtn.textContent = '✓ Copied'; els.copyPromptBtn.classList.add('copied');
+  setTimeout(() => { els.copyPromptBtn.textContent = 'Copy prompt'; els.copyPromptBtn.classList.remove('copied'); }, 2000);
+});
+
+els.parseBtn.addEventListener('click', () => {
+  const ok = parseLLMResponse(els.llmPaste.value);
+  if (ok) {
+    els.parseFeedback.style.display = 'block';
+    setTimeout(() => { els.parseFeedback.style.display = 'none'; }, 3000);
+  } else {
+    alert('Could not parse response — make sure it follows the expected format (PRIMARY: #... etc.)');
+  }
+});
+
+// logo upload
+const logoZone = document.getElementById('logo-zone');
+const logoFile = document.getElementById('logo-file');
+document.getElementById('logo-browse').addEventListener('click', () => logoFile.click());
+logoZone.addEventListener('click', e => { if (e.target === logoZone || e.target.classList.contains('lz-hint')) logoFile.click(); });
+logoZone.addEventListener('dragover', e => { e.preventDefault(); logoZone.classList.add('drag-over'); });
+logoZone.addEventListener('dragleave', () => logoZone.classList.remove('drag-over'));
+logoZone.addEventListener('drop', async e => {
+  e.preventDefault(); logoZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processLogo(file);
+});
+logoFile.addEventListener('change', e => { if (e.target.files[0]) processLogo(e.target.files[0]); });
+
+async function processLogo(file) {
+  const hint = logoZone.querySelector('.lz-hint');
+  hint.textContent = 'Extracting colors…';
+  const colors = await extractColorsFromLogo(file).catch(() => null);
+  hint.innerHTML = 'Drop logo here or <button class="lz-link" id="logo-browse">browse files</button>';
+  document.getElementById('logo-browse').addEventListener('click', () => logoFile.click());
+  if (!colors) { alert('Could not extract colors — try a logo with more distinct colors.'); return; }
+  showLogoResult(file, colors);
+}
+
 els.copyBtn.addEventListener('click', async () => {
   await navigator.clipboard.writeText(els.cssOutput.textContent);
-  els.copyBtn.textContent = '✓ Copied';
-  els.copyBtn.classList.add('copied');
-  setTimeout(() => {
-    els.copyBtn.textContent = 'Copy CSS';
-    els.copyBtn.classList.remove('copied');
-  }, 2000);
+  els.copyBtn.textContent = '✓ Copied'; els.copyBtn.classList.add('copied');
+  setTimeout(() => { els.copyBtn.textContent = 'Copy CSS'; els.copyBtn.classList.remove('copied'); }, 2000);
 });
 
 document.getElementById('download-btn').addEventListener('click', async () => {
   const btn = document.getElementById('download-btn');
-  btn.textContent = 'Preparing…';
-  btn.disabled = true;
+  btn.textContent = 'Preparing…'; btn.disabled = true;
   try {
     const resp = await fetch('deck.html');
     if (!resp.ok) throw new Error('fetch failed');
@@ -989,19 +1132,20 @@ document.getElementById('download-btn').addEventListener('click', async () => {
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'investor-deck.html';
-    a.click();
-    URL.revokeObjectURL(a.href);
-    btn.textContent = '✓ Downloaded';
-    btn.classList.add('copied');
+    const co = (state.company || 'deck').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    a.download = `${co}-investor-deck.html`;
+    a.click(); URL.revokeObjectURL(a.href);
+    btn.textContent = '✓ Downloaded'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'Download deck'; btn.classList.remove('copied'); btn.disabled = false; }, 2000);
   } catch {
-    btn.textContent = 'Download deck';
-    btn.disabled = false;
+    btn.textContent = 'Download deck'; btn.disabled = false;
     alert('Run "npm run dev" first — file:// fetch is blocked by the browser.');
   }
 });
 
+// =========== BOOT ===========
+renderPrompt();
+renderChartPalette();
 render();
 </script>
 </body>
