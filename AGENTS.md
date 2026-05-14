@@ -34,7 +34,7 @@ presentable/
 │       └── business-case-warehousing-analytics.html ← 13-slide worked example: analytics team in 3PL
 │
 ├── investor/
-│   ├── deck.html                ← showcase: 13-slide Series A pitch (the "Loop" demo)
+│   ├── deck.html                ← showcase: 17-slide Series A pitch (the "Loop" demo)
 │   ├── theme-builder.html       ← image-upload theme tool with Canvas color extraction
 │   ├── AGENTS.md                ← investor case overlay (pitch principles, storylines, tone)
 │   └── examples/
@@ -1294,6 +1294,242 @@ A visual 12-column bar chart showing concurrent workstreams against a monthly ti
 ```
 
 **Bar label text:** use 2–4 words maximum. The bar is read as a shape, not a text block. If the bar is too narrow to show the label, the browser clips it — that is fine and expected for short-duration tasks.
+
+---
+
+## v0.5 components — investor metrics, pricing, mockups, ask
+
+Four components for investor pitch decks. All are pure CSS/HTML — no Chart.js required. These are investor-specific by convention; the CSS is present in `investor/deck.html` only.
+
+### 43. SaaS metrics dashboard
+
+A four-tile KPI grid — ARR, NRR, CAC:LTV ratio, and monthly churn — each with a sparkline or ratio bar and a benchmark benchmark line. The only investor-deck component designed specifically for SaaS business models.
+
+**When to use:** the "traction" slide in a Series A or B pitch where you need to show product-market fit via unit economics. Place after the solution/product slide and before the competitive landscape.
+
+**Tile modifier:** `.sm-tile.hero` — subtle background tint; use on the metric that tells the strongest story (usually ARR or NRR).
+
+**Sparkline:** `.sm-sparkline` contains `.sm-spark` bars sized by `--h` (0–1 float = 0%–100% bar height). Always end the sparkline with `.sm-spark.current` (accent color) to anchor the most recent period.
+
+**Delta classes:** `.sm-delta.pos` (green) · `.sm-delta.neg` (red) · no modifier (gray)
+
+**Benchmark:** `.sm-bench` shows industry context in mono. `.sm-bench.good` colors it green — use when your number is world-class.
+
+**CAC:LTV ratio bar:** use `.sm-ratio-bar` inside the CAC:LTV tile instead of a sparkline. `.sm-ratio-cac` takes `--cac-w` (the CAC as a % of total bar); `.sm-ratio-ltv` fills the rest.
+
+```html
+<div class="saas-metrics">
+  <div class="sm-tile hero">
+    <div class="sm-label">ARR</div>
+    <div class="sm-value">$1.2<span class="unit">M</span></div>
+    <div class="sm-delta pos">▲ 180% YoY</div>
+    <div class="sm-sparkline">
+      <div class="sm-spark" style="--h:0.35"></div>
+      <div class="sm-spark" style="--h:0.52"></div>
+      <div class="sm-spark" style="--h:0.72"></div>
+      <div class="sm-spark" style="--h:0.95"></div>
+      <div class="sm-spark current" style="--h:1"></div>
+    </div>
+    <div class="sm-bench good">Top-decile seed-stage SaaS at month 18</div>
+  </div>
+  <div class="sm-tile">
+    <div class="sm-label">CAC : LTV Ratio</div>
+    <div class="sm-value">3.4<span class="unit">×</span></div>
+    <div class="sm-delta">CAC $820 · LTV $2,790</div>
+    <div class="sm-ratio-bar">
+      <div class="sm-ratio-cac" style="--cac-w: 23%;">CAC</div>
+      <div class="sm-ratio-ltv">LTV</div>
+    </div>
+    <div class="sm-bench good">Target &gt;3× for efficient growth</div>
+  </div>
+  <!-- 2 more tiles: NRR, Churn -->
+</div>
+```
+
+Four tiles fills the width. Don't reduce to three — use the empty-state class on a tile if you lack the metric rather than dropping a column.
+
+---
+
+### 44. Pricing & packaging tiers
+
+A three-column (or four-column) grid showing subscription tiers — name, price, target customer, feature list, CTA. The canonical SaaS pricing slide.
+
+**When to use:** the monetisation slide in any SaaS investor pitch. Shows how the company captures value across customer segments.
+
+**Hero column:** `.pt-col.hero` gets an accent border, a tinted background, and is visually heavier than the flanking columns. Always mark exactly one column as hero — typically the Pro/Growth tier that represents the highest volume and expansion pathway.
+
+**Badge:** `.pt-badge` is a small accent-colored bar at the top of the hero column — use "Most popular" or "Best value".
+
+**Feature rows:** `.pt-feat` (check mark) · `.pt-feat.na` (dash, dimmed) — both use `::before` pseudo-elements for their glyphs. Wrap any key differentiating word in `<strong>` to make it scannable.
+
+**Four-column variant:** add `.pricing.four-col` to the wrapper for a Free / Starter / Pro / Enterprise layout.
+
+```html
+<div class="pricing">
+  <div class="pt-col">
+    <div class="pt-head">
+      <div class="pt-tier">Starter</div>
+      <div class="pt-price">$29<span class="pt-per">/mo</span></div>
+      <div class="pt-target">For small teams.</div>
+    </div>
+    <div class="pt-features">
+      <div class="pt-feat">Up to <strong>5 seats</strong></div>
+      <div class="pt-feat na">SSO / SAML</div>
+    </div>
+    <div class="pt-cta">Get started free</div>
+  </div>
+  <div class="pt-col hero">
+    <div class="pt-badge">Most popular</div>
+    <!-- ... -->
+  </div>
+  <div class="pt-col">
+    <!-- Enterprise column -->
+  </div>
+</div>
+```
+
+Keep feature lists at 6–7 rows. Longer lists compress the pricing area and the tier distinction gets lost. The investor cares about the revenue model, not the feature matrix.
+
+---
+
+### 45. Device / UI mockup frames
+
+CSS-drawn product visualization — a macOS-style browser window and/or a mobile device bezel, each containing a placeholder UI composed of simple geometric shapes.
+
+**When to use:** the "product" slide where you need to show the product surface without a live screenshot. Also useful as a supporting visual alongside bullets or callouts to anchor what the product looks like.
+
+**Browser mockup:** `.mockup-browser` — traffic-light dots + URL bar (`mb-url`) + screen area (`mb-screen`). Use `.mb-ui` inside `mb-screen` for the CSS placeholder UI (sidebar + topbar + cards + chart). Replace `.mb-ui` with an `<img>` when a screenshot is available.
+
+**Mobile mockup:** `.mm-device` — rounded bezel with `.mm-notch` (top) + `.mm-screen` (9:16 aspect ratio) + `.mm-home` (bottom bar). Use `.mm-s-bar`, `.mm-s-bar.accent`, and `.mm-s-card` inside the screen as placeholder content.
+
+**Side-by-side:** wrap both in `.mockup-wrap` (flex row). The browser takes `flex: 1`; the mobile is `flex-shrink: 0` with a fixed 140px width.
+
+```html
+<div class="mockup-wrap">
+  <div class="mockup-browser">
+    <div class="mb-chrome">
+      <div class="mb-dots">
+        <div class="mb-dot mb-dot-r"></div>
+        <div class="mb-dot mb-dot-y"></div>
+        <div class="mb-dot mb-dot-g"></div>
+      </div>
+      <div class="mb-url">app.yourproduct.com/dashboard</div>
+    </div>
+    <div class="mb-screen">
+      <div class="mb-ui">
+        <div class="mb-ui-sidebar">
+          <div class="mb-ui-nav-item active"></div>
+          <div class="mb-ui-nav-item"></div>
+          <div class="mb-ui-nav-item"></div>
+        </div>
+        <div class="mb-ui-main">
+          <div class="mb-ui-topbar"></div>
+          <div class="mb-ui-cards">
+            <div class="mb-ui-card"></div>
+            <div class="mb-ui-card"></div>
+            <div class="mb-ui-card"></div>
+          </div>
+          <div class="mb-ui-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mockup-mobile">
+    <div class="mm-device">
+      <div class="mm-notch"></div>
+      <div class="mm-screen">
+        <div class="mm-s-bar accent"></div>
+        <div class="mm-s-bar"></div>
+        <div class="mm-s-card"></div>
+      </div>
+      <div class="mm-home"></div>
+    </div>
+  </div>
+</div>
+```
+
+The URL bar is the product's identity signal — make it read as the actual app URL, not a placeholder. The first `.mb-ui-card` gets an accent top border automatically (via `:first-child`), signaling the primary metric.
+
+One browser + one mobile is the canonical pairing. Two browsers side by side is valid for a before/after (old UX vs new). Do not put two mobiles side by side.
+
+---
+
+### 46. The Ask — full layout (donut + cap table + milestones)
+
+The detailed version of an investor-deck "Ask" slide. Three columns: the raise amount (left) + use-of-funds donut chart with legend (center) + post-round cap table with ownership bar (right). Below: a three-milestone grid answering "what does this money achieve?"
+
+**When to use:** the Ask slide for Series A or B decks where investors need to understand how the money will be used and what the cap table looks like post-close. Replaces the simpler bar-chart Ask for later-stage decks. Use the simpler `.ask` + `.use-of-funds` combo (components already in the deck) for seed rounds where simplicity matters more.
+
+**Donut chart:** `.af-donut-chart` is a 100×100px circle. Set the `background` inline as a `conic-gradient`. Compute degrees from percentages: `pct × 360 = degrees`; use cumulative stops.
+
+```
+45% Product → 0 162deg (45×360=162)
+35% GTM → 162deg 288deg (162+126=288)
+10% Ops → 288deg 324deg (288+36=324)
+10% Reserve → 324deg 360deg
+```
+
+**Cap table bar:** `.act-bar-track` is a flex row of `.act-seg` segments. Each segment takes `--w` (percentage width as a CSS value, e.g. `52%`) and `--c` (any color or CSS variable). The founders segment should always be widest and darkest.
+
+**Mini bars:** `.act-bar-mini` in each `.act-row` uses `--w` and `--c` on its `::after` pseudo-element to show a proportional fill. This gives the table a visual encoding without a second chart.
+
+**Milestones:** `.akm-items` is a three-column grid. Each `.akm-item` has a `.akm-no` (the time marker — accent color mono, e.g. "M6 →") and `.akm-text` with a bold lead (`<strong>`) for the metric achieved.
+
+```html
+<div class="ask-full">
+  <div class="ask-top">
+    <div class="af-amount">
+      <div class="af-label">Series A target</div>
+      <div class="af-number"><span class="unit">$</span>8<span class="unit">M</span></div>
+      <div class="af-sub">At $48M post-money. 24-month runway.</div>
+      <div class="af-meta">Target Series B at $10M ARR</div>
+    </div>
+    <div class="af-donut">
+      <div class="af-donut-heading">Use of funds</div>
+      <div class="af-donut-row">
+        <div class="af-donut-chart" style="background: conic-gradient(var(--c1) 0 162deg, var(--c3) 162deg 288deg, var(--c5) 288deg 324deg, var(--ink-5) 324deg 360deg)"></div>
+        <div class="af-donut-legend">
+          <div class="af-legend-item">
+            <div class="af-swatch" style="background: var(--c1)"></div>
+            <span>Product &amp; Engineering</span>
+            <span class="af-pct">45%</span>
+          </div>
+          <!-- 3 more legend items -->
+        </div>
+      </div>
+    </div>
+    <div class="af-captable">
+      <div class="act-heading">Cap table · post-round</div>
+      <div class="act-bar-track">
+        <div class="act-seg" style="--w: 52%; --c: var(--ink-1);">Founders</div>
+        <div class="act-seg" style="--w: 23%; --c: var(--c3);">Existing</div>
+        <div class="act-seg" style="--w: 17%; --c: var(--c1);">Series A</div>
+        <div class="act-seg" style="--w: 8%; --c: var(--ink-4);">ESOP</div>
+      </div>
+      <div class="act-rows">
+        <div class="act-row">
+          <div class="act-party">Founders</div>
+          <div class="act-bar-mini" style="--w: 52%; --c: var(--ink-1)"></div>
+          <div class="act-pct">52%</div>
+        </div>
+        <!-- 3 more rows -->
+      </div>
+    </div>
+  </div>
+  <div class="ask-milestones">
+    <div class="akm-heading">What this round achieves</div>
+    <div class="akm-items">
+      <div class="akm-item">
+        <div class="akm-no">M6 →</div>
+        <div class="akm-text"><strong>$3.2M ARR.</strong> Enterprise tier live; first 5 Fortune 1000 contracts signed.</div>
+      </div>
+      <!-- M12, M24 -->
+    </div>
+  </div>
+</div>
+```
+
+**Color discipline:** use `var(--c1)` through `var(--c5)` for donut segments and cap-table colors so they harmonize with the rest of the deck's data palette. Avoid more than four donut segments; the visual breaks down with five.
 
 ---
 

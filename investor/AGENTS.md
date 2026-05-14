@@ -236,7 +236,7 @@ Series B decks frequently include a customer-logo bar or testimonial quote betwe
 
 ## Components — what to use, what to avoid
 
-Most of the framework's 38 components work in investor decks, but lean toward these:
+Most of the framework's 46 components work in investor decks, but lean toward these:
 
 **Heavy use:**
 - Cover, dark moment slides (`.slide.dark`)
@@ -250,6 +250,10 @@ Most of the framework's 38 components work in investor decks, but lean toward th
 - Team grid *(investor-specific component)*
 - The Ask *(investor-specific component)*
 - Line chart (growth, retention)
+- SaaS metrics dashboard (component 43) — traction slide for SaaS businesses
+- Pricing & packaging tiers (component 44) — monetisation slide
+- Device / UI mockup frames (component 45) — product slide
+- The Ask full layout (component 46) — Series A/B ask with donut + cap table + milestones
 
 **Avoid:**
 - Harvey Balls — too consulting-y; investors find them sterile
@@ -266,7 +270,7 @@ Most of the framework's 38 components work in investor decks, but lean toward th
 
 ## The investor-specific components
 
-Two new patterns introduced for this case (CSS in `investor/deck.html` only):
+Six patterns introduced for this case (CSS in `investor/deck.html` only):
 
 ### Team grid
 
@@ -313,6 +317,126 @@ Left side: the headline amount. Right side: use-of-funds breakdown with horizont
 Always 3–4 use-of-funds rows. Always percentages that add to 100%. Always a dollar amount alongside the percentage.
 
 Always include the milestone the round is meant to reach ("target Series B at $10M ARR"). Investors care about *what this money buys you*, not just *what you spend it on*.
+
+---
+
+### SaaS metrics dashboard (component 43)
+
+Use on the **traction slide** when the company is a SaaS business. Replaces a plain stat grid with four purpose-built tiles for ARR, NRR, CAC:LTV, and monthly churn — each with a sparkline or ratio bar and an industry benchmark line.
+
+**When to use:** any SaaS pitch at Series A or later where the audience needs to see unit economics, not just revenue. Skip it for pre-revenue pitches or non-SaaS business models.
+
+**Key rule:** each tile's `.sm-bench` line should state whether the number is good by industry standards — don't force the investor to do the benchmark comparison themselves.
+
+```html
+<div class="saas-metrics">
+  <div class="sm-tile hero">
+    <div class="sm-label">ARR</div>
+    <div class="sm-value">$1.2<span class="unit">M</span></div>
+    <div class="sm-delta pos">▲ 180% YoY</div>
+    <div class="sm-sparkline">
+      <div class="sm-spark" style="--h:0.35"></div>
+      <div class="sm-spark" style="--h:0.72"></div>
+      <div class="sm-spark current" style="--h:1"></div>
+    </div>
+    <div class="sm-bench good">Top-decile at seed-stage, month 18</div>
+  </div>
+  <!-- NRR, CAC:LTV, Churn tiles -->
+</div>
+```
+
+For the CAC:LTV tile, use `.sm-ratio-bar` instead of `.sm-sparkline`: `--cac-w` sets the CAC portion as a percentage; the LTV fills the rest.
+
+---
+
+### Pricing & packaging tiers (component 44)
+
+Use on the **monetisation / business model slide** for SaaS companies. Shows Starter / Pro / Enterprise (or Free / Starter / Pro / Enterprise for a free-tier model) with feature rows and CTAs.
+
+**When to use:** whenever an investor needs to understand how different customer segments are priced and why the expansion motion works. Replaces or augments a comparison table for SaaS pricing.
+
+**Hero column:** exactly one `.pt-col.hero` — the revenue-driving tier that most paying customers land on. This is visually weightier and gets the `.pt-badge` ("Most popular").
+
+**Feature density:** 6–7 feature rows. Fewer than 5 is sparse; more than 8 crowds the cell.
+
+```html
+<div class="pricing">
+  <div class="pt-col"><!-- Starter --></div>
+  <div class="pt-col hero">
+    <div class="pt-badge">Most popular</div>
+    <!-- Pro column -->
+  </div>
+  <div class="pt-col"><!-- Enterprise --></div>
+</div>
+```
+
+Add `.pricing.four-col` for a four-tier layout. The feature list marks available features with `✓` (default) and unavailable with `—` (`.pt-feat.na`). Wrap differentiating words in `<strong>` to make the tier differences scannable.
+
+---
+
+### Device / UI mockup frames (component 45)
+
+Use on the **product slide** when the product is software and you want to show what it looks like without a live screenshot.
+
+**When to use:** any software pitch where there is no screenshot available or where the screenshot would need heavy redaction. Also useful to frame a screenshot: drop an `<img>` inside `.mb-screen` or `.mm-screen` in place of the CSS placeholder.
+
+**Two mockup types:**
+- `.mockup-browser` — macOS-style window with traffic-light dots, URL bar, and a sidebar + content area placeholder UI
+- `.mockup-mobile` with `.mm-device` — smartphone bezel with notch and 9:16 screen
+
+**Side-by-side:** wrap in `.mockup-wrap` for a flex row layout. The browser stretches to fill; the mobile stays at fixed 140px width. This is the canonical pairing for a product that has both a web and mobile surface.
+
+Replace the CSS placeholder by dropping an `<img src="...">` inside `.mb-screen` or `.mm-screen` when a real screenshot is available — the placeholder disappears and the image fills the space.
+
+The URL bar (`mb-url`) should use the **real product URL** — this is a trust signal, not a placeholder.
+
+---
+
+### The Ask — full layout (component 46)
+
+Use on the **Ask slide** for Series A or later decks where investors need full detail: raise amount + use-of-funds breakdown + post-round cap table + milestones the round achieves.
+
+**When to use:** Series A and B. Use the simpler two-column `.ask` component (above) for seed rounds — a donut chart and cap table in a seed pitch reads as premature.
+
+**Three-column layout:** amount column (left) + donut chart with legend (center) + cap table (right).
+
+**Donut chart:** the `background` of `.af-donut-chart` is set inline as a `conic-gradient`. Convert percentages to degrees (pct × 360) and use cumulative stops. Four segments maximum.
+
+**Cap table bar:** `.act-bar-track` is a flex row of `.act-seg` segments, each with `--w` (percentage) and `--c` (color). Use `var(--c1)` through `var(--c5)` and `var(--ink-1)` / `var(--ink-4)` from the palette.
+
+**Milestones:** three items, always. Format: `M6 →`, `M12 →`, `M24 →` (or the round's relevant timepoints). Lead with the ARR or GMV milestone (`<strong>`), then supporting context.
+
+```html
+<div class="ask-full">
+  <div class="ask-top">
+    <div class="af-amount"><!-- raise amount --></div>
+    <div class="af-donut"><!-- donut + legend --></div>
+    <div class="af-captable"><!-- bar + rows --></div>
+  </div>
+  <div class="ask-milestones"><!-- 3 milestone items --></div>
+</div>
+```
+
+This component replaces the existing `.ask` component for later-stage pitches. Don't include both on the same deck. The simple Ask is for decks where speed of comprehension matters more than detail.
+
+---
+
+## When the user says...
+
+Use these as quick-decision rules for component selection.
+
+| User intent | Component to reach for |
+|---|---|
+| "Show our growth metrics / traction" | SaaS metrics dashboard (43) if SaaS; stat grid + line chart if not |
+| "Show our pricing model" | Pricing & packaging tiers (44) |
+| "Show what the product looks like" | Device / UI mockup frames (45) |
+| "Show the ask / how we're spending the money" | The Ask full (46) for Series A+; simple Ask component for seed |
+| "Show the team" | Team grid (investor-specific) |
+| "Show the market" | TAM/SAM/SOM (component 27) |
+| "Show the competition" | 2×2 matrix (component 8) |
+| "Show how the product works" | Process flow (component 15) |
+
+---
 
 ## Slide density rule
 

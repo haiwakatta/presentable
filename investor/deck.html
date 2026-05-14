@@ -2847,6 +2847,578 @@ body.embed .progress { display: none; }
 #slide-counter.warn { color: #d97706; }
 #slide-counter.over { color: #dc2626; }
 @media print { #shortcut-overlay, #slide-counter { display: none !important; } }
+
+/* ================================================================
+   v0.5 COMPONENTS — saas metrics, pricing tiers, mockup frames, ask-full
+   ================================================================ */
+
+/* --- SaaS Metrics Dashboard ----------------------------------- */
+.saas-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 2px solid var(--ink-1);
+  flex: 1 1 auto;
+  align-content: stretch;
+}
+.sm-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--gap-md) var(--gap-md) var(--gap-sm);
+  border-right: var(--hairline) solid var(--line-1);
+}
+.sm-tile:last-child { border-right: none; }
+.sm-tile.hero { background: var(--bg-card-alt); }
+.sm-label {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 2px;
+}
+.sm-value {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 48px);
+  font-weight: 600;
+  color: var(--ink-1);
+  line-height: 1;
+}
+.sm-value .unit { font-size: 0.55em; color: var(--ink-3); }
+.sm-delta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.sm-delta.pos { color: var(--positive); }
+.sm-delta.neg { color: var(--risk); }
+.sm-sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 32px;
+  margin: var(--gap-xs) 0;
+}
+.sm-spark {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  background: var(--line-2);
+  height: calc(var(--h) * 100%);
+}
+.sm-spark.current { background: var(--accent); }
+.sm-ratio-bar {
+  display: flex;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin: var(--gap-xs) 0;
+}
+.sm-ratio-cac {
+  width: var(--cac-w, 24%);
+  background: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--on-dark-1);
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 4px;
+}
+.sm-ratio-ltv {
+  flex: 1;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: white;
+}
+.sm-bench {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  line-height: 1.4;
+  border-top: var(--hairline) solid var(--line-1);
+  padding-top: 6px;
+  margin-top: auto;
+}
+.sm-bench.good { color: var(--positive); }
+
+/* --- Pricing & Packaging Tiers -------------------------------- */
+.pricing {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: var(--hairline) solid var(--line-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+.pricing.four-col { grid-template-columns: repeat(4, 1fr); }
+.pt-col {
+  display: flex;
+  flex-direction: column;
+  border-right: var(--hairline) solid var(--line-2);
+}
+.pt-col:last-child { border-right: none; }
+.pt-col.hero {
+  background: var(--bg-card-alt);
+  border-right: 1.5px solid var(--accent);
+  border-left: 1.5px solid var(--accent);
+  margin-left: -1px;
+  position: relative;
+  z-index: 1;
+}
+.pt-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-ink);
+  background: var(--accent);
+  text-align: center;
+  padding: 3px 8px;
+  flex-shrink: 0;
+}
+.pt-head {
+  padding: var(--gap-sm) var(--gap-md);
+  border-bottom: var(--hairline) solid var(--line-2);
+}
+.pt-tier {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+.pt-col.hero .pt-tier { color: var(--accent); }
+.pt-price {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.8vw, 40px);
+  font-weight: 600;
+  color: var(--ink-1);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.pt-price .pt-per {
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  font-weight: 400;
+  color: var(--ink-3);
+}
+.pt-target {
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  color: var(--ink-3);
+  line-height: 1.35;
+  margin-top: 4px;
+}
+.pt-features {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.pt-feat {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 6px;
+  align-items: baseline;
+  padding: 6px var(--gap-md);
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  color: var(--ink-2);
+  border-bottom: var(--hairline) solid var(--line-1);
+  line-height: 1.35;
+}
+.pt-feat::before {
+  content: '✓';
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--positive);
+  font-weight: 600;
+}
+.pt-feat.na { color: var(--ink-4); }
+.pt-feat.na::before { content: '—'; color: var(--ink-5); }
+.pt-feat strong { color: var(--ink-1); font-weight: 600; }
+.pt-cta {
+  padding: var(--gap-xs) var(--gap-md);
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  border-top: var(--hairline) solid var(--line-2);
+  text-align: center;
+  margin-top: auto;
+}
+.pt-col.hero .pt-cta { color: var(--accent); font-weight: 600; }
+
+/* --- Device / UI Mockup Frames -------------------------------- */
+.mockup-wrap {
+  display: flex;
+  gap: var(--gap-lg);
+  align-items: center;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.mockup-browser {
+  flex: 1;
+  border: 1.5px solid var(--line-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  height: 100%;
+}
+.mb-chrome {
+  background: var(--bg-card-alt);
+  border-bottom: var(--hairline) solid var(--line-2);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.mb-dots { display: flex; gap: 5px; }
+.mb-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.mb-dot-r { background: #ff5f57; }
+.mb-dot-y { background: #febc2e; }
+.mb-dot-g { background: #28c840; }
+.mb-url {
+  flex: 1;
+  background: var(--bg);
+  border: var(--hairline) solid var(--line-1);
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.mb-screen {
+  flex: 1;
+  background: var(--bg-card-alt);
+  overflow: hidden;
+  min-height: 160px;
+}
+.mb-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* CSS placeholder UI — used when no screenshot is available */
+.mb-ui {
+  display: flex;
+  height: 100%;
+  font-family: var(--font-mono);
+}
+.mb-ui-sidebar {
+  width: 18%;
+  background: var(--ink-1);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mb-ui-nav-item {
+  height: 8px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.12);
+}
+.mb-ui-nav-item.active { background: var(--accent); }
+.mb-ui-main {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg);
+}
+.mb-ui-topbar {
+  height: 28px;
+  background: var(--bg-card-alt);
+  border-radius: var(--radius-sm);
+  border: var(--hairline) solid var(--line-1);
+}
+.mb-ui-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  flex-shrink: 0;
+}
+.mb-ui-card {
+  height: 52px;
+  background: var(--bg-card-alt);
+  border: var(--hairline) solid var(--line-1);
+  border-radius: var(--radius-sm);
+  border-top: 3px solid var(--line-2);
+}
+.mb-ui-card:first-child { border-top-color: var(--accent); }
+.mb-ui-chart {
+  flex: 1;
+  background: var(--bg-card-alt);
+  border: var(--hairline) solid var(--line-1);
+  border-radius: var(--radius-sm);
+}
+.mockup-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+.mm-device {
+  background: var(--ink-1);
+  border-radius: 28px;
+  padding: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+}
+.mm-notch {
+  width: 48px; height: 10px;
+  background: var(--ink-1);
+  border-radius: 0 0 6px 6px;
+  margin-bottom: 6px;
+}
+.mm-screen {
+  background: var(--bg);
+  border-radius: 18px;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 9/16;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 5px;
+}
+.mm-screen img { width: 100%; display: block; border-radius: 12px; }
+.mm-s-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line-1);
+  flex-shrink: 0;
+}
+.mm-s-bar.accent { background: var(--accent); width: 60%; }
+.mm-s-card {
+  flex: 1;
+  border-radius: 6px;
+  background: var(--bg-card-alt);
+  border: var(--hairline) solid var(--line-1);
+}
+.mm-home {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+/* --- The Ask (full) — donut + cap table + milestones ---------- */
+.ask-full {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  height: 100%;
+}
+.ask-top {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1.2fr;
+  gap: var(--gap-xl);
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+}
+.af-amount { display: flex; flex-direction: column; gap: 6px; }
+.af-label {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-4);
+}
+.af-number {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6.5vw, 90px);
+  font-weight: 600;
+  color: var(--ink-1);
+  line-height: 0.9;
+}
+.af-number .unit { font-size: 0.45em; color: var(--accent); }
+.af-sub {
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  color: var(--ink-3);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+.af-meta {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  color: var(--ink-4);
+  margin-top: 2px;
+}
+.af-donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+.af-donut-heading {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+  align-self: flex-start;
+}
+.af-donut-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  width: 100%;
+}
+.af-donut-chart {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  /* author sets background: conic-gradient(...) inline */
+}
+.af-donut-chart::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px; height: 52px;
+  background: var(--bg);
+  border-radius: 50%;
+}
+.af-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.af-legend-item {
+  display: grid;
+  grid-template-columns: 9px 1fr auto;
+  gap: 6px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-2);
+}
+.af-swatch { width: 9px; height: 9px; border-radius: 2px; }
+.af-pct { color: var(--ink-4); }
+.af-captable { display: flex; flex-direction: column; gap: var(--gap-xs); }
+.act-heading {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+  margin-bottom: 6px;
+}
+.act-bar-track {
+  display: flex;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--gap-xs);
+}
+.act-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--on-dark-1);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0 4px;
+  width: var(--w);
+  background: var(--c);
+}
+.act-rows { display: flex; flex-direction: column; gap: 2px; }
+.act-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 0;
+  border-bottom: var(--hairline) solid var(--line-1);
+}
+.act-party {
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  color: var(--ink-2);
+}
+.act-bar-mini {
+  height: 5px;
+  background: var(--line-1);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+.act-bar-mini::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: var(--w, 0%);
+  background: var(--c, var(--ink-3));
+  border-radius: 3px;
+}
+.act-pct {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  color: var(--ink-3);
+  text-align: right;
+}
+.ask-milestones {
+  border-top: var(--hairline) solid var(--line-2);
+  padding-top: var(--gap-sm);
+  flex-shrink: 0;
+}
+.akm-heading {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-4);
+  margin-bottom: var(--gap-sm);
+}
+.akm-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-md);
+}
+.akm-item { display: flex; gap: var(--gap-xs); align-items: flex-start; }
+.akm-no {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.akm-text {
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+.akm-text strong { color: var(--ink-1); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -3316,7 +3888,306 @@ body.embed .progress { display: none; }
   </section>
 
   <!-- =================================================================
-       SLIDE 13 — CLOSING (dark hero)
+       SLIDE 13 — SAAS METRICS DASHBOARD
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Metrics</div>
+      <h2 class="title">Strong unit economics confirm <em>product-market fit</em> and efficient growth.</h2>
+      <div class="title-rule"></div>
+      <div class="saas-metrics">
+        <div class="sm-tile hero">
+          <div class="sm-label">ARR</div>
+          <div class="sm-value">$1.2<span class="unit">M</span></div>
+          <div class="sm-delta pos">▲ 180% YoY</div>
+          <div class="sm-sparkline">
+            <div class="sm-spark" style="--h:0.18"></div>
+            <div class="sm-spark" style="--h:0.35"></div>
+            <div class="sm-spark" style="--h:0.52"></div>
+            <div class="sm-spark" style="--h:0.72"></div>
+            <div class="sm-spark" style="--h:0.95"></div>
+            <div class="sm-spark current" style="--h:1"></div>
+          </div>
+          <div class="sm-bench good">Top-decile seed-stage SaaS at month 18</div>
+        </div>
+        <div class="sm-tile">
+          <div class="sm-label">Net Revenue Retention</div>
+          <div class="sm-value">118<span class="unit">%</span></div>
+          <div class="sm-delta pos">▲ +6pp vs. prior quarter</div>
+          <div class="sm-sparkline">
+            <div class="sm-spark" style="--h:0.76"></div>
+            <div class="sm-spark" style="--h:0.80"></div>
+            <div class="sm-spark" style="--h:0.85"></div>
+            <div class="sm-spark" style="--h:0.89"></div>
+            <div class="sm-spark" style="--h:0.93"></div>
+            <div class="sm-spark current" style="--h:1"></div>
+          </div>
+          <div class="sm-bench good">&gt;110% is world-class retention</div>
+        </div>
+        <div class="sm-tile">
+          <div class="sm-label">CAC : LTV Ratio</div>
+          <div class="sm-value">3.4<span class="unit">×</span></div>
+          <div class="sm-delta">CAC $820 · LTV $2,790</div>
+          <div class="sm-ratio-bar">
+            <div class="sm-ratio-cac" style="--cac-w: 23%;">CAC</div>
+            <div class="sm-ratio-ltv">LTV</div>
+          </div>
+          <div class="sm-bench good">Target &gt;3× for efficient growth — we're there</div>
+        </div>
+        <div class="sm-tile">
+          <div class="sm-label">Monthly Churn</div>
+          <div class="sm-value">0.8<span class="unit">%</span></div>
+          <div class="sm-delta pos">▼ −1.3pp since launch</div>
+          <div class="sm-sparkline">
+            <div class="sm-spark" style="--h:1.00"></div>
+            <div class="sm-spark" style="--h:0.86"></div>
+            <div class="sm-spark" style="--h:0.71"></div>
+            <div class="sm-spark" style="--h:0.62"></div>
+            <div class="sm-spark" style="--h:0.52"></div>
+            <div class="sm-spark current" style="--h:0.38"></div>
+          </div>
+          <div class="sm-bench good">Best-in-class for PLG SaaS (&lt;1% MoM)</div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Internal billing data, April 2026. NRR = expansion + contraction net of churn over trailing 12 months.</div>
+        <div class="page-no">13</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 14 — PRICING & PACKAGING TIERS
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Monetisation</div>
+      <h2 class="title">Land with <em>Starter</em>, grow with <em>Pro</em> — enterprise on custom terms.</h2>
+      <div class="title-rule"></div>
+      <div class="pricing">
+        <div class="pt-col">
+          <div class="pt-head">
+            <div class="pt-tier">Starter</div>
+            <div class="pt-price">$29<span class="pt-per">/mo per team</span></div>
+            <div class="pt-target">For small design teams getting started with structured feedback.</div>
+          </div>
+          <div class="pt-features">
+            <div class="pt-feat">Up to <strong>5 designers</strong></div>
+            <div class="pt-feat">10 active projects</div>
+            <div class="pt-feat">Figma &amp; Framer integrations</div>
+            <div class="pt-feat">30-day comment history</div>
+            <div class="pt-feat na">Slack / Linear / Jira sync</div>
+            <div class="pt-feat na">Analytics dashboard</div>
+            <div class="pt-feat na">SSO / SAML</div>
+          </div>
+          <div class="pt-cta">Get started free</div>
+        </div>
+        <div class="pt-col hero">
+          <div class="pt-badge">Most popular</div>
+          <div class="pt-head">
+            <div class="pt-tier">Pro</div>
+            <div class="pt-price">$79<span class="pt-per">/mo per team</span></div>
+            <div class="pt-target">For growing design orgs that need integrations and history at scale.</div>
+          </div>
+          <div class="pt-features">
+            <div class="pt-feat"><strong>Unlimited</strong> designers</div>
+            <div class="pt-feat">Unlimited projects</div>
+            <div class="pt-feat">All tool integrations</div>
+            <div class="pt-feat">Unlimited comment history</div>
+            <div class="pt-feat">Slack / Linear / Jira sync</div>
+            <div class="pt-feat">Analytics dashboard</div>
+            <div class="pt-feat na">SSO / SAML</div>
+          </div>
+          <div class="pt-cta">Start 14-day trial</div>
+        </div>
+        <div class="pt-col">
+          <div class="pt-head">
+            <div class="pt-tier">Enterprise</div>
+            <div class="pt-price">Custom</div>
+            <div class="pt-target">For large orgs requiring security, compliance, and dedicated support.</div>
+          </div>
+          <div class="pt-features">
+            <div class="pt-feat">Everything in Pro</div>
+            <div class="pt-feat">SSO &amp; SAML</div>
+            <div class="pt-feat">Audit logs &amp; DLP</div>
+            <div class="pt-feat">Dedicated CSM</div>
+            <div class="pt-feat">99.99% uptime SLA</div>
+            <div class="pt-feat">Custom integrations</div>
+            <div class="pt-feat">On-prem option</div>
+          </div>
+          <div class="pt-cta">Talk to sales</div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Published pricing as of April 2026. Enterprise contracts average $8,400 ARR; 3 signed to date. Annual billing saves 20%.</div>
+        <div class="page-no">14</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 15 — DEVICE / UI MOCKUP FRAMES
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Product</div>
+      <h2 class="title">Loop lives where design happens — <em>browser-native</em>, available everywhere.</h2>
+      <div class="title-rule"></div>
+      <div class="mockup-wrap">
+        <div class="mockup-browser">
+          <div class="mb-chrome">
+            <div class="mb-dots">
+              <div class="mb-dot mb-dot-r"></div>
+              <div class="mb-dot mb-dot-y"></div>
+              <div class="mb-dot mb-dot-g"></div>
+            </div>
+            <div class="mb-url">app.useloop.com/project/checkout-redesign-v3</div>
+          </div>
+          <div class="mb-screen">
+            <div class="mb-ui">
+              <div class="mb-ui-sidebar">
+                <div class="mb-ui-nav-item active"></div>
+                <div class="mb-ui-nav-item"></div>
+                <div class="mb-ui-nav-item"></div>
+                <div class="mb-ui-nav-item"></div>
+                <div class="mb-ui-nav-item"></div>
+              </div>
+              <div class="mb-ui-main">
+                <div class="mb-ui-topbar"></div>
+                <div class="mb-ui-cards">
+                  <div class="mb-ui-card"></div>
+                  <div class="mb-ui-card"></div>
+                  <div class="mb-ui-card"></div>
+                </div>
+                <div class="mb-ui-chart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-mobile">
+          <div class="mm-device">
+            <div class="mm-notch"></div>
+            <div class="mm-screen">
+              <div class="mm-s-bar accent"></div>
+              <div class="mm-s-bar"></div>
+              <div class="mm-s-card"></div>
+              <div class="mm-s-bar"></div>
+              <div class="mm-s-card"></div>
+            </div>
+            <div class="mm-home"></div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">CSS-drawn UI placeholders. Full interactive demo at app.useloop.com · native iOS &amp; Android app in private beta, 2,100+ installs.</div>
+        <div class="page-no">15</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 16 — THE ASK (FULL) — donut + cap table + milestones
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">The ask</div>
+      <h2 class="title">Raising <em>$8M Series A</em> to reach $10M ARR and Series B readiness in 24 months.</h2>
+      <div class="title-rule"></div>
+      <div class="ask-full">
+        <div class="ask-top">
+          <div class="af-amount">
+            <div class="af-label">Series A target</div>
+            <div class="af-number"><span class="unit">$</span>8<span class="unit">M</span></div>
+            <div class="af-sub">At $48M post-money. Co-led by [Lead] and [Co-lead]; existing investors participating pro-rata.</div>
+            <div class="af-meta">24-month runway · Target Series B at $10M ARR</div>
+          </div>
+          <div class="af-donut">
+            <div class="af-donut-heading">Use of funds</div>
+            <div class="af-donut-row">
+              <div class="af-donut-chart" style="background: conic-gradient(var(--c1) 0 162deg, var(--c3) 162deg 288deg, var(--c5) 288deg 324deg, var(--ink-5) 324deg 360deg)"></div>
+              <div class="af-donut-legend">
+                <div class="af-legend-item">
+                  <div class="af-swatch" style="background: var(--c1)"></div>
+                  <span>Product &amp; Engineering</span>
+                  <span class="af-pct">45%</span>
+                </div>
+                <div class="af-legend-item">
+                  <div class="af-swatch" style="background: var(--c3)"></div>
+                  <span>Go-to-Market</span>
+                  <span class="af-pct">35%</span>
+                </div>
+                <div class="af-legend-item">
+                  <div class="af-swatch" style="background: var(--c5)"></div>
+                  <span>Operations</span>
+                  <span class="af-pct">10%</span>
+                </div>
+                <div class="af-legend-item">
+                  <div class="af-swatch" style="background: var(--ink-5)"></div>
+                  <span>Reserve</span>
+                  <span class="af-pct">10%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="af-captable">
+            <div class="act-heading">Cap table · post-round</div>
+            <div class="act-bar-track">
+              <div class="act-seg" style="--w: 52%; --c: var(--ink-1);">Founders</div>
+              <div class="act-seg" style="--w: 23%; --c: var(--c3);">Existing</div>
+              <div class="act-seg" style="--w: 17%; --c: var(--c1);">Series A</div>
+              <div class="act-seg" style="--w: 8%; --c: var(--ink-4);">ESOP</div>
+            </div>
+            <div class="act-rows">
+              <div class="act-row">
+                <div class="act-party">Founders</div>
+                <div class="act-bar-mini" style="--w: 52%; --c: var(--ink-1)"></div>
+                <div class="act-pct">52%</div>
+              </div>
+              <div class="act-row">
+                <div class="act-party">Existing investors</div>
+                <div class="act-bar-mini" style="--w: 23%; --c: var(--c3)"></div>
+                <div class="act-pct">23%</div>
+              </div>
+              <div class="act-row">
+                <div class="act-party">Series A (this round)</div>
+                <div class="act-bar-mini" style="--w: 17%; --c: var(--c1)"></div>
+                <div class="act-pct">17%</div>
+              </div>
+              <div class="act-row">
+                <div class="act-party">ESOP pool</div>
+                <div class="act-bar-mini" style="--w: 8%; --c: var(--ink-4)"></div>
+                <div class="act-pct">8%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ask-milestones">
+          <div class="akm-heading">What this round achieves</div>
+          <div class="akm-items">
+            <div class="akm-item">
+              <div class="akm-no">M6 →</div>
+              <div class="akm-text"><strong>$3.2M ARR.</strong> Enterprise tier live; first 5 Fortune 1000 contracts signed. Team grows to 30.</div>
+            </div>
+            <div class="akm-item">
+              <div class="akm-no">M12 →</div>
+              <div class="akm-text"><strong>$6.1M ARR.</strong> 15,000 paying teams. EMEA expansion underway; London office opens.</div>
+            </div>
+            <div class="akm-item">
+              <div class="akm-no">M24 →</div>
+              <div class="akm-text"><strong>$10M ARR.</strong> Series B ready at 110%+ NRR. Profitable GTM motion; 45 full-time employees.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Projections based on current growth rate and signed pipeline. Cap table is illustrative pending final allocation.</div>
+        <div class="page-no">16</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 17 — CLOSING (dark hero)
        ================================================================= -->
   <section class="slide dark">
     <div class="slide-inner" style="justify-content: center; gap: 1.5rem;">
@@ -3340,7 +4211,7 @@ body.embed .progress { display: none; }
      CHROME — counter, nav, PDF
      ================================================================ -->
 <div class="chrome">
-  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">13</span></div>
+  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">17</span></div>
   <div class="nav-btns">
     <button class="nav-btn" onclick="prev()" aria-label="Previous slide">← Prev</button>
     <button class="nav-btn" onclick="next()" aria-label="Next slide">Next →</button>
