@@ -1131,7 +1131,7 @@ document.getElementById('download-btn').addEventListener('click', async () => {
     const plainCss = els.cssOutput.textContent;
     html = html.replace(/:root \{[\s\S]*?\n\}/, plainCss);
     html = html.replace(/(<link id="font-link" href=")[^"]*"/, `$1${getFontUrlForOutput()}"`);
-    const writeResp = await fetch('http://localhost:3001/apply-theme', {
+    const writeResp = await fetch('/apply-theme', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ file: 'enterprise/deck.html', html })

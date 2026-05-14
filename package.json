@@ -25,9 +25,7 @@
   "dependencies": {
     "playwright": "^1.48.0"
   },
-  "devDependencies": {
-    "browser-sync": "^3.0.2"
-  },
+  "devDependencies": {},
   "license": "MIT",
   "keywords": [
     "presentable",
