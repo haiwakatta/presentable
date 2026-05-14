@@ -508,21 +508,12 @@ SOURCE: https://..."></textarea>
         <div class="output-header">
           <h3>Generated <code style="font-family:'JetBrains Mono';font-size:14px;">:root</code> block</h3>
           <div style="display:flex;gap:8px;">
-            <button class="btn secondary" id="download-btn">Download deck</button>
-            <button class="btn" id="copy-btn">Copy CSS</button>
+            <button class="btn" id="download-btn">Apply to deck</button>
+            <button class="btn secondary" id="copy-btn">Copy CSS</button>
           </div>
         </div>
         <pre class="css-block" id="css-output"></pre>
-        <div class="how-to">
-          <h4>How to apply this to your deck</h4>
-          <ol>
-            <li>Open <code>investor/deck.html</code> in your editor.</li>
-            <li>Find the <code>:root {</code> block near the top of the <code>&lt;style&gt;</code> tag.</li>
-            <li>Replace the entire <code>:root { ... }</code> with the generated block above.</li>
-            <li>Update the Google Fonts <code>&lt;link&gt;</code> in <code>&lt;head&gt;</code>. The comment at the top includes the URL.</li>
-            <li>Reload. Every component and chart series retones to the brand.</li>
-          </ol>
-        </div>
+        <p class="helper-note">Writes the theme directly to <code>investor/deck.html</code> and triggers a live reload. Requires <strong>npm run dev</strong> to be running.</p>
       </div>
 
     </div><!-- /preview-wrap -->
@@ -1121,7 +1112,7 @@ els.copyBtn.addEventListener('click', async () => {
 
 document.getElementById('download-btn').addEventListener('click', async () => {
   const btn = document.getElementById('download-btn');
-  btn.textContent = 'Preparing…'; btn.disabled = true;
+  btn.textContent = 'Applying…'; btn.disabled = true;
   try {
     const resp = await fetch('deck.html');
     if (!resp.ok) throw new Error('fetch failed');
@@ -1129,17 +1120,17 @@ document.getElementById('download-btn').addEventListener('click', async () => {
     const plainCss = els.cssOutput.textContent;
     html = html.replace(/:root \{[\s\S]*?\n\}/, plainCss);
     html = html.replace(/(<link id="font-link" href=")[^"]*"/, `$1${currentFontUrl}"`);
-    const blob = new Blob([html], { type: 'text/html' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    const co = (state.company || 'deck').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    a.download = `${co}-investor-deck.html`;
-    a.click(); URL.revokeObjectURL(a.href);
-    btn.textContent = '✓ Downloaded'; btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Download deck'; btn.classList.remove('copied'); btn.disabled = false; }, 2000);
+    const writeResp = await fetch('http://localhost:3001/apply-theme', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ file: 'investor/deck.html', html })
+    });
+    if (!writeResp.ok) throw new Error('write failed');
+    btn.textContent = '✓ Applied'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Apply to deck'; btn.classList.remove('copied'); btn.disabled = false; }, 2000);
   } catch {
-    btn.textContent = 'Download deck'; btn.disabled = false;
-    alert('Run "npm run dev" first — file:// fetch is blocked by the browser.');
+    btn.textContent = 'Apply to deck'; btn.disabled = false;
+    alert('Run "npm run dev" first — the write server must be running.');
   }
 });
 

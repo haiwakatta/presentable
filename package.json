@@ -4,7 +4,7 @@
   "description": "Presentable — an HTML deck framework for the LLM-with-human workflow. One foundation, three cases (enterprise, investor, portfolio), with per-case theme builders. Chart.js + Playwright PDF export.",
   "main": "enterprise/deck.html",
   "scripts": {
-    "dev": "browser-sync start --server --files '**/*.html,**/*.css,**/*.js' --no-open --port 3000",
+    "dev": "node dev-server.js",
     "pdf": "node export-pdf.js",
     "pdf:enterprise": "node export-pdf.js enterprise/deck.html",
     "pdf:investor": "node export-pdf.js investor/deck.html",
