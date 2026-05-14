@@ -2721,6 +2721,431 @@ body.embed .progress { display: none; }
 #slide-counter.warn { color: #d97706; }
 #slide-counter.over { color: #dc2626; }
 @media print { #shortcut-overlay, #slide-counter { display: none !important; } }
+
+/* ================================================================
+   v0.5 COMPONENTS — topology grid, swimlane, tco table, gantt-lite
+   ================================================================ */
+
+/* --- System Architecture / Topology Grid ---------------------- */
+.topology { display: flex; flex-direction: column; gap: var(--gap-md); height: 100%; }
+.topo-body {
+  display: grid;
+  grid-template-columns: 1fr 52px 1fr 52px 1fr;
+  align-items: stretch;
+  flex: 1;
+}
+.topo-zone {
+  border: var(--hairline) solid var(--line-2);
+  border-radius: var(--radius-md);
+  padding: var(--gap-sm) var(--gap-md);
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.topo-zone.hero { border-color: var(--accent); border-width: 1.5px; background: var(--accent-tint); }
+.topo-zone-label {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding-bottom: 6px;
+  border-bottom: var(--hairline) solid var(--line-1);
+  margin-bottom: 2px;
+}
+.topo-zone.hero .topo-zone-label { color: var(--accent); opacity: 0.8; }
+.topo-nodes { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.topo-node {
+  padding: 6px 10px;
+  border: var(--hairline) solid var(--line-1);
+  border-left: 2px solid var(--line-2);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.topo-zone.hero .topo-node { border-left-color: var(--line-2); }
+.topo-node.active { border-left-color: var(--accent); }
+.topo-node-name {
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  font-weight: 600;
+  color: var(--ink-1);
+  line-height: 1.25;
+}
+.topo-node-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.topo-conn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 4px;
+}
+.topo-conn-arrow {
+  width: 100%;
+  height: 2px;
+  background: var(--line-2);
+  position: relative;
+}
+.topo-conn-arrow::after {
+  content: '';
+  position: absolute;
+  right: -1px; top: -4px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid var(--line-2);
+}
+.topo-conn-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  letter-spacing: 0.05em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --- Swimlane / BPMN Lanes ------------------------------------ */
+.swimlane {
+  display: flex;
+  flex-direction: column;
+  border: var(--hairline) solid var(--line-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 100%;
+}
+.sl-phases {
+  display: grid;
+  grid-template-columns: 108px repeat(4, 1fr);
+  background: var(--bg-card-alt);
+  border-bottom: 2px solid var(--line-3);
+  flex-shrink: 0;
+}
+.sl-phase-gap { border-right: var(--hairline) solid var(--line-2); }
+.sl-phase {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  padding: 7px 10px;
+  text-align: center;
+  border-right: var(--hairline) solid var(--line-2);
+}
+.sl-phase:last-child { border-right: none; }
+.sl-lane {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  border-bottom: var(--hairline) solid var(--line-2);
+  flex: 1;
+  min-height: 0;
+}
+.sl-lane:last-child { border-bottom: none; }
+.sl-actor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gap-sm);
+  border-right: var(--hairline) solid var(--line-2);
+  background: var(--bg-card-alt);
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  font-weight: 600;
+  color: var(--ink-2);
+  text-align: center;
+  line-height: 1.3;
+}
+.sl-lane.hero .sl-actor { background: var(--accent-tint); color: var(--accent); }
+.sl-cells {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: var(--gap-sm) var(--gap-xs);
+  gap: var(--gap-xs);
+  align-items: center;
+}
+.sl-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.sl-task {
+  background: var(--bg-card);
+  border: var(--hairline) solid var(--line-2);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  color: var(--ink-2);
+  text-align: center;
+  width: 100%;
+  line-height: 1.3;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sl-task.active { background: var(--ink-1); color: var(--on-dark-1); border-color: var(--ink-1); }
+.sl-task.milestone {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sl-task.empty { background: transparent; border: var(--hairline) dashed var(--line-1); color: transparent; }
+.sl-handoff {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  text-align: center;
+}
+
+/* --- ROI / TCO Breakdown Table -------------------------------- */
+.tco-wrap { display: flex; flex-direction: column; gap: var(--gap-sm); height: 100%; }
+.tco-table { width: 100%; border-collapse: collapse; }
+.tco-table thead th {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 5px 10px;
+  text-align: right;
+  border-bottom: 2px solid var(--line-3);
+  white-space: nowrap;
+}
+.tco-table thead th:first-child { text-align: left; min-width: 170px; }
+.tco-table th.tco-tot, .tco-table td.tco-tot { border-left: 1px solid var(--line-2); font-weight: 700; }
+.tco-table tr.tco-section-head td {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 8px 10px 3px;
+  border-bottom: var(--hairline) solid var(--line-1);
+}
+.tco-table tbody td {
+  padding: 4px 10px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--body-small);
+  color: var(--ink-2);
+  border-bottom: var(--hairline) solid var(--line-1);
+}
+.tco-table tbody td:first-child {
+  text-align: left;
+  font-family: var(--font-body);
+  color: var(--ink-2);
+  padding-left: 18px;
+}
+.tco-table tr.tco-sub td {
+  font-family: var(--font-mono);
+  font-size: var(--body-small);
+  font-weight: 700;
+  color: var(--ink-1);
+  border-top: 1px solid var(--ink-1);
+  border-bottom: var(--hairline) solid var(--line-1);
+  padding-top: 5px;
+}
+.tco-table tr.tco-sub td:first-child {
+  padding-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+}
+.tco-table tr.tco-net td {
+  background: var(--bg-card-alt);
+  font-weight: 700;
+  color: var(--ink-1);
+}
+.tco-table tr.tco-net td:first-child {
+  padding-left: 10px;
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.tco-table tr.tco-cum td {
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-weight: 700;
+  border-bottom: none;
+}
+.tco-table tr.tco-cum td:first-child {
+  padding-left: 10px;
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.tco-table td.pos { color: var(--positive); }
+.tco-table td.neg { color: var(--risk); }
+.tco-callouts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-sm);
+  flex-shrink: 0;
+  margin-top: auto;
+}
+.tco-callout {
+  background: var(--bg-card-alt);
+  border: var(--hairline) solid var(--line-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+.tco-c-label {
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 3px;
+}
+.tco-c-value {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 600;
+  color: var(--ink-1);
+  line-height: 1;
+}
+.tco-c-value.pos { color: var(--positive); }
+.tco-c-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-4);
+  margin-top: 2px;
+}
+
+/* --- Gantt-Lite / Deployment Phasing -------------------------- */
+.gantt-lite { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.gl-header { display: grid; grid-template-columns: 130px 1fr; flex-shrink: 0; }
+.gl-header-label {
+  border-right: var(--hairline) solid var(--line-2);
+  background: var(--bg-card-alt);
+  grid-row: 1 / 3;
+}
+.gl-header-right { display: flex; flex-direction: column; }
+.gl-phase-strip {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border-bottom: var(--hairline) solid var(--line-2);
+}
+.gl-phase {
+  grid-column: var(--cs) / span var(--cspan);
+  font-family: var(--font-mono);
+  font-size: var(--eyebrow-size);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-4);
+  padding: 4px 8px;
+  border-right: var(--hairline) solid var(--line-2);
+  white-space: nowrap;
+  overflow: hidden;
+  background: var(--bg-card-alt);
+}
+.gl-phase.ph1 { background: var(--accent-tint); color: var(--accent); }
+.gl-phase:last-child { border-right: none; }
+.gl-month-strip {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border-bottom: 2px solid var(--line-3);
+}
+.gl-month {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-4);
+  padding: 4px 0;
+  text-align: center;
+  border-right: var(--hairline) solid var(--line-1);
+}
+.gl-month:last-child { border-right: none; }
+.gl-row { display: grid; grid-template-columns: 130px 1fr; border-bottom: var(--hairline) solid var(--line-1); flex: 1; min-height: 0; }
+.gl-row:last-child { border-bottom: none; }
+.gl-row-label {
+  display: flex;
+  align-items: center;
+  padding: var(--gap-xs) var(--gap-sm);
+  border-right: var(--hairline) solid var(--line-2);
+  background: var(--bg-card-alt);
+  font-family: var(--font-body);
+  font-size: var(--body-small);
+  font-weight: 600;
+  color: var(--ink-2);
+  line-height: 1.3;
+}
+.gl-bars {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 24px;
+  padding: 5px 0;
+  gap: 3px 0;
+  align-content: start;
+  position: relative;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(100% / 12 - 1px),
+    var(--line-1) calc(100% / 12 - 1px),
+    var(--line-1) calc(100% / 12)
+  );
+}
+.gl-bar {
+  grid-column: var(--cs) / span var(--cspan);
+  grid-row: var(--gr, 1);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 7px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  color: var(--on-dark-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 2px;
+}
+.gl-bar.b1 { background: var(--c1); }
+.gl-bar.b2 { background: var(--c2); }
+.gl-bar.b3 { background: var(--c3); }
+.gl-bar.b4 { background: var(--c4); }
+.gl-bar.b5 { background: var(--c5); }
+.gl-bar.muted { background: var(--ink-5); color: var(--ink-2); }
+.gl-milestone {
+  position: absolute;
+  left: calc((var(--col) - 0.5) / 12 * 100%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  pointer-events: none;
+}
+.gl-milestone-mark {
+  width: 9px; height: 9px;
+  background: var(--ink-1);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.gl-milestone-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  color: var(--ink-1);
+  white-space: nowrap;
+  margin-top: 8px;
+}
+.gl-row.milestone-row .gl-row-label { font-style: italic; color: var(--ink-4); font-weight: 400; }
+.gl-row.milestone-row .gl-bars { background-image: none; min-height: 52px; align-content: center; }
 </style>
 </head>
 <body>
@@ -4709,13 +5134,338 @@ body.embed .progress { display: none; }
     </div>
   </section>
 
+  <!-- =================================================================
+       SLIDE 47 — SYSTEM TOPOLOGY / ARCHITECTURE GRID
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Platform architecture · system overview</div>
+      <h2 class="title">A three-tier topology links 640 edge cameras to a unified analytics platform via on-premise gateways at each site.</h2>
+      <div class="title-rule"></div>
+      <div class="topology">
+        <div class="topo-body">
+
+          <div class="topo-zone">
+            <div class="topo-zone-label">Edge</div>
+            <div class="topo-nodes">
+              <div class="topo-node">
+                <div class="topo-node-name">IP Camera Array</div>
+                <div class="topo-node-meta">640 units · 4K/30fps · PTZ + fixed</div>
+              </div>
+              <div class="topo-node active">
+                <div class="topo-node-name">Edge GPU Appliance</div>
+                <div class="topo-node-meta">NVIDIA Jetson · 1 per site · 4 sites</div>
+              </div>
+              <div class="topo-node">
+                <div class="topo-node-name">Local NVR Buffer</div>
+                <div class="topo-node-meta">72-hr rolling storage · failsafe</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topo-conn">
+            <div class="topo-conn-arrow"></div>
+            <div class="topo-conn-label">RTSP · &lt;5 ms</div>
+          </div>
+
+          <div class="topo-zone hero">
+            <div class="topo-zone-label">On-Premise</div>
+            <div class="topo-nodes">
+              <div class="topo-node active">
+                <div class="topo-node-name">Analytics Platform</div>
+                <div class="topo-node-meta">Real-time inference · 99.9% SLA</div>
+              </div>
+              <div class="topo-node active">
+                <div class="topo-node-name">Integration Gateway</div>
+                <div class="topo-node-meta">VMS · PSIM · SIEM connectors</div>
+              </div>
+              <div class="topo-node">
+                <div class="topo-node-name">Model Registry</div>
+                <div class="topo-node-meta">Versioned · air-gapped option</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topo-conn">
+            <div class="topo-conn-arrow"></div>
+            <div class="topo-conn-label">TLS 1.3 · encrypted</div>
+          </div>
+
+          <div class="topo-zone">
+            <div class="topo-zone-label">Cloud</div>
+            <div class="topo-nodes">
+              <div class="topo-node">
+                <div class="topo-node-name">ML Training Platform</div>
+                <div class="topo-node-meta">Continuous retraining · CI/CD</div>
+              </div>
+              <div class="topo-node">
+                <div class="topo-node-name">Data Lake</div>
+                <div class="topo-node-meta">Event metadata · 90-day hot tier</div>
+              </div>
+              <div class="topo-node active">
+                <div class="topo-node-name">Executive Dashboard</div>
+                <div class="topo-node-meta">SSO · role-based views · mobile</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Platform architecture v2.1 · subject to final network survey at each site.</div>
+        <div class="page-no">47</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 48 — SWIMLANE / BPMN PROCESS LANES
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Deployment plan · onboarding process</div>
+      <h2 class="title">Platform onboarding follows five cross-team handoffs across twelve weeks; every step is a dependency, none is optional.</h2>
+      <div class="title-rule"></div>
+      <div class="swimlane">
+        <div class="sl-phases">
+          <div class="sl-phase-gap"></div>
+          <div class="sl-phase">01 · Assess</div>
+          <div class="sl-phase">02 · Design</div>
+          <div class="sl-phase">03 · Build</div>
+          <div class="sl-phase">04 · Validate</div>
+        </div>
+        <div class="sl-lane hero">
+          <div class="sl-actor">IT &amp;<br>Infrastructure</div>
+          <div class="sl-cells">
+            <div class="sl-cell"><div class="sl-task active">Network &amp; camera audit</div></div>
+            <div class="sl-cell"><div class="sl-task">Server provisioning</div></div>
+            <div class="sl-cell"><div class="sl-task">Integration config</div></div>
+            <div class="sl-cell"><div class="sl-task milestone">Sign-off</div></div>
+          </div>
+        </div>
+        <div class="sl-lane">
+          <div class="sl-actor">Analytics<br>Team</div>
+          <div class="sl-cells">
+            <div class="sl-cell"><div class="sl-task">Requirements workshop</div></div>
+            <div class="sl-cell"><div class="sl-task">Model selection &amp; config</div></div>
+            <div class="sl-cell"><div class="sl-task active">Deploy &amp; tune models</div></div>
+            <div class="sl-cell"><div class="sl-task">Support UAT</div></div>
+          </div>
+        </div>
+        <div class="sl-lane">
+          <div class="sl-actor">Business<br>Stakeholder</div>
+          <div class="sl-cells">
+            <div class="sl-cell"><div class="sl-task">Scope &amp; KPI approval</div></div>
+            <div class="sl-cell"><div class="sl-task">Alert threshold definition</div></div>
+            <div class="sl-cell"><div class="sl-task empty">—</div></div>
+            <div class="sl-cell"><div class="sl-task milestone">UAT &amp; go-live</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Delivery methodology v3 · timeline assumes no change to network topology · durations in business weeks.</div>
+        <div class="page-no">48</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 49 — ROI / TCO BREAKDOWN TABLE
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Business case · 5-year financial model</div>
+      <h2 class="title">The platform breaks even at month 19 and returns $12.1M cumulative net benefit by year 5 at a 2.2× benefit-cost ratio.</h2>
+      <div class="title-rule"></div>
+      <div class="tco-wrap">
+        <table class="tco-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Yr 1</th><th>Yr 2</th><th>Yr 3</th><th>Yr 4</th><th>Yr 5</th>
+              <th class="tco-tot">5-yr total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tco-section-head"><td colspan="7">Costs ($M)</td></tr>
+            <tr>
+              <td>Platform licence</td>
+              <td class="neg">(1.2)</td><td class="neg">(0.8)</td><td class="neg">(0.8)</td><td class="neg">(0.8)</td><td class="neg">(0.8)</td>
+              <td class="tco-tot neg">(4.4)</td>
+            </tr>
+            <tr>
+              <td>Implementation &amp; integration</td>
+              <td class="neg">(2.8)</td><td>—</td><td>—</td><td>—</td><td>—</td>
+              <td class="tco-tot neg">(2.8)</td>
+            </tr>
+            <tr>
+              <td>Infrastructure (HW &amp; network)</td>
+              <td class="neg">(0.6)</td><td class="neg">(0.2)</td><td class="neg">(0.2)</td><td class="neg">(0.2)</td><td class="neg">(0.2)</td>
+              <td class="tco-tot neg">(1.4)</td>
+            </tr>
+            <tr>
+              <td>Ongoing support &amp; training</td>
+              <td class="neg">(0.3)</td><td class="neg">(0.2)</td><td class="neg">(0.2)</td><td class="neg">(0.2)</td><td class="neg">(0.2)</td>
+              <td class="tco-tot neg">(1.1)</td>
+            </tr>
+            <tr class="tco-sub">
+              <td>Total cost</td>
+              <td class="neg">(4.9)</td><td class="neg">(1.2)</td><td class="neg">(1.2)</td><td class="neg">(1.2)</td><td class="neg">(1.2)</td>
+              <td class="tco-tot neg">(9.7)</td>
+            </tr>
+            <tr class="tco-section-head"><td colspan="7">Benefits ($M)</td></tr>
+            <tr>
+              <td>Incident cost avoidance</td>
+              <td class="pos">0.8</td><td class="pos">2.4</td><td class="pos">2.8</td><td class="pos">3.1</td><td class="pos">3.4</td>
+              <td class="tco-tot pos">12.5</td>
+            </tr>
+            <tr>
+              <td>Labour efficiency gains</td>
+              <td class="pos">0.4</td><td class="pos">1.2</td><td class="pos">1.4</td><td class="pos">1.5</td><td class="pos">1.6</td>
+              <td class="tco-tot pos">6.1</td>
+            </tr>
+            <tr>
+              <td>Operations optimisation</td>
+              <td class="pos">0.2</td><td class="pos">0.6</td><td class="pos">0.7</td><td class="pos">0.8</td><td class="pos">0.9</td>
+              <td class="tco-tot pos">3.2</td>
+            </tr>
+            <tr class="tco-sub">
+              <td>Total benefit</td>
+              <td class="pos">1.4</td><td class="pos">4.2</td><td class="pos">4.9</td><td class="pos">5.4</td><td class="pos">5.9</td>
+              <td class="tco-tot pos">21.8</td>
+            </tr>
+            <tr class="tco-net">
+              <td>Net annual</td>
+              <td class="neg">(3.5)</td><td class="pos">3.0</td><td class="pos">3.7</td><td class="pos">4.2</td><td class="pos">4.7</td>
+              <td class="tco-tot pos">12.1</td>
+            </tr>
+            <tr class="tco-cum">
+              <td>Cumulative</td>
+              <td class="neg">(3.5)</td><td class="neg">(0.5)</td><td class="pos">3.2</td><td class="pos">7.4</td><td class="pos">12.1</td>
+              <td class="tco-tot">—</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tco-callouts">
+          <div class="tco-callout">
+            <div class="tco-c-label">5-yr NPV</div>
+            <div class="tco-c-value pos">$8.4M</div>
+            <div class="tco-c-sub">at 10% discount rate</div>
+          </div>
+          <div class="tco-callout">
+            <div class="tco-c-label">IRR</div>
+            <div class="tco-c-value pos">34%</div>
+            <div class="tco-c-sub">vs 12% hurdle rate</div>
+          </div>
+          <div class="tco-callout">
+            <div class="tco-c-label">Payback period</div>
+            <div class="tco-c-value">19 months</div>
+            <div class="tco-c-sub">month 7 of year 2</div>
+          </div>
+          <div class="tco-callout">
+            <div class="tco-c-label">Benefit-cost ratio</div>
+            <div class="tco-c-value pos">2.2×</div>
+            <div class="tco-c-sub">$21.8M benefit / $9.7M cost</div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Financial model v2.3 · benefits validated by ops and finance · costs include 15% contingency · discount rate 10%.</div>
+        <div class="page-no">49</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 50 — GANTT-LITE / DEPLOYMENT PHASING
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Deployment plan · 12-month timeline</div>
+      <h2 class="title">Three sequential phases complete full deployment by December; infrastructure is done by end of Q1 to unblock all downstream workstreams.</h2>
+      <div class="title-rule"></div>
+      <div class="gantt-lite">
+        <div class="gl-header">
+          <div class="gl-header-label"></div>
+          <div class="gl-header-right">
+            <div class="gl-phase-strip">
+              <div class="gl-phase ph1" style="--cs:1;--cspan:4">Phase 1 · Foundation</div>
+              <div class="gl-phase" style="--cs:5;--cspan:4">Phase 2 · Rollout</div>
+              <div class="gl-phase" style="--cs:9;--cspan:4">Phase 3 · Scale</div>
+            </div>
+            <div class="gl-month-strip">
+              <div class="gl-month">Jan</div><div class="gl-month">Feb</div>
+              <div class="gl-month">Mar</div><div class="gl-month">Apr</div>
+              <div class="gl-month">May</div><div class="gl-month">Jun</div>
+              <div class="gl-month">Jul</div><div class="gl-month">Aug</div>
+              <div class="gl-month">Sep</div><div class="gl-month">Oct</div>
+              <div class="gl-month">Nov</div><div class="gl-month">Dec</div>
+            </div>
+          </div>
+        </div>
+        <div class="gl-row">
+          <div class="gl-row-label">Infrastructure</div>
+          <div class="gl-bars">
+            <div class="gl-bar b1" style="--cs:1;--cspan:3;--gr:1">Hardware procurement</div>
+            <div class="gl-bar b1" style="--cs:3;--cspan:5;--gr:2">Network installation</div>
+          </div>
+        </div>
+        <div class="gl-row">
+          <div class="gl-row-label">Software &amp; Integration</div>
+          <div class="gl-bars">
+            <div class="gl-bar b2" style="--cs:2;--cspan:4;--gr:1">Platform config</div>
+            <div class="gl-bar b2" style="--cs:6;--cspan:3;--gr:1">Integration testing</div>
+            <div class="gl-bar b2" style="--cs:9;--cspan:2;--gr:1">Fine-tuning</div>
+          </div>
+        </div>
+        <div class="gl-row">
+          <div class="gl-row-label">Change Management</div>
+          <div class="gl-bars">
+            <div class="gl-bar b3" style="--cs:2;--cspan:3;--gr:1">Training design</div>
+            <div class="gl-bar b3" style="--cs:5;--cspan:5;--gr:1">Training delivery</div>
+            <div class="gl-bar b3" style="--cs:10;--cspan:3;--gr:1">Adoption support</div>
+          </div>
+        </div>
+        <div class="gl-row">
+          <div class="gl-row-label">Operations</div>
+          <div class="gl-bars">
+            <div class="gl-bar b4" style="--cs:6;--cspan:3;--gr:1">Pilot · 2 sites</div>
+            <div class="gl-bar b4" style="--cs:8;--cspan:4;--gr:2">Phased rollout</div>
+            <div class="gl-bar b4" style="--cs:11;--cspan:2;--gr:1">Full ops</div>
+          </div>
+        </div>
+        <div class="gl-row milestone-row">
+          <div class="gl-row-label">Key milestones</div>
+          <div class="gl-bars">
+            <div class="gl-milestone" style="--col:4">
+              <div class="gl-milestone-mark"></div>
+              <div class="gl-milestone-label">Infra ready</div>
+            </div>
+            <div class="gl-milestone" style="--col:9">
+              <div class="gl-milestone-mark"></div>
+              <div class="gl-milestone-label">Pilot go-live</div>
+            </div>
+            <div class="gl-milestone" style="--col:11">
+              <div class="gl-milestone-mark"></div>
+              <div class="gl-milestone-label">Full go-live</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Deployment plan v1.0 · timelines subject to site readiness · workstreams led by vendor PM with client co-lead.</div>
+        <div class="page-no">50</div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <!-- ================================================================
      CHROME — counter, nav, PDF
      ================================================================ -->
 <div class="chrome">
-  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">46</span></div>
+  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">50</span></div>
   <div class="nav-btns">
     <button class="nav-btn" onclick="prev()" aria-label="Previous slide">← Prev</button>
     <button class="nav-btn" onclick="next()" aria-label="Next slide">Next →</button>

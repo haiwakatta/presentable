@@ -1074,6 +1074,229 @@ Maximum 15 visible tasks per slide. More belongs in the project tracker, not a d
 
 ---
 
+## v0.5 components — enterprise topology, process, financials, phasing
+
+Four components added for enterprise platform rollout work (video analytics, infrastructure, SaaS). All are pure CSS/HTML — no Chart.js required.
+
+### 39. System architecture / topology grid
+
+A three-zone node-and-edge diagram for data-flow architecture. Each zone is a bordered column of node cards; connector arrows sit between zones.
+
+**When to use:** explaining how edge devices, on-premise infrastructure, and cloud services connect. One topology per deck. Use the hero zone modifier on the zone that is the subject of the meeting (usually the on-premise analytics layer or the proposed platform).
+
+**Zone classes:** `.topo-zone` (default) · `.topo-zone.hero` (accent border + tinted background — the primary zone being evaluated)
+
+**Node classes:** `.topo-node` (default, gray left border) · `.topo-node.active` (accent left border — the specific product or component under discussion)
+
+```html
+<div class="topology">
+  <div class="topo-body">
+    <div class="topo-zone">
+      <div class="topo-zone-label">Edge</div>
+      <div class="topo-nodes">
+        <div class="topo-node">
+          <div class="topo-node-name">IP Camera Array</div>
+          <div class="topo-node-meta">640 units · 4K/30fps</div>
+        </div>
+        <div class="topo-node active">
+          <div class="topo-node-name">Edge GPU Appliance</div>
+          <div class="topo-node-meta">NVIDIA Jetson · 4 sites</div>
+        </div>
+      </div>
+    </div>
+    <div class="topo-conn">
+      <div class="topo-conn-arrow"></div>
+      <div class="topo-conn-label">RTSP · &lt;5 ms</div>
+    </div>
+    <div class="topo-zone hero">
+      <div class="topo-zone-label">On-Premise</div>
+      <div class="topo-nodes">
+        <!-- 2–3 nodes -->
+      </div>
+    </div>
+    <div class="topo-conn">
+      <div class="topo-conn-arrow"></div>
+      <div class="topo-conn-label">TLS 1.3</div>
+    </div>
+    <div class="topo-zone">
+      <div class="topo-zone-label">Cloud</div>
+      <div class="topo-nodes">
+        <!-- 2–3 nodes -->
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+**Grid structure:** `grid-template-columns: 1fr 52px 1fr 52px 1fr` — three equal zones with narrow connector columns between them. Keep 2–3 nodes per zone. More than 3 nodes crowds the card.
+
+**Connector label:** describe the protocol and latency/encryption. "RTSP · <5 ms" and "TLS 1.3 · encrypted" are the right level of detail. Don't put topology opinions in the connector labels — save those for the action title.
+
+---
+
+### 40. Process flow / swimlane (BPMN lanes)
+
+A horizontal swimlane diagram for mapping business processes or user journeys across multiple actors and sequential phases.
+
+**When to use:** showing who does what and when during onboarding, change management, or a workflow handoff. Use over a plain process-flow component (component 15) when actor identity matters — i.e., when the key finding is about handoffs or responsibilities, not just sequence.
+
+**Structure:** `.sl-phases` header row (1 spacer + 4 phase columns) × N `.sl-lane` rows (1 actor label + 4 task cells each).
+
+**Lane modifier:** `.sl-lane.hero` — tints the actor label with accent color; use for the primary team owning the process.
+
+**Task modifiers:**
+- `.sl-task` — default bordered card
+- `.sl-task.active` — dark background (current or critical task)
+- `.sl-task.milestone` — accent-tinted, mono uppercase (gates and decisions)
+- `.sl-task.empty` — dashed border, invisible text (actor has no work in this phase — makes the gap deliberate rather than a mistake)
+
+```html
+<div class="swimlane">
+  <div class="sl-phases">
+    <div class="sl-phase-gap"></div>
+    <div class="sl-phase">01 · Assess</div>
+    <div class="sl-phase">02 · Design</div>
+    <div class="sl-phase">03 · Build</div>
+    <div class="sl-phase">04 · Validate</div>
+  </div>
+  <div class="sl-lane hero">
+    <div class="sl-actor">IT &amp;<br>Infrastructure</div>
+    <div class="sl-cells">
+      <div class="sl-cell"><div class="sl-task active">Network audit</div></div>
+      <div class="sl-cell"><div class="sl-task">Server provisioning</div></div>
+      <div class="sl-cell"><div class="sl-task">Integration config</div></div>
+      <div class="sl-cell"><div class="sl-task milestone">Sign-off</div></div>
+    </div>
+  </div>
+  <!-- repeat for each lane -->
+</div>
+```
+
+**Phase count:** four is the sweet spot. Three is too abstract; five or more crowds the cells. Name phases as actions, not time periods ("01 · Assess", not "Week 1–3").
+
+**Task text:** two to five words per task. This is not a project plan; it is a map of responsibilities. The cell is too small for sentences.
+
+---
+
+### 41. ROI / TCO breakdown table
+
+A structured five-year financial table showing costs vs benefits by category, with cumulative totals and four callout metrics below.
+
+**When to use:** the business case or board update slide where you need to show the *full* cost-and-benefit picture, not just NPV and IRR. Use over `.fin-tiles` when the reader needs to see where the numbers come from. Pair with the cumulative cash flow chart (component 33) on the following slide.
+
+**Row classes:**
+- `.tco-section-head` — category header row ("Costs ($M)", "Benefits ($M)") — use `colspan="7"`
+- Default `<tr>` — individual line items
+- `.tco-sub` — subtotal row (bold, top border in `--ink-1`)
+- `.tco-net` — net annual row (tinted background)
+- `.tco-cum` — cumulative row (accent-tinted, accent color)
+
+**Cell classes:**
+- `.pos` — positive value in `--positive` green
+- `.neg` — negative/cost value in `--risk` red; use parentheses format `(4.9)` not minus sign
+- `.tco-tot` — 5-year total column (heavier left border)
+
+```html
+<div class="tco-wrap">
+  <table class="tco-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Yr 1</th><th>Yr 2</th><th>Yr 3</th><th>Yr 4</th><th>Yr 5</th>
+        <th class="tco-tot">5-yr total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="tco-section-head"><td colspan="7">Costs ($M)</td></tr>
+      <tr>
+        <td>Platform licence</td>
+        <td class="neg">(1.2)</td><!-- ... -->
+        <td class="tco-tot neg">(4.4)</td>
+      </tr>
+      <!-- more cost rows -->
+      <tr class="tco-sub">
+        <td>Total cost</td><!-- subtotals -->
+      </tr>
+      <tr class="tco-section-head"><td colspan="7">Benefits ($M)</td></tr>
+      <!-- benefit rows -->
+      <tr class="tco-sub"><td>Total benefit</td><!-- ... --></tr>
+      <tr class="tco-net"><td>Net annual</td><!-- ... --></tr>
+      <tr class="tco-cum"><td>Cumulative</td><!-- ... --></tr>
+    </tbody>
+  </table>
+  <div class="tco-callouts">
+    <div class="tco-callout">
+      <div class="tco-c-label">5-yr NPV</div>
+      <div class="tco-c-value pos">$8.4M</div>
+      <div class="tco-c-sub">at 10% discount rate</div>
+    </div>
+    <!-- IRR, Payback, Benefit-cost ratio -->
+  </div>
+</div>
+```
+
+**Callout row:** always four callouts — 5-yr NPV, IRR, Payback period, Benefit-cost ratio. This gives the executive the headline metrics without having to read the table. Use `.pos` on values that beat the hurdle rate.
+
+**Number format:** use `($M)` in the column header and parentheses for negatives throughout (CFO convention). Always use the same unit across the entire table — don't mix $M and $K.
+
+---
+
+### 42. Gantt-lite / deployment phasing
+
+A visual 12-column bar chart showing concurrent workstreams against a monthly timeline with phase bands and milestone markers. Distinct from `.gantt-tasks` (component 38), which is a tabular task list — this component communicates the *shape* of a deployment, not the detail.
+
+**When to use:** executive-level deployment planning slide. One per deck. Use `.gantt-tasks` when the audience needs task-level detail; use `.gantt-lite` when they need the overall timeline shape and parallel-workstream story.
+
+**Grid:** always 12 columns (months). For a multi-year plan, relabel months as quarters (Q1–Q8). The visual logic is the same; only the header labels change.
+
+**Bar positioning:** each `.gl-bar` uses `--cs` (start column, 1-based) and `--cspan` (column span = number of months). Bars in the same row that don't overlap in column position are auto-placed in `grid-row: 1` by the browser. For overlapping bars in the same workstream row, set `--gr:2` or `--gr:3` explicitly on the later bar.
+
+**Phase modifiers:** `.gl-phase.ph1` — accent-tinted (the current or first phase). Default `.gl-phase` is subtle gray. Use phases to show the strategic rhythm of the rollout, not every task.
+
+**Bar color classes:** `.b1` through `.b5` map to `--c1`–`--c5` (the data-series palette). Assign one color per workstream consistently. Use `.muted` for support/admin tasks that aren't primary workstreams.
+
+**Milestone row:** the last `gl-row` should be `.gl-row.milestone-row` — a dedicated row for diamond markers only, no bars. Use 3 milestones maximum. Milestone `.--col` is the column number (1-based); the diamond is centered at the midpoint of that month.
+
+```html
+<div class="gantt-lite">
+  <div class="gl-header">
+    <div class="gl-header-label"></div>
+    <div class="gl-header-right">
+      <div class="gl-phase-strip">
+        <div class="gl-phase ph1" style="--cs:1;--cspan:4">Phase 1 · Foundation</div>
+        <div class="gl-phase" style="--cs:5;--cspan:4">Phase 2 · Rollout</div>
+        <div class="gl-phase" style="--cs:9;--cspan:4">Phase 3 · Scale</div>
+      </div>
+      <div class="gl-month-strip">
+        <div class="gl-month">Jan</div><!-- ... 12 months -->
+      </div>
+    </div>
+  </div>
+  <div class="gl-row">
+    <div class="gl-row-label">Infrastructure</div>
+    <div class="gl-bars">
+      <div class="gl-bar b1" style="--cs:1;--cspan:3;--gr:1">Hardware procurement</div>
+      <div class="gl-bar b1" style="--cs:3;--cspan:5;--gr:2">Network installation</div>
+    </div>
+  </div>
+  <!-- more workstream rows -->
+  <div class="gl-row milestone-row">
+    <div class="gl-row-label">Key milestones</div>
+    <div class="gl-bars">
+      <div class="gl-milestone" style="--col:4">
+        <div class="gl-milestone-mark"></div>
+        <div class="gl-milestone-label">Infra ready</div>
+      </div>
+      <!-- 2 more milestones -->
+    </div>
+  </div>
+</div>
+```
+
+**Bar label text:** use 2–4 words maximum. The bar is read as a shape, not a text block. If the bar is too narrow to show the label, the browser clips it — that is fine and expected for short-duration tasks.
+
+---
+
 ## Chart components
 
 Four chart types are built in via Chart.js: line, horizontal bar, stacked column, and waterfall. The framework applies design-token defaults — Manrope and JetBrains Mono fonts, ink-scale colors, hairline gridlines — so the author specifies *data*, not styling.

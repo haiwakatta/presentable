@@ -351,6 +351,10 @@ The enterprise case uses the **broadest palette** of the three cases. Most of th
 - Financial tiles, cost-benefit chart, cumulative cash flow, tornado/sensitivity
 - Power/Interest stakeholder map, RAG status dashboard
 - Line chart, horizontal bar, stacked column, waterfall
+- **System topology** — for any deck proposing or auditing infrastructure (analytics platforms, SaaS rollouts, network architecture)
+- **Swimlane** — whenever the key finding is about *who does what and when* (onboarding, change management, cross-team handoffs)
+- **TCO table** — business cases and board updates where the reader needs to see cost and benefit detail, not just headline metrics; always pair with the cumulative cash flow chart on the next slide
+- **Gantt-lite** — executive deployment timeline when the argument is about *phasing* (concurrent workstreams, dependencies, milestone sequencing); use `.gantt-tasks` instead when the reader needs task-level detail
 
 **Use sparingly:**
 - Insight/quote — at most two per deck; favor specific testimony over generic motivation
@@ -404,6 +408,10 @@ When the human says:
 - "Show the strategy" → Strategy House or 2×2
 - "Compare options" → options assessment
 - "Show the plan" → roadmap with named gates
+- "Show the architecture / how the systems connect" → **topology grid** (component 39); three zones maximum; hero zone = the platform being proposed or evaluated
+- "Show the process / who does what / onboarding flow / handoffs" → **swimlane** (component 40); four phases maximum; hero lane = the primary owning team
+- "Show the business case / costs vs benefits / ROI / TCO" → **TCO table** (component 41) for full breakdown + **fin-tiles** (component 31) or **cumulative cash flow** chart (component 33) on adjacent slides for the headline summary; never put the full table and the cash flow on the same slide
+- "Show the timeline / deployment plan / rollout phasing / workstreams" → **Gantt-lite** (component 42) for executive view; **Gantt task list** (component 38) for operational detail; one Gantt-lite per deck is the rule
 - "Add a chart of X" → match to one of the seven chart types: line (trajectory), horizontal bar (ranked comparison), stacked column (composition over time), waterfall (bridge between two states), cost-benefit (project economics by year), cumulative cash flow (running balance), tornado (sensitivity). If none fit the finding, the finding probably isn't a chart — it's a stat grid or comparison table. **Always write the action title before picking the chart type.** The title describes the finding; the chart type is whatever makes the finding most visible.
 - "Make this sharper" → start with the action title. If the title is a sentence stating the conclusion, the slide is probably fine. If it's a topic label, rewrite the title and the rest will follow.
 - "Add a quote slide" → insight/quote, but ask "do we really need it?" — these are the most over-used component in amateur decks.
