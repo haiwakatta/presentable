@@ -90,6 +90,49 @@ Chrome behavior:
 
 The framework is **screen-first** but exports cleanly to PDF via `window.print()` (in-page button) or the headless Playwright exporter (`export-pdf.js`).
 
+## CSV → chart bridge
+
+When the human has spreadsheet data in a `.csv` file, **do not write chart JSON by hand**. Run `csv-to-chart.js` instead — it parses the file, infers or accepts a chart type, and emits a ready-to-paste `<section class="slide">` block.
+
+```bash
+node csv-to-chart.js <file.csv> [--chart TYPE] [--title "Action title."] [--eyebrow LABEL] [--note TEXT] [--source TEXT]
+
+# or via npm
+npm run csv -- <file.csv> --chart waterfall
+```
+
+**Supported types and expected CSV column layout:**
+
+| `--chart` | CSV columns | When to use |
+|---|---|---|
+| `bar` | `label, value [, value2 …]` | Horizontal bars — segment comparison, ranking |
+| `column` | `period, series1, series2 …` | Vertical grouped or add `--stacked` for stacked |
+| `line` | `period, series1, series2 …` | Trajectory over time, two-scenario comparison |
+| `waterfall` | `label, value` | EBITDA bridge, cost/benefit waterfall — first/last rows auto-detected as totals |
+| `tornado` | `label, downside, upside` | Sensitivity analysis — script normalises sign and sorts by magnitude |
+| `cost-benefit` | `label, cost_col, benefit_col …` | Mixed-sign stacked — negative cols treated as costs, positive as benefits |
+| `cumulative` | `period, cumulative_value` | Running cash flow with auto-detected break-even line |
+| `stat-grid` | `label, value [, delta, description]` | CSS stat tiles — max 4 rows, no Chart.js |
+
+**Auto-detection** fires when `--chart` is omitted:
+- Column names contain `down/up/low/high/pessim/optim` → `tornado`
+- Column name contains `cumul` → `cumulative`
+- Column names have both cost-like and benefit-like words → `cost-benefit`
+- First column looks like periods (2024, Q1, Y1, Jan…) → `line` or `column`
+- 2 columns, mixed positive/negative, bridge word in header → `waterfall`
+- 2 columns → `bar`
+
+**Output** goes to stdout. Capture it, review it, then paste the `<section>` block into `deck.html`. Always update the action title — the script emits a placeholder.
+
+Example workflow:
+```bash
+# Human provides ebitda-bridge.csv with columns: driver, value
+node csv-to-chart.js ebitda-bridge.csv --chart waterfall \
+  --title "Three drivers move EBITDA from $240M to $480M by 2029." \
+  --eyebrow "EBITDA bridge" \
+  --source "Financial model v3.2"
+```
+
 ## First decision: which case?
 
 Before writing a single line of HTML, identify which case the human is in. Wrong-case decks fail no matter how well-executed.
