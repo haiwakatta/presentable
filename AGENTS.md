@@ -484,22 +484,53 @@ Score classes: `.score.high` (dark, strongest), `.score.med` (tinted, middle), `
 
 ### 18. Risk matrix
 
-3×3 probability × impact grid with risks placed as labeled dots. Reference risks below in the source line (e.g. R1: …, R2: …).
+3×3 probability × impact grid with risks placed as labeled dots. Pair with a `.risk-key` panel (flex row sibling) to show what each Rn stands for — the source line alone is too small to be readable.
+
+**IMPORTANT:** the `.risk-legend` div must be placed inside `.risk-matrix` (not inside `.risk-grid`). If it's inside `.risk-grid`, it becomes the first grid child and shifts `nth-child(3n)` to remove borders from the middle column instead of the right column, breaking the grid lines.
 
 ```html
-<div class="risk-matrix">
-  <div class="y-axis-label">Impact →</div>
-  <div class="risk-grid">
-    <!-- 9 cells, row 1 = high impact -->
-    <div class="risk-cell med"></div>
-    <div class="risk-cell high"><div class="risk-dot">R1</div></div>
-    <!-- etc. -->
+<div style="display: flex; flex: 1 1 auto; min-height: 0; gap: var(--gap-xl); align-items: stretch;">
+  <div class="risk-matrix" style="flex: 0 0 auto;">
+    <div class="y-axis-label">Impact →</div>
+    <div class="risk-grid">
+      <!-- 9 cells only — no .risk-legend here -->
+      <!-- Row 1: high impact -->
+      <div class="risk-cell med"></div>
+      <div class="risk-cell high"><div class="risk-dot">R1</div><div class="risk-dot">R2</div></div>
+      <div class="risk-cell high"><div class="risk-dot">R3</div></div>
+      <!-- Row 2: medium impact -->
+      <div class="risk-cell low"></div>
+      <div class="risk-cell med"><div class="risk-dot">R4</div></div>
+      <div class="risk-cell high"><div class="risk-dot">R5</div></div>
+      <!-- Row 3: low impact -->
+      <div class="risk-cell low"></div>
+      <div class="risk-cell low"><div class="risk-dot">R6</div></div>
+      <div class="risk-cell med"></div>
+    </div>
+    <div class="x-axis"><div class="x-tick">Low</div><div class="x-tick">Medium</div><div class="x-tick">High</div></div>
+    <!-- Legend goes here — anchored to .risk-matrix via position:absolute -->
+    <div class="risk-legend">
+      <div class="item"><span class="swatch" style="background: var(--positive-tint);"></span>Low</div>
+      <div class="item"><span class="swatch" style="background: var(--warn-tint);"></span>Medium</div>
+      <div class="item"><span class="swatch" style="background: var(--risk-tint);"></span>High</div>
+    </div>
   </div>
-  <div class="x-axis"><div class="x-tick">Low</div><div class="x-tick">Medium</div><div class="x-tick">High</div></div>
+  <div class="risk-key">
+    <div class="rk-item">
+      <div class="risk-dot">R1</div>
+      <div>
+        <div class="rk-cat">[Category]</div>
+        <div class="rk-text">[One sentence describing the risk and its consequence.]</div>
+      </div>
+    </div>
+    <!-- repeat for each Rn -->
+  </div>
 </div>
 ```
 
-Cell colors: `.low` (positive tint), `.med` (warn tint), `.high` (risk tint). Always include a legend in the upper right.
+Cell colors: `.low` (positive tint), `.med` (warn tint), `.high` (risk tint).
+
+**`.risk-key` layout:** sits to the right of the risk-matrix in a flex row. Each `.rk-item` has a `.risk-dot` on the left and a `<div>` with `.rk-cat` (category label) + `.rk-text` (one-sentence description) on the right. Use `justify-content: space-evenly` on `.risk-key` so items distribute evenly across the available height.
 
 ### 19. Insight / quote
 
@@ -646,8 +677,8 @@ A side-labeled list with checkbox bullets. Use for pre-meeting prep, launch read
     <div class="cls-sublabel">[Optional sub-label]</div>
   </div>
   <div class="checklist-items">
-    <div class="cl-item done"><span></span><div><div class="cl-text">[Completed item]</div><div class="cl-meta">Completed · [date]</div></div></div>
-    <div class="cl-item"><span></span><div><div class="cl-text">[Pending item]</div><div class="cl-meta">Due [date] · [owner]</div></div></div>
+    <div class="cl-item done"><div><div class="cl-text">[Completed item]</div><div class="cl-meta">Completed · [date]</div></div></div>
+    <div class="cl-item"><div><div class="cl-text">[Pending item]</div><div class="cl-meta">Due [date] · [owner]</div></div></div>
   </div>
 </div>
 ```
