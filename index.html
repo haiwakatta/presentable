@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Presentable — HTML slide framework for Claude</title>
-  <meta name="description" content="A self-contained HTML slide framework for the AI-assisted workflow. Raw HTML output — no framework, no component API. Works with Claude, GPT-4o, Gemini, and any capable LLM. 46 components, 7 chart types, CSV bridge, PDF export." />
+  <title>Presentable — AI-native design system for slide decks</title>
+  <meta name="description" content="An AI-native design system for professional slide decks. The design vocabulary ships as AGENTS.md instruction files — not a runtime library. Your LLM reads the instructions, references the example decks, and writes raw HTML directly. 46 components, 7 chart types, 3 cases." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -911,10 +911,10 @@
     <div class="hero-eyebrow">Open source · MIT licensed</div>
     <h1>Professional slide decks,<br><em>built by your AI.</em></h1>
     <p class="hero-sub">
-      A self-contained HTML framework for the AI-assisted deck workflow.
-      Every deck is raw HTML — no framework, no component API, no build step.
-      LLMs are trained on HTML; they write it more accurately than any DSL.
-      Works with Claude, GPT-4o, Gemini, or any capable model.
+      An AI-native design system for the LLM-assisted deck workflow.
+      The design vocabulary ships as <code style="font-family:var(--font-mono);font-size:0.85em;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:3px;">AGENTS.md</code> instruction files — not a runtime library.
+      Your LLM reads the instructions, references the example decks, and writes
+      raw HTML directly. Works with Claude, GPT-4o, Gemini, or any capable model.
     </p>
     <div class="hero-stats">
       <span class="stat-pill">46 components</span>
@@ -941,10 +941,10 @@
 <section id="cases">
   <div class="section-inner">
     <div class="section-eyebrow">The three cases</div>
-    <h2 class="section-title">One framework, <em>three audiences.</em></h2>
+    <h2 class="section-title">One design system, <em>three audiences.</em></h2>
     <p class="section-sub">
       Each case has its own visual theme, its own component discipline, its own
-      AI agent — and its own demo deck you can open right now.
+      <code style="font-family:var(--font-mono);font-size:12px;background:var(--line-1);padding:1px 5px;border-radius:3px;">AGENTS.md</code> — and its own example deck you can open right now.
     </p>
 
     <div class="cases-grid">
@@ -1137,7 +1137,7 @@
     <p class="section-sub">
       Every component is pure CSS and HTML — no external libraries beyond
       Chart.js for charts. Same class names across all three cases; only the
-      theme tokens change.
+      theme tokens change. Copy any <code style="font-family:var(--font-mono);font-size:12px;background:var(--line-1);padding:1px 5px;border-radius:3px;">&lt;section&gt;</code> block from a showcase deck — it works immediately.
     </p>
     <div class="components-grid">
 
@@ -1482,11 +1482,12 @@
 <section id="agents">
   <div class="section-inner">
     <div class="section-eyebrow">AI workflow</div>
-    <h2 class="section-title">Designed for Claude. <em>Runs on any LLM.</em></h2>
+    <h2 class="section-title">The <em>instructions</em> are the product.</h2>
     <p class="section-sub">
-      Every case ships with an <code style="font-family:var(--font-mono);font-size:13px;background:var(--line-1);padding:2px 6px;border-radius:3px;">AGENTS.md</code> — a complete instruction set that tells
-      the model exactly how to build that type of deck, which components to use,
-      and which mistakes to avoid.
+      Every case ships with an <code style="font-family:var(--font-mono);font-size:13px;background:var(--line-1);padding:2px 6px;border-radius:3px;">AGENTS.md</code> — the primary artifact. ~3,500 lines of
+      prose telling an LLM how to think about deck-making, which components to
+      use, and which mistakes to avoid. The HTML decks are worked examples it reads
+      alongside them. Designed for Claude Code — runs on any capable LLM.
     </p>
 
     <div class="agents-grid">
@@ -1551,7 +1552,7 @@
       </div>
 
       <div class="agents-copy">
-        <h3>The agent reads the framework. You give the brief.</h3>
+        <h3>The agent reads the instructions. You give the brief.</h3>
         <p>
           In Claude Code, the <code style="font-family:var(--font-mono);font-size:12px;background:#eee;padding:1px 5px;border-radius:3px;">AGENTS.md</code> files are picked up automatically
           when you open a session in the repo directory. In Cursor and
@@ -1563,10 +1564,10 @@
           (enterprise / investor / portfolio), the <strong>audience</strong>,
           and the <strong>recommendation or conclusion</strong> you want the deck
           to argue. The agent then picks the storyline, selects components,
-          and writes the HTML directly into your deck file.
+          and writes the HTML directly — using the example decks as reference.
         </p>
         <p>
-          The output is <strong>raw HTML</strong> — not a DSL, not a framework
+          The output is <strong>raw HTML</strong> — not a DSL, not a template
           abstraction, not generated JSON for a renderer to interpret. Every
           frontier model has been trained on billions of HTML pages and reasons
           about it natively. There is no component API to hallucinate, no prop
@@ -1593,10 +1594,11 @@
 <section id="examples">
   <div class="section-inner">
     <div class="section-eyebrow">Example decks</div>
-    <h2 class="section-title">Ready-to-edit <em>templates.</em></h2>
+    <h2 class="section-title">Worked <em>examples.</em></h2>
     <p class="section-sub">
-      Each example is a different mix of components from the showcase — demonstrating
-      that the storyline shapes the spine, not the template.
+      Each deck is a different mix of components — demonstrating that the storyline
+      shapes the spine. Not templates: copy a <code style="font-family:var(--font-mono);font-size:12px;background:var(--line-1);padding:1px 5px;border-radius:3px;">&lt;section&gt;</code> you need,
+      discard what you don't.
     </p>
 
     <table class="examples-table">

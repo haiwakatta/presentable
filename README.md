@@ -1,12 +1,18 @@
 # Presentable
 
-An HTML deck framework built for the LLM-with-human workflow. **One foundation. Three cases.** Each deck is a self-contained `.html` file — no build step, no JavaScript framework, no install beyond the optional PDF exporter. The discipline is rooted in classical consulting structure: Pyramid Principle, action titles, SCR, MECE.
+An AI-native design system for the LLM-with-human workflow. **One design vocabulary. Three cases.** Each deck is a self-contained `.html` file — no build step, no JavaScript framework, no runtime to depend on. The discipline is rooted in classical consulting structure: Pyramid Principle, action titles, SCR, MECE.
 
 > **Running this locally for the first time?** See **[LOCAL_SETUP.md](./LOCAL_SETUP.md)** — covers prerequisites, the QA checklist, Claude Code integration, and pushing to GitHub.
 >
 > **Want to build a deck for your situation?** See **[NEW_DECK.md](./NEW_DECK.md)** — the manual and Claude Code workflows, the storyline picker, and a fully worked example (13-slide business case for an analytics team in a warehousing company, using a deliberately different component mix than the generic business case).
 
-The same component library — 46 components and 7 chart types — serves three very different audiences:
+**Three layers, in order of importance:**
+
+- **`AGENTS.md` files** — the real product. ~3,500 lines of prose telling an LLM how to think about deck-making: what components exist, when to use which, what storylines fit what situation, what tone goes with what case. Without these files, you'd have a folder of HTML samples with no instructions.
+- **HTML decks** — few-shot examples. Not templates in a technical sense (no slots, no variables, no inheritance). Worked examples — high-quality, hand-crafted output that an LLM reads to learn the visual vocabulary. The CSS-class design system lives here; the way to use it is to copy a `<section>` from one deck into another.
+- **CLI scripts** — quality-of-life. PDF export, brand drift detection, CSV-to-chart generation. If you deleted every `.js` file, every deck would still open in a browser. That's the point.
+
+The design vocabulary — 46 components and 7 chart types — serves three very different audiences:
 
 - **Enterprise** decks for executives, boards, and clients (consulting-grade strategy work)
 - **Investor** decks for startup pitches (seed, Series A/B)
@@ -109,13 +115,13 @@ Same engine. Different bodies.
 
 ## The AI workflow
 
-Each case has its own `AGENTS.md` file. The recommended workflow:
+The `AGENTS.md` files are the primary interface — they tell your LLM what components exist, how to structure each case, and which mistakes to avoid. The HTML decks are reference material the agent reads alongside them. The recommended workflow:
 
 ```
 1. Identify the case (enterprise / investor / portfolio)
-2. Read the foundation: AGENTS.md (root)
-3. Read the case overlay: <case>/AGENTS.md
-4. Open the case's deck.html as the working file
+2. Load the foundation: AGENTS.md (root) — the shared component reference
+3. Load the case overlay: <case>/AGENTS.md — case-specific storylines, tone, discipline
+4. Open the case's deck.html as the working file and reference
 5. Tell the agent the recommendation, audience, and decision being asked
 6. Agent picks the case-appropriate storyline
 7. Agent drafts the strongest slide first (exec summary, vision, or cover line)
@@ -125,6 +131,8 @@ Each case has its own `AGENTS.md` file. The recommended workflow:
 ```
 
 When working with Cursor, Claude Code, or any agentic LLM, the agent reads the foundation file plus the case file and produces case-appropriate output. The case files differ enough that an enterprise agent will produce a different deck than an investor agent given the same brief — that's the design.
+
+The work that improves this project is better `AGENTS.md`, more worked examples, and clearer component documentation — not refactoring the JavaScript or building a runtime.
 
 ## Quick start
 
@@ -178,11 +186,11 @@ Append `?embed` to the URL to hide the navigation chrome and progress bar. Usefu
 
 ## Which AI does the work?
 
-Presentable is **model-agnostic**. The framework is just files — HTML decks, theme builders, and `AGENTS.md` instruction files — that any capable LLM can read.
+Presentable is **model-agnostic**. It's just files — `AGENTS.md` instruction files, HTML example decks, and theme builders — that any capable LLM can read. The consumer is the LLM, not a runtime.
 
-The `AGENTS.md` convention is read natively by **Claude Code** (recommended; the framework is designed around it). It also works with **Cursor**, **Windsurf**, **GitHub Copilot**, and any agentic editor that ingests files from the workspace — though those tools have their own additional configuration formats (e.g., `.cursor/rules`, `.github/copilot-instructions.md`) you can mirror the content into if you want native pickup. You can also work with plain **Claude.ai**, **ChatGPT**, or **Gemini** by pasting the relevant `AGENTS.md` into the chat alongside your request.
+The `AGENTS.md` convention is read natively by **Claude Code** (recommended; the project is designed around it). It also works with **Cursor**, **Windsurf**, **GitHub Copilot**, and any agentic editor that ingests files from the workspace — though those tools have their own additional configuration formats (e.g., `.cursor/rules`, `.github/copilot-instructions.md`) you can mirror the content into if you want native pickup. You can also work with plain **Claude.ai**, **ChatGPT**, or **Gemini** by pasting the relevant `AGENTS.md` into the chat alongside your request.
 
-What matters more than the model is **context length**. The root `AGENTS.md` is ~1,250 lines; each case overlay adds 300–400 more. Models with shorter context windows (smaller open-source models, older API versions) will struggle to keep the framework's discipline in view across a long deck-building session. Modern frontier models from any provider handle it comfortably.
+What matters more than the model is **context length**. The root `AGENTS.md` is ~1,250 lines; each case overlay adds 300–400 more. Models with shorter context windows (smaller open-source models, older API versions) will struggle to keep the full design vocabulary in view across a long deck-building session. Modern frontier models from any provider handle it comfortably.
 
 ## License
 
