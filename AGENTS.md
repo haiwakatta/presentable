@@ -1652,6 +1652,329 @@ The detailed version of an investor-deck "Ask" slide. Three columns: the raise a
 
 ---
 
+## v0.6 components — benchmark, visualization, org, research
+
+Ten new components for McKinsey-style operating model, benchmark, and competitive intelligence work. All defined in `enterprise/deck.html` CSS. Slides 51–60 in that file are the reference implementations.
+
+### 47. Org chart
+
+A CSS-only hierarchy with a vertical connector between levels and a horizontal connector bar across sibling nodes.
+
+**When to use:** governance slides, operating model proposals, reporting-line changes. Keep to three levels per slide. Use a separate slide for each sub-tree if the org is deeper.
+
+**Node levels:** `.org-node.n0` (dark navy, CEO/top box) · `.org-node.n1` (mid navy, direct reports) · `.org-node.n2` (tint, second level) · `.org-node.n3` (alt card, third level). Each node holds `.on-title` (bold) and optionally `.on-sub` (dimmed).
+
+**Connectors:** `.org-v` is a vertical bar (1px, 1.25rem tall) between parent and the `.org-children` row. The horizontal connector is the `::before` pseudo-element on `.org-children` — it spans `left: 85px; right: 85px` (half the 170px node width) so it exactly bisects the outer nodes.
+
+```html
+<div class="org-chart">
+  <div class="org-node n0"><div class="on-title">CEO</div></div>
+  <div class="org-v"></div>
+  <div class="org-children">
+    <div class="org-child">
+      <div class="org-node n1"><div class="on-title">CIO</div></div>
+    </div>
+    <div class="org-child">
+      <div class="org-node n1"><div class="on-title">CFO</div></div>
+    </div>
+  </div>
+</div>
+```
+
+If a child node has its own children, add `.org-v` + another `.org-children` div inside the parent `.org-child`.
+
+---
+
+### 48. S-Curve Journey
+
+An SVG sigmoid / S-curve path with absolutely-positioned callout boxes overlaid on top.
+
+**When to use:** technology adoption arcs, capability maturity journeys, transformation phase maps. The curve communicates *momentum* — slow start, acceleration, plateau — which no table or bullet list does.
+
+**SVG:** use `viewBox="0 0 900 360"` + `preserveAspectRatio="none"`. Draw the S with a cubic `<path>` and a dashed extension for the projected future. Add `<circle>` ticks at key milestones.
+
+**Callouts:** `.sc-callout` boxes are positioned *outside* the SVG using `position: absolute` percentages matched to where the SVG curve reaches those points visually. The connector lines (from callout to curve) are thin SVG `<line>` elements drawn to approximate coordinates.
+
+```html
+<div class="scurve-wrap">
+  <svg class="scurve-svg" viewBox="0 0 900 360" preserveAspectRatio="none">
+    <path d="M 50,320 C 200,310 250,200 450,180 S 750,60 880,40"
+          fill="none" stroke="var(--accent)" stroke-width="3"/>
+    <circle cx="200" cy="300" r="6" fill="var(--accent)"/>
+    <!-- year labels as <text> elements -->
+  </svg>
+  <div class="sc-callout" style="left: 5%; top: 60%;">
+    <div class="sc-phase">Phase 1</div>
+    <div class="sc-desc">Foundation</div>
+  </div>
+</div>
+```
+
+Always pair the S-curve with year labels (SVG `<text>`) along the X-axis and phase labels either as SVG text or callout divs.
+
+---
+
+### 49. Benchmark Heatmap Matrix
+
+A `<table>` where each cell carries a score class (`.hm-1` through `.hm-5`) that applies a five-shade color ramp from pale blue to dark navy.
+
+**When to use:** benchmarking 5–15 entities across 8–20 dimensions where the finding is a pattern (e.g., "Novo Nordisk lags on digital operations but leads on data governance"). Use `.hm-group` header rows to cluster dimensions into A/B/C sections. Add a `.hm-total` row at the bottom for aggregate scores.
+
+**Score classes:**
+- `.hm-1` — pale blue (`#dce8f4`) — lowest capability
+- `.hm-2` — light blue (`#aecde8`)
+- `.hm-3` — mid blue (`#6aaad6`)
+- `.hm-4` — strong blue (`#2f7fc0`) — white text
+- `.hm-5` — full accent (`var(--accent)`) — white text; highest capability
+
+**Row label column:** `.hm-row-label` — left-aligned, body font; first column, no score class.
+
+```html
+<table class="heatmap">
+  <thead>
+    <tr>
+      <th class="hm-row-label"></th>
+      <th>Co. A</th><th>Co. B</th><th>Co. C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="hm-group"><td colspan="4">A. Strategy &amp; Vision</td></tr>
+    <tr>
+      <td class="hm-row-label">Digital ambition</td>
+      <td class="hm-5">5</td><td class="hm-3">3</td><td class="hm-2">2</td>
+    </tr>
+    <tr class="hm-total">
+      <td class="hm-row-label">Total score</td>
+      <td>4.2</td><td>3.1</td><td>2.8</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+Keep column count to 10 or fewer — beyond that the cell text becomes illegible.
+
+---
+
+### 50. Spectrum / Continuum Matrix
+
+Rows of capability dimensions, each showing a gradient bar with selectable positions. Marks the subject's current state and can imply a target direction.
+
+**When to use:** operating model choices ("centralized vs. federated"), maturity positioning, "where are we vs. where do we want to be." One slide handles 4–6 dimensions; beyond that, split.
+
+**Row structure:** `.spec-row` is a `grid-template-columns: 130px 1fr` row. The label sits in the first column; `.spec-options` holds two or three `.spec-option` boxes with `.current` on the active position. Below the options, `.spec-grad` provides the visual gradient bar and `.spec-labels` gives left/right anchors.
+
+**Active state:** `.spec-option.current` gets accent tint background, accent border, and a downward triangle arrow (`.spec-marker`) pointing to the gradient.
+
+```html
+<div class="spectrum">
+  <div class="spec-row">
+    <div class="spec-dim">Data governance</div>
+    <div>
+      <div class="spec-options">
+        <div class="spec-option">Siloed</div>
+        <div class="spec-option current">
+          Federated
+          <div class="spec-marker"></div>
+        </div>
+        <div class="spec-option">Centralised</div>
+      </div>
+      <div class="spec-grad"></div>
+      <div class="spec-labels"><span>Distributed</span><span>Unified</span></div>
+    </div>
+  </div>
+</div>
+```
+
+---
+
+### 51. Logo Scatter Plot
+
+A two-axis scatter plot where entities are represented by logo images (or text badges) rather than data points.
+
+**When to use:** competitive landscape slides where position can be expressed as two continuous axes (e.g., "Digital investment" × "Execution maturity"). Stronger than a table when the spatial story matters.
+
+**Positioning:** `.ls-logo` elements inside `.ls-plot` use `position: absolute; left: X%; bottom: Y%`. Use `bottom` (not `top`) so higher percentage = higher position. The hero entity gets `.ls-name.hero` on its label for accent styling.
+
+**Axes:** `.ls-y-label` (rotated, left side) and `.ls-x-labels` (bottom row) provide axis titles. The plot has `border-left` and `border-bottom` to form the axis lines.
+
+```html
+<div class="logo-scatter">
+  <div class="ls-y-label">← Low · Digital Investment · High →</div>
+  <div class="ls-plot">
+    <div class="ls-logo" style="left: 72%; bottom: 68%;">
+      <img src="logo.png" class="ls-img" alt="Client">
+      <span class="ls-name hero">Client Co.</span>
+    </div>
+    <div class="ls-logo" style="left: 45%; bottom: 40%;">
+      <img src="peer.png" class="ls-img" alt="Peer A">
+      <span class="ls-name">Peer A</span>
+    </div>
+  </div>
+  <div class="ls-x-labels"><span>Low maturity</span><span>High maturity</span></div>
+</div>
+```
+
+---
+
+### 52. Investment / Deal Intelligence Table
+
+A structured table for M&A activity, partnership landscape, or deal-by-deal intelligence with category pills.
+
+**When to use:** competitive intelligence slides showing who is investing in what; partnership ecosystem maps; any structured list of transactions where category, partner, and amount are the key data points.
+
+**Pills:** `.itl-pill` with a modifier for category — `.research`, `.diagnosis`, `.treatment`, `.platform`, `.data`. These are remappable by changing the color rules in the CSS block. Each pill is a small `<span>` inline inside the category cell.
+
+**Highlighted row:** `.itl-hl` on a `<tr>` applies accent-tint background to call out the most significant deal.
+
+**Flag column:** `td.it-flag` holds an emoji flag (🇺🇸, 🇬🇧) — use for geography context. Keep the table to 8–10 rows; longer lists belong in an appendix.
+
+```html
+<table class="intel-table">
+  <thead>
+    <tr>
+      <th>Year</th><th>Partner</th><th>Value</th><th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="itl-hl">
+      <td>2023</td>
+      <td class="it-partner">Arena Biologics</td>
+      <td class="it-amount">$6.7B</td>
+      <td><span class="itl-pill research">Research</span></td>
+    </tr>
+  </tbody>
+</table>
+```
+
+---
+
+### 53. Connected Maturity Assessment
+
+A radar / spider chart drawn in pure SVG — no Chart.js. Compares the subject entity against a peer average across 5–8 capability dimensions.
+
+**When to use:** operating model maturity reviews, capability gap assessments, digital transformation benchmarks. The radar format is stronger than a bar chart when the finding is about a *profile* (some areas strong, others weak) rather than a single ranking.
+
+**SVG structure:** `viewBox="0 0 520 290"`. Draw a grid polygon for each score level (1–5) in faint strokes; overlay two `<polyline>` elements: one for the subject (solid accent) and one for the peer average (dashed gray). Add `<circle>` dots at each vertex. Dimension labels are SVG `<text>` elements anchored to the polygon vertices.
+
+**Layout:** place the SVG in `.maturity-chart-area` (left column) inside `.maturity-wrap` grid (`1fr 210px`). The right column `.maturity-sidebar` holds a legend and dimension score rows.
+
+```html
+<div class="maturity-wrap">
+  <div class="maturity-chart-area">
+    <svg class="maturity-svg" viewBox="0 0 520 290" preserveAspectRatio="xMidYMid meet">
+      <!-- concentric pentagons, two polylines, dots, labels -->
+    </svg>
+  </div>
+  <div class="maturity-sidebar">
+    <div class="mat-legend">
+      <div class="mat-leg-item"><span class="mat-swatch solid"></span>Client</div>
+      <div class="mat-leg-item"><span class="mat-swatch dashed"></span>Peer avg.</div>
+    </div>
+    <!-- dimension score rows -->
+  </div>
+</div>
+```
+
+Use exactly one maturity assessment per deck. Two radars on facing slides is the maximum before the format loses impact.
+
+---
+
+### 54. Case Study with Outcome Numbers
+
+A three-column layout for evidence-heavy proof points: context / signals / outcomes.
+
+**When to use:** any slide that needs to present a real-world example with quantified results. The large outcome numbers (`cs-num` in Fraunces display) anchor the message visually.
+
+**Columns:** left = `.cs-col` with context prose + a bullet list; center = `.cs-col` with `.cs-signal` items (each with a check icon); right = `.cs-col` with `.cs-stat` blocks holding `.cs-num` (the big number) and `.cs-stat-label`.
+
+**Number styling:** `.cs-num` uses `font-family: var(--font-display)` at `clamp(26px, 3.2vw, 46px)` with `font-variation-settings: "opsz" 72` for the optical-size axis on Fraunces. Color is `var(--accent)`.
+
+```html
+<div class="case-study">
+  <div class="cs-col">
+    <div class="cs-context-label">Context</div>
+    <p>Brief situation paragraph...</p>
+    <ul class="cs-bullets"><li>Key constraint</li></ul>
+  </div>
+  <div class="cs-col">
+    <div class="cs-context-label">Evidence</div>
+    <div class="cs-signal"><span class="cs-check">✓</span>Signal one</div>
+  </div>
+  <div class="cs-col">
+    <div class="cs-context-label">Outcomes</div>
+    <div class="cs-stat">
+      <div class="cs-num">67%</div>
+      <div class="cs-stat-label">Reduction in time-to-market</div>
+    </div>
+  </div>
+</div>
+```
+
+Keep outcome numbers to three maximum per slide; beyond that the visual hierarchy flattens.
+
+---
+
+### 55. Value Chain Opportunity Matrix
+
+A table where rows = journey/value-chain stages and columns = initiative types. Each cell holds an activity dot cluster and a large opportunity number.
+
+**When to use:** "where should we invest" slides in transformation strategy work. The matrix makes spatial the argument that some stages have higher opportunity density than others.
+
+**Stage rows:** `.vc-stage` inside the first column holds an icon (`vc-icon`) and a stage label. Use 4–6 stages.
+
+**Activity dots:** `.vc-dots` holds `.vc-dot` spans — use 2–5 per cell to signal relative activity density. Don't over-populate; more than 5 per cell becomes noise.
+
+**Opportunity number:** `.vc-hero-num` for the cell's dollar opportunity. Uses Fraunces display at `clamp(16px, 2vw, 28px)`. Keep to one number per cell — this is not a data table.
+
+```html
+<table class="vc-matrix">
+  <thead><tr>
+    <th></th><th>Prevention</th><th>Diagnosis</th><th>Treatment</th>
+  </tr></thead>
+  <tbody>
+    <tr>
+      <td><div class="vc-stage"><span class="vc-icon">🧬</span>Discovery</div></td>
+      <td><div class="vc-dots"><span class="vc-dot"></span><span class="vc-dot"></span></div><div class="vc-hero-num">~$150b</div></td>
+    </tr>
+  </tbody>
+</table>
+```
+
+---
+
+### 56. Sidebar Slide
+
+A two-column slide layout: a main content column (table, chart, or bullet list) and a 230px right sidebar for commentary, quotes, or interview verbatim.
+
+**When to use:** research synthesis slides where data and expert commentary need to live on the same page. Classic McKinsey pattern for interview-heavy sections. Use at most two per deck — it's a structural element, not a default.
+
+**Activation:** add `.with-sidebar` to the outer `.slide` div. This overrides the default `display: flex` to `display: block`, allowing the inner `.slide-sidebar-layout` grid (`1fr 230px`) to fill the full slide height.
+
+**Sidebar blocks:** `.sb-comment` for synthesized insight paragraphs (dimmed text, small font); `.sb-quote` for verbatim pull quotes (italic, accent-left-border).
+
+```html
+<section class="slide with-sidebar" id="s-research">
+  <div class="slide-sidebar-layout">
+    <div class="slide-main-col">
+      <div class="slide-head">
+        <div class="eyebrow">Research synthesis</div>
+        <h2 class="slide-title">Action title here</h2>
+      </div>
+      <!-- main content: table, chart, bullets -->
+    </div>
+    <div class="slide-sidebar-col">
+      <div class="sb-section-label">Expert commentary</div>
+      <div class="sb-comment">Synthesized insight paragraph...</div>
+      <div class="sb-quote">"Verbatim quote from interview."</div>
+    </div>
+  </div>
+</section>
+```
+
+The sidebar background is `var(--accent-tint)` with a left border. Don't put charts in the sidebar — it's for text only. The main column handles all data visualisation.
+
+---
+
 ## Chart components
 
 Four chart types are built in via Chart.js: line, horizontal bar, stacked column, and waterfall. The framework applies design-token defaults — Manrope and JetBrains Mono fonts, ink-scale colors, hairline gridlines — so the author specifies *data*, not styling.

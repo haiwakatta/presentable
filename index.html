@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Presentable — AI-native design system for slide decks</title>
-  <meta name="description" content="An AI-native design system for professional slide decks. The design vocabulary ships as AGENTS.md instruction files — not a runtime library. Your LLM reads the instructions, references the example decks, and writes raw HTML directly. 46 components, 7 chart types, 3 cases." />
+  <meta name="description" content="An AI-native design system for professional slide decks. The design vocabulary ships as AGENTS.md instruction files — not a runtime library. Your LLM reads the instructions, references the example decks, and writes raw HTML directly. 56 components, 7 chart types, 3 cases." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -1133,7 +1133,7 @@
 <section id="components">
   <div class="section-inner">
     <div class="section-eyebrow">Component library</div>
-    <h2 class="section-title">46 components, <em>7 chart types.</em></h2>
+    <h2 class="section-title">56 components, <em>7 chart types.</em></h2>
     <p class="section-sub">
       Every component is pure CSS and HTML — no external libraries beyond
       Chart.js for charts. Same class names across all three cases; only the
@@ -1257,22 +1257,23 @@
         </ul>
       </div>
 
-      <div class="comp-group" style="grid-column: span 2; background: var(--bg-tint); display: flex; flex-direction: column; justify-content: center;">
+      <div class="comp-group">
         <div class="comp-group-head">
-          <span class="comp-group-name">On the roadmap</span>
-          <span class="comp-count" style="color: var(--ink-5);">v0.6 →</span>
+          <span class="comp-group-name">Benchmark &amp; intelligence</span>
+          <span class="comp-count">10</span>
         </div>
-        <p style="font-size: 13px; color: var(--ink-4); line-height: 1.65; margin-bottom: 1rem; max-width: 560px;">
-          New components ship with each case update — expanding the library across
-          all three cases. Coming next:
-        </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-          <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); border: 1px dashed var(--line-2); padding: 4px 11px; border-radius: 4px;">Executive KPI scorecard</span>
-          <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); border: 1px dashed var(--line-2); padding: 4px 11px; border-radius: 4px;">Competitive radar chart</span>
-          <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); border: 1px dashed var(--line-2); padding: 4px 11px; border-radius: 4px;">Interview synthesis grid</span>
-          <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); border: 1px dashed var(--line-2); padding: 4px 11px; border-radius: 4px;">Scenario planning table</span>
-          <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-4); border: 1px dashed var(--line-2); padding: 4px 11px; border-radius: 4px;">Customer journey map</span>
-        </div>
+        <ul class="comp-list">
+          <li>Org chart (3-level hierarchy)</li>
+          <li>S-Curve journey (SVG + callouts)</li>
+          <li>Benchmark heatmap matrix</li>
+          <li>Spectrum / continuum matrix</li>
+          <li>Logo scatter plot</li>
+          <li>Investment intelligence table</li>
+          <li>Connected maturity assessment (radar)</li>
+          <li>Case study with outcome numbers</li>
+          <li>Value chain opportunity matrix</li>
+          <li>Sidebar slide (commentary + data)</li>
+        </ul>
       </div>
 
     </div>

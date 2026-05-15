@@ -3182,6 +3182,176 @@ body.embed .progress { display: none; }
 }
 .gl-row.milestone-row .gl-row-label { font-style: italic; color: var(--ink-4); font-weight: 400; }
 .gl-row.milestone-row .gl-bars { background-image: none; min-height: 52px; align-content: center; }
+
+/* ================================================================
+   v0.6 COMPONENTS — benchmark viz, hierarchy, journey, analytics
+   ================================================================ */
+
+/* --- 47. Org Chart -------------------------------------------- */
+.org-chart { display: flex; flex-direction: column; align-items: center; flex: 1 1 auto; min-height: 0; overflow: visible; gap: 0; }
+.org-node { min-width: 150px; max-width: 190px; padding: 0.5rem 0.75rem; text-align: center; flex-shrink: 0; border-radius: var(--radius-sm); }
+.on-title { font-size: clamp(9.5px, 0.8vw, 11px); font-weight: 600; line-height: 1.3; }
+.on-name  { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.04em; margin-top: 0.15rem; }
+.org-node.n0 { background: var(--accent); }
+.org-node.n0 .on-title { color: #fff; } .org-node.n0 .on-name { color: rgba(255,255,255,0.65); }
+.org-node.n1 { background: #2e6da0; }
+.org-node.n1 .on-title { color: #fff; } .org-node.n1 .on-name { color: rgba(255,255,255,0.65); }
+.org-node.n2 { background: var(--accent-tint); border: 1px solid var(--line-2); }
+.org-node.n2 .on-title { color: var(--accent); } .org-node.n2 .on-name { color: var(--ink-3); }
+.org-node.n3 { background: var(--bg-card-alt); border: 1px solid var(--line-1); }
+.org-node.n3 .on-title { color: var(--ink-2); } .org-node.n3 .on-name { color: var(--ink-4); }
+.org-v { width: 1px; height: 1.25rem; background: var(--line-2); flex-shrink: 0; }
+.org-children { display: flex; gap: 0.65rem; position: relative; padding-top: 1.25rem; width: fit-content; margin: 0 auto; }
+.org-children::before { content: ''; position: absolute; top: 0; left: 85px; right: 85px; height: 1px; background: var(--line-2); }
+.org-child { display: flex; flex-direction: column; align-items: center; }
+.org-child::before { content: ''; width: 1px; height: 1.25rem; background: var(--line-2); flex-shrink: 0; }
+.org-legend { display: flex; gap: 1.25rem; flex-shrink: 0; margin-top: 0.65rem; justify-content: center; }
+.org-legend-item { display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 8.5px; color: var(--ink-4); letter-spacing: 0.05em; }
+.org-legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+/* --- 48. S-Curve Annotated Journey ---------------------------- */
+.scurve-wrap { position: relative; flex: 1 1 auto; min-height: 0; margin-top: 0.35rem; }
+.scurve-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.sc-callout { position: absolute; background: var(--bg); border: 1px solid var(--line-2); border-left: 3px solid var(--accent); padding: 0.55rem 0.8rem; max-width: 190px; border-radius: var(--radius-sm); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.sc-callout .sc-label { font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem; }
+.sc-callout h5 { font-family: var(--font-display); font-size: clamp(11px, 0.92vw, 13px); font-weight: 500; color: var(--ink-1); line-height: 1.25; margin-bottom: 0.25rem; font-variation-settings: "opsz" 36; }
+.sc-callout p { font-size: clamp(9px, 0.74vw, 10.5px); color: var(--ink-3); line-height: 1.45; }
+.sc-future { position: absolute; font-family: var(--font-display); font-size: clamp(11px, 0.95vw, 13.5px); color: var(--ink-4); font-style: italic; font-variation-settings: "opsz" 36; }
+
+/* --- 49. Benchmark Heatmap ------------------------------------ */
+.heatmap-wrap { flex: 1 1 auto; min-height: 0; overflow: auto; margin-top: 0.5rem; }
+.heatmap { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: clamp(9.5px, 0.78vw, 11px); }
+.heatmap th { padding: 0.4rem 0.5rem; font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.05em; text-align: center; background: var(--bg-card-alt); border-bottom: 2px solid var(--line-2); color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.heatmap th.hm-col-dim { text-align: left; padding-left: 0.7rem; }
+.heatmap td { padding: 0.3rem 0.4rem; border: 1.5px solid var(--bg); text-align: center; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; }
+.heatmap td.hm-row-label { text-align: left; font-family: var(--font-body); font-weight: 400; font-size: clamp(9.5px, 0.78vw, 11px); color: var(--ink-2); background: var(--bg); padding-left: 1rem; }
+.heatmap td.hm-group { font-family: var(--font-mono); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; color: var(--accent); background: var(--accent-tint); border-top: 1.5px solid var(--line-2); padding: 0.28rem 0.5rem 0.28rem 0.7rem; text-align: left; }
+.heatmap tr.hm-total td { background: var(--accent); color: #fff; font-family: var(--font-display); font-size: clamp(11px, 0.9vw, 13px); font-weight: 600; border-top: 2px solid var(--accent); border-color: rgba(255,255,255,0.15); }
+.heatmap tr.hm-total td.hm-row-label { background: var(--accent); color: rgba(255,255,255,0.9); font-family: var(--font-body); font-weight: 700; font-size: clamp(10px, 0.82vw, 11.5px); }
+.hm-1 { background: #dce8f4; color: #3a6a90; }
+.hm-2 { background: #aecde8; color: #1a4d7a; }
+.hm-3 { background: #6aaad6; color: #0c3050; }
+.hm-4 { background: #2f7fc0; color: #fff; }
+.hm-5 { background: var(--accent); color: #fff; }
+.hm-legend { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; margin-top: 0.4rem; }
+.hm-legend-label { font-family: var(--font-mono); font-size: 8.5px; color: var(--ink-4); letter-spacing: 0.05em; }
+.hm-legend-scale { display: flex; border-radius: 2px; overflow: hidden; }
+.hm-ls { width: 32px; height: 9px; }
+.hm-ls:nth-child(1) { background: #dce8f4; }
+.hm-ls:nth-child(2) { background: #aecde8; }
+.hm-ls:nth-child(3) { background: #6aaad6; }
+.hm-ls:nth-child(4) { background: #2f7fc0; }
+.hm-ls:nth-child(5) { background: var(--accent); }
+
+/* --- 50. Spectrum / Continuum Matrix -------------------------- */
+.spectrum { display: flex; flex-direction: column; gap: 0; flex: 1 1 auto; min-height: 0; margin-top: 0.5rem; }
+.spec-row { display: grid; grid-template-columns: 130px 1fr; align-items: center; gap: var(--gap-md); border-bottom: 1px solid var(--line-1); padding: 0.5rem 0; }
+.spec-row:last-of-type { border-bottom: none; }
+.spec-dim { display: flex; flex-direction: column; gap: 0.15rem; }
+.spec-dim-tag { font-family: var(--font-mono); font-size: 8.5px; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+.spec-dim-label { font-size: clamp(10px, 0.82vw, 11.5px); font-weight: 600; color: var(--ink-1); line-height: 1.3; }
+.spec-options { display: flex; gap: 0.4rem; }
+.spec-option { flex: 1; padding: 0.5rem 0.65rem; background: var(--bg-card-alt); border: 1px solid var(--line-1); border-radius: var(--radius-sm); display: flex; flex-direction: column; gap: 0.15rem; }
+.spec-option h6 { font-size: clamp(9px, 0.75vw, 10.5px); font-weight: 600; color: var(--ink-2); line-height: 1.25; }
+.spec-option p { font-size: clamp(8px, 0.65vw, 9.5px); color: var(--ink-4); line-height: 1.4; }
+.spec-option.current { background: var(--accent-tint); border-color: var(--accent); }
+.spec-option.current h6 { color: var(--accent); }
+.spec-option .spec-arrow { font-size: 0.9em; color: var(--ink-5); margin: 0 0.15rem; }
+.spec-grad { height: 4px; border-radius: 2px; background: linear-gradient(to right, #dce8f4 0%, var(--accent) 100%); margin-top: 0.6rem; flex-shrink: 0; }
+.spec-grad-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 8.5px; color: var(--ink-4); letter-spacing: 0.06em; margin-top: 0.25rem; flex-shrink: 0; }
+
+/* --- 51. Logo Scatter Plot ------------------------------------ */
+.logo-scatter { display: grid; grid-template-columns: 22px 1fr; grid-template-rows: 1fr 22px; gap: 0; flex: 1 1 auto; min-height: 0; margin-top: 0.5rem; }
+.ls-y-label { grid-column:1; grid-row:1; writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; justify-content: center; }
+.ls-x-label { grid-column:2; grid-row:2; font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; justify-content: center; border-top: 1.5px solid var(--accent); }
+.ls-plot { grid-column:2; grid-row:1; position: relative; border-left: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); background: linear-gradient(var(--line-1) 1px, transparent 1px) 0 0 / 100% 25%, linear-gradient(90deg, var(--line-1) 1px, transparent 1px) 0 0 / 25% 100%; }
+.ls-hline { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line-2); }
+.ls-hline-label { position: absolute; right: 0.25rem; font-family: var(--font-mono); font-size: 8px; color: var(--ink-4); white-space: nowrap; }
+.ls-logo { position: absolute; transform: translate(-50%, 50%); display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: default; z-index: 5; }
+.ls-name { background: var(--bg); border: 1.5px solid var(--line-2); padding: 0.2rem 0.45rem; border-radius: var(--radius-sm); font-family: var(--font-body); font-size: clamp(8.5px, 0.7vw, 10px); font-weight: 700; color: var(--ink-2); white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.ls-name.hero { border-color: var(--accent); color: var(--accent); background: var(--accent-tint); }
+.ls-dot-marker { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-4); }
+.ls-dot-marker.hero { background: var(--accent); }
+.ls-qlabel { position: absolute; font-family: var(--font-mono); font-size: 8px; color: var(--ink-5); letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* --- 52. Investment Intelligence Table ------------------------ */
+.intel-table { width: 100%; border-collapse: collapse; font-size: clamp(10px, 0.82vw, 11.5px); flex: 1 1 auto; min-height: 0; }
+.intel-table thead tr { background: var(--accent); }
+.intel-table thead th { padding: 0.45rem 0.65rem; font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: #fff; text-align: left; }
+.intel-table tbody tr { border-bottom: 1px solid var(--line-1); }
+.intel-table tbody tr:nth-child(even) { background: var(--bg-tint); }
+.intel-table tbody tr.itl-hl { background: var(--accent-tint); }
+.intel-table tbody td { padding: 0.38rem 0.65rem; color: var(--ink-2); vertical-align: middle; line-height: 1.4; }
+td.it-yr { font-family: var(--font-mono); font-size: 9.5px; color: var(--ink-4); white-space: nowrap; width: 38px; }
+td.it-flag { font-size: 15px; text-align: center; width: 28px; }
+td.it-partner { font-weight: 600; color: var(--ink-1); width: 130px; }
+td.it-amount { font-family: var(--font-mono); font-size: 10px; font-weight: 600; color: var(--ink-1); white-space: nowrap; width: 55px; }
+td.it-desc { font-size: clamp(9.5px, 0.78vw, 10.5px); color: var(--ink-3); }
+.itl-pill { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 20px; font-family: var(--font-mono); font-size: 8px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+.itl-pill.research  { background: #e8f0f9; color: #1a4d7a; }
+.itl-pill.diagnosis { background: #e8f4f0; color: #1a604a; }
+.itl-pill.treatment { background: #f4f0e8; color: #6b4510; }
+.itl-pill.platform  { background: #ede8f4; color: #4a2080; }
+.itl-pill.data      { background: var(--warn-tint); color: var(--warn); }
+
+/* --- 53. Connected Maturity Assessment ------------------------ */
+.maturity-wrap { display: grid; grid-template-columns: 1fr 210px; gap: var(--gap-lg); flex: 1 1 auto; min-height: 0; margin-top: 0.5rem; align-items: stretch; }
+.maturity-chart-area { position: relative; min-width: 0; min-height: 0; }
+.maturity-svg { width: 100%; height: 100%; overflow: visible; }
+.maturity-sidebar { background: var(--accent-tint); border: 1px solid var(--line-2); padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; border-radius: var(--radius-sm); }
+.mat-side-title { font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); padding-bottom: 0.4rem; border-bottom: 1px solid var(--line-2); }
+.mat-side-item { display: flex; align-items: flex-start; gap: 0.5rem; font-size: clamp(9.5px, 0.78vw, 10.5px); color: var(--ink-2); line-height: 1.45; }
+.mat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.2rem; }
+
+/* --- 54. Case Study with Outcome Numbers ---------------------- */
+.case-study { display: grid; grid-template-columns: 1.1fr 1fr 0.9fr; gap: var(--gap-lg); flex: 1 1 auto; min-height: 0; margin-top: 0.5rem; }
+.cs-col-title { font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--line-2); }
+.cs-context { display: flex; flex-direction: column; }
+.cs-context p { font-size: clamp(10.5px, 0.85vw, 12px); color: var(--ink-2); line-height: 1.6; margin-bottom: 0.5rem; }
+.cs-context ul { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+.cs-context li { font-size: clamp(10px, 0.82vw, 11.5px); color: var(--ink-2); line-height: 1.5; padding-left: 0.9rem; position: relative; }
+.cs-context li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 4px; height: 1px; background: var(--ink-4); }
+.cs-signals { display: flex; flex-direction: column; }
+.cs-signal { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.4rem 0.6rem; background: var(--accent-tint); border-radius: var(--radius-sm); margin-bottom: 0.4rem; }
+.cs-signal:last-child { margin-bottom: 0; }
+.cs-signal-icon { flex-shrink: 0; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 0.1rem; }
+.cs-signal-icon svg { width: 9px; height: 9px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
+.cs-signal-text { font-size: clamp(9.5px, 0.78vw, 10.5px); color: var(--accent); font-weight: 500; line-height: 1.4; }
+.cs-outcomes { display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; }
+.cs-stat { display: flex; flex-direction: column; gap: 0.1rem; }
+.cs-num { font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 46px); font-weight: 400; color: var(--accent); line-height: 1; letter-spacing: -0.01em; font-variation-settings: "opsz" 72; }
+.cs-num .cs-unit { font-size: 0.5em; font-weight: 300; vertical-align: super; }
+.cs-num-label { font-size: clamp(9px, 0.74vw, 10.5px); color: var(--ink-3); line-height: 1.4; max-width: 155px; margin-top: 0.1rem; }
+
+/* --- 55. Value Chain Opportunity Matrix ----------------------- */
+.vc-matrix { width: 100%; border-collapse: collapse; flex: 1 1 auto; min-height: 0; font-size: clamp(10px, 0.82vw, 11.5px); }
+.vc-matrix thead tr { background: var(--accent); }
+.vc-matrix thead th { padding: 0.45rem 0.7rem; font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: #fff; text-align: left; }
+.vc-matrix thead th.vc-th-hero { text-align: center; min-width: 85px; }
+.vc-matrix tbody tr { border-bottom: 1px solid var(--line-1); vertical-align: top; }
+.vc-matrix tbody td { padding: 0.5rem 0.7rem; line-height: 1.5; color: var(--ink-2); }
+.vc-stage { display: flex; align-items: center; gap: 0.5rem; }
+.vc-icon { width: 20px; height: 20px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.vc-icon svg { width: 11px; height: 11px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.vc-stage-name { font-weight: 600; color: var(--ink-1); }
+.vc-activity { display: flex; gap: 3px; justify-content: center; align-items: center; padding-top: 0.2rem; }
+.vc-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.vc-dot.dim { background: var(--line-2); }
+.vc-hero-num { text-align: center; font-family: var(--font-display); font-size: clamp(16px, 2vw, 28px); font-weight: 400; color: var(--accent); line-height: 1; letter-spacing: -0.01em; font-variation-settings: "opsz" 72; }
+.vc-hero-num small { display: block; font-size: 0.38em; font-family: var(--font-mono); color: var(--ink-4); letter-spacing: 0.07em; text-transform: uppercase; font-weight: 400; margin-top: 0.2em; font-variation-settings: normal; }
+
+/* --- 56. Sidebar Slide layout --------------------------------- */
+.slide.with-sidebar { display: block; }
+.slide-sidebar-layout { display: grid; grid-template-columns: 1fr 230px; height: 100%; overflow: hidden; }
+.slide-main-col { padding: var(--slide-pad-y) var(--gap-lg) var(--slide-pad-y) var(--slide-pad-x); display: flex; flex-direction: column; gap: var(--gap-sm); overflow: hidden; min-width: 0; }
+.slide-sidebar-col { background: var(--accent-tint); border-left: 1px solid var(--line-2); padding: 1.4rem 1.1rem; display: flex; flex-direction: column; gap: 0.85rem; overflow-y: auto; }
+.sb-section-label { font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); padding-bottom: 0.35rem; border-bottom: 1px solid var(--line-2); flex-shrink: 0; }
+.sb-comment { font-size: clamp(9.5px, 0.78vw, 11px); color: var(--ink-2); line-height: 1.6; }
+.sb-comment strong { color: var(--ink-1); font-weight: 600; }
+.sb-quote { margin-top: 0.1rem; }
+.sb-qmark { font-family: var(--font-display); font-size: 24px; color: var(--accent); line-height: 1; opacity: 0.4; margin-bottom: 0.1rem; }
+.sb-qtext { font-size: clamp(9px, 0.74vw, 10.5px); color: var(--ink-2); line-height: 1.55; font-style: italic; }
+.sb-qattr { font-family: var(--font-mono); font-size: 8px; color: var(--ink-4); margin-top: 0.3rem; letter-spacing: 0.04em; }
 </style>
 </head>
 <body>
@@ -5542,13 +5712,563 @@ body.embed .progress { display: none; }
     </div>
   </section>
 
+  <!-- =================================================================
+       SLIDE 51 — ORG CHART (component 47)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Organisational structure · 2025</div>
+      <h2 class="title">The CIO reports directly to the CEO — a signal that digital transformation is board-level priority.</h2>
+      <div class="title-rule"></div>
+      <div class="org-chart">
+        <div class="org-node n0">
+          <div class="on-title">Chairman &amp; CEO</div>
+          <div class="on-name">Joaquin Duato</div>
+        </div>
+        <div class="org-v"></div>
+        <div class="org-node n1">
+          <div class="on-title">EVP, Chief Information Officer</div>
+          <div class="on-name">James Swanson</div>
+        </div>
+        <div class="org-children">
+          <div class="org-child">
+            <div class="org-node n2"><div class="on-title">CIO, MedTech</div><div class="on-name">Mark Gaynor</div></div>
+          </div>
+          <div class="org-child">
+            <div class="org-node n2"><div class="on-title">MedTech Group CIO &amp; Global VP</div><div class="on-name">Larry Jones</div></div>
+          </div>
+          <div class="org-child">
+            <div class="org-node n2"><div class="on-title">Pharma Group CIO &amp; Global VP</div><div class="on-name">Joyce Lee</div></div>
+          </div>
+          <div class="org-child">
+            <div class="org-node n2"><div class="on-title">CIO, Global Supply Chain</div><div class="on-name">Tom Weck</div></div>
+          </div>
+          <div class="org-child">
+            <div class="org-node n2"><div class="on-title">CTO &amp; Global VP, Technology</div><div class="on-name">Rowena Yao</div></div>
+          </div>
+        </div>
+        <div class="org-legend">
+          <div class="org-legend-item"><div class="org-legend-swatch" style="background:var(--accent)"></div>Level N — CEO</div>
+          <div class="org-legend-item"><div class="org-legend-swatch" style="background:#2e6da0"></div>Level N-1</div>
+          <div class="org-legend-item"><div class="org-legend-swatch" style="background:var(--accent-tint);border:1px solid var(--line-2)"></div>Level N-2</div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Annual report; expert interviews; McKinsey Organisational Benchmarking.</div>
+        <div class="page-no">51</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 52 — S-CURVE ANNOTATED JOURNEY (component 48)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Transformation trajectory</div>
+      <h2 class="title">Three years of execution have moved the organisation past the early-adopter plateau — the inflection is now.</h2>
+      <div class="title-rule"></div>
+      <div class="scurve-wrap">
+        <svg class="scurve-svg" viewBox="0 0 900 360" preserveAspectRatio="none">
+          <!-- Grid lines -->
+          <line x1="50" y1="0" x2="50" y2="320" stroke="#ececec" stroke-width="1"/>
+          <line x1="50" y1="320" x2="900" y2="320" stroke="#ececec" stroke-width="1"/>
+          <!-- S-curve: solid portion (past to present) -->
+          <path d="M 50 305 C 120 300, 200 285, 280 255 C 380 215, 460 155, 540 100 C 600 62, 660 42, 720 34"
+                fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Dashed future extension -->
+          <path d="M 720 34 C 780 24, 840 16, 880 12"
+                fill="none" stroke="var(--line-2)" stroke-width="2" stroke-dasharray="6,4"/>
+          <!-- Dots at key moments -->
+          <circle cx="100" cy="302" r="4.5" fill="var(--accent)"/>
+          <circle cx="280" cy="255" r="4.5" fill="var(--accent)"/>
+          <circle cx="480" cy="126" r="4.5" fill="var(--accent)"/>
+          <circle cx="720" cy="34" r="4.5" fill="var(--accent)"/>
+          <!-- Connector lines to callouts (dashed) -->
+          <line x1="100" y1="302" x2="100" y2="232" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="480" y1="126" x2="510" y2="170" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="720" y1="34" x2="720" y2="60" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3,2"/>
+          <!-- Year markers -->
+          <text x="100" y="338" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">2021</text>
+          <text x="280" y="338" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">2022</text>
+          <text x="480" y="338" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">2023</text>
+          <text x="720" y="338" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">Today</text>
+          <!-- Y-axis label -->
+          <text x="20" y="160" font-family="JetBrains Mono,monospace" font-size="9" fill="var(--accent)" text-anchor="middle" transform="rotate(-90,20,160)" letter-spacing="1">MATURITY</text>
+        </svg>
+        <!-- Callout boxes positioned over SVG -->
+        <div class="sc-callout" style="left:3%;top:42%;">
+          <div class="sc-label">Phase 1 · 2021</div>
+          <h5>Exploring &amp; Experimenting</h5>
+          <p>Local use-case pilots. Push for digital agenda. No cross-functional coordination.</p>
+        </div>
+        <div class="sc-callout" style="left:44%;top:40%;">
+          <div class="sc-label">Phase 2 · 2023</div>
+          <h5>Execution</h5>
+          <p>Ensuring value-chain alignment. Joint digital transformation agenda. First shared platforms deployed.</p>
+        </div>
+        <div class="sc-future" style="right:3%;top:10%;">Direction of Travel?</div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: McKinsey organisational benchmarking; expert interviews.</div>
+        <div class="page-no">52</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 53 — BENCHMARK HEATMAP MATRIX (component 49)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Outside-in assessment</div>
+      <h2 class="title">Pfizer, AZ, and Roche lead on digital maturity — the gap is widest in ecosystem and commercial digitisation.</h2>
+      <div class="title-rule"></div>
+      <div style="display:flex;align-items:center;gap:1.5rem;flex-shrink:0;margin-bottom:0.35rem;">
+        <span style="font-family:var(--font-mono);font-size:8.5px;color:var(--ink-4);letter-spacing:0.06em;">Scoring (low → high)</span>
+        <div class="hm-legend-scale"><div class="hm-ls"></div><div class="hm-ls"></div><div class="hm-ls"></div><div class="hm-ls"></div><div class="hm-ls"></div></div>
+        <span style="font-family:var(--font-mono);font-size:8.5px;color:var(--ink-4);">1 → 5</span>
+      </div>
+      <div class="heatmap-wrap">
+        <table class="heatmap">
+          <thead>
+            <tr>
+              <th class="hm-col-dim" style="width:42%;">Dimension</th>
+              <th>Pfizer</th><th>AZ</th><th>Roche</th><th>Novartis</th><th>Sanofi</th><th>J&amp;J</th><th>Merck</th><th>Novo Nordisk</th><th>Bayer</th><th>Eli Lilly</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="hm-group" colspan="11">A. Strategy</td></tr>
+            <tr><td class="hm-row-label">Formulated digital strategy</td><td class="hm-5">5</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-5">5</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-2">2</td></tr>
+            <tr><td class="hm-row-label">Digital targets / KPIs</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-2">2</td><td class="hm-3">3</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-row-label">Investment in digital talent</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-2">2</td><td class="hm-2">2</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-row-label">CDO presence and mandate</td><td class="hm-4">4</td><td class="hm-5">5</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-2">2</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-2">2</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-group" colspan="11">B. Eco-system</td></tr>
+            <tr><td class="hm-row-label">Innovation hubs</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-5">5</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-2">2</td><td class="hm-2">2</td><td class="hm-3">3</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-row-label">M&amp;A and venture investments</td><td class="hm-5">5</td><td class="hm-3">3</td><td class="hm-5">5</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-5">5</td><td class="hm-4">4</td><td class="hm-2">2</td><td class="hm-3">3</td><td class="hm-4">4</td></tr>
+            <tr><td class="hm-row-label">Healthtech partnerships</td><td class="hm-4">4</td><td class="hm-5">5</td><td class="hm-5">5</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-1">1</td><td class="hm-2">2</td><td class="hm-2">2</td></tr>
+            <tr><td class="hm-group" colspan="11">C. Value chain innovation</td></tr>
+            <tr><td class="hm-row-label">Discovery</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-5">5</td><td class="hm-3">3</td><td class="hm-2">2</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-row-label">Development</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-row-label">Manufacturing and supply</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-3">3</td></tr>
+            <tr><td class="hm-row-label">Commercial</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-4">4</td><td class="hm-3">3</td><td class="hm-3">3</td><td class="hm-2">2</td><td class="hm-3">3</td><td class="hm-3">3</td></tr>
+            <tr class="hm-total"><td class="hm-row-label">Total score</td><td>3.9</td><td>3.8</td><td>3.7</td><td>3.7</td><td>3.4</td><td>3.4</td><td>3.3</td><td>3.0</td><td>3.0</td><td>3.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Desk research; annual reports; press releases; expert interviews; Capital IQ; HealthTech Alpha.</div>
+        <div class="page-no">53</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 54 — SPECTRUM / CONTINUUM MATRIX (component 50)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Operating model assessment</div>
+      <h2 class="title">Novo Nordisk deploys a less coordinated model than most peers — the gap is largest on prioritisation and talent.</h2>
+      <div class="title-rule"></div>
+      <div class="spectrum">
+        <div class="spec-row">
+          <div class="spec-dim">
+            <div class="spec-dim-tag">I.</div>
+            <div class="spec-dim-label">Organisational structure &amp; anchoring</div>
+          </div>
+          <div class="spec-options">
+            <div class="spec-option"><h6>Separate Digital &amp; IT BU</h6><p>Digital is a standalone function with a separate reporting line. Sanofi, Eli Lilly.</p></div>
+            <div class="spec-option"><h6>BU/Function embedded</h6><p>IT and digital are embedded in the BU or function. AstraZeneca, Roche.</p></div>
+            <div class="spec-option current"><h6>BU/Function embedded + IT/Digital subunit<span class="spec-marker"></span></h6><p>Digital is in the BU but a digital sub-unit coordinates across. Novo Nordisk, Pfizer.</p></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-dim">
+            <div class="spec-dim-tag">II.</div>
+            <div class="spec-dim-label">Prioritisation &amp; execution</div>
+          </div>
+          <div class="spec-options">
+            <div class="spec-option"><h6>Embedded coordination</h6><p>Pfizer, Roche — strong central coordination of digital priorities.</p></div>
+            <div class="spec-option"><h6>BU and CoE</h6><p>Eli Lilly, AstraZeneca — coordination through a centre of excellence.</p></div>
+            <div class="spec-option current"><h6>BU/Functions-driven<span class="spec-marker"></span></h6><p>Novo Nordisk — BUs set and own the digital agenda with limited central input.</p></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-dim">
+            <div class="spec-dim-tag">III.</div>
+            <div class="spec-dim-label">Funding allocation</div>
+          </div>
+          <div class="spec-options">
+            <div class="spec-option"><h6>Central funding</h6><p>Sanofi — one central budget pool for all digital activities.</p></div>
+            <div class="spec-option"><h6>Hybrid funding</h6><p>Most peers — BU budgets earmarked for digital with a central cross-BU pool.</p></div>
+            <div class="spec-option current"><h6>Decentral funding<span class="spec-marker"></span></h6><p>Novo Nordisk — BUs allocate their own budgets to digital; very limited central overlay.</p></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-dim">
+            <div class="spec-dim-tag">IV.</div>
+            <div class="spec-dim-label">FTE and talent deployment</div>
+          </div>
+          <div class="spec-options">
+            <div class="spec-option"><h6>Central digital talent pool</h6><p>Pfizer, Novartis — digital talent managed and deployed centrally.</p></div>
+            <div class="spec-option"><h6>CoE + function-specific pool</h6><p>AZ, Roche, Eli Lilly — hybrid between central expertise and embedded specialists.</p></div>
+            <div class="spec-option current"><h6>Function-specific talent pool<span class="spec-marker"></span></h6><p>Novo Nordisk — digital talent recruited and managed within each function.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="spec-grad"></div>
+      <div class="spec-grad-labels">
+        <span>High coordination</span>
+        <span>Low coordination</span>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Expert interviews; desk research; McKinsey Organisational Benchmarking.</div>
+        <div class="page-no">54</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 55 — LOGO SCATTER PLOT (component 51)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Outside-in assessment</div>
+      <h2 class="title">Higher coordination is consistently associated with higher digital maturity — Novo Nordisk has room to move on both axes.</h2>
+      <div class="title-rule"></div>
+      <div class="logo-scatter">
+        <div class="ls-y-label">Digital maturity score</div>
+        <div class="ls-plot">
+          <!-- Average line at 50% height -->
+          <div class="ls-hline" style="bottom:42%;"><div class="ls-hline-label" style="bottom:2px;">Average = 3.4</div></div>
+          <!-- Company logos positioned by (x=coordination %, y=maturity %) — y is inverted (top=high) -->
+          <div class="ls-logo" style="left:82%;bottom:76%;"><div class="ls-name">Pfizer</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:76%;bottom:72%;"><div class="ls-name">AZ</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:70%;bottom:69%;"><div class="ls-name">Roche</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:55%;bottom:68%;"><div class="ls-name">Novartis</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:45%;bottom:58%;"><div class="ls-name">Sanofi</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:60%;bottom:56%;"><div class="ls-name">J&amp;J</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:38%;bottom:50%;"><div class="ls-name">Merck</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:42%;bottom:42%;"><div class="ls-name">Bayer</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:36%;bottom:40%;"><div class="ls-name">Eli Lilly</div><div class="ls-dot-marker"></div></div>
+          <div class="ls-logo" style="left:22%;bottom:32%;"><div class="ls-name hero">Novo Nordisk</div><div class="ls-dot-marker hero"></div></div>
+        </div>
+        <div class="ls-x-label">Degree of coordinated efforts →</div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Expert interviews; desk research; McKinsey Organisational Benchmarking. Axes are qualitative outside-in assessments.</div>
+        <div class="page-no">55</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 56 — INVESTMENT INTELLIGENCE TABLE (component 52)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">B. Ecosystem — M&amp;A and investments</div>
+      <h2 class="title">Pfizer targets R&amp;D and diagnostics — almost all activity is in the US with a selective Asia presence.</h2>
+      <div class="title-rule"></div>
+      <div style="flex:1 1 auto;min-height:0;overflow:auto;">
+        <table class="intel-table">
+          <thead>
+            <tr>
+              <th style="width:38px;">Year</th>
+              <th style="width:28px;"></th>
+              <th style="width:130px;">Partner / Target</th>
+              <th style="width:55px;">Amount</th>
+              <th style="width:90px;">Category</th>
+              <th>Strategic rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="itl-hl"><td class="it-yr">2023</td><td class="it-flag">🇺🇸</td><td class="it-partner">Seagen</td><td class="it-amount">$43B</td><td><span class="itl-pill treatment">Treatment</span></td><td class="it-desc">Acquired antibody-drug conjugate oncology platform to expand cancer treatment pipeline.</td></tr>
+            <tr><td class="it-yr">2022</td><td class="it-flag">🇺🇸</td><td class="it-partner">Tempus AI</td><td class="it-amount">$150M</td><td><span class="itl-pill data">Data &amp; AI</span></td><td class="it-desc">Strategic investment in AI diagnostics platform for precision oncology and genomics.</td></tr>
+            <tr class="itl-hl"><td class="it-yr">2022</td><td class="it-flag">🇺🇸</td><td class="it-partner">BioAtla</td><td class="it-amount">$1.2B</td><td><span class="itl-pill research">Research</span></td><td class="it-desc">Licensed conditionally active biologics technology for tumour microenvironment targeting.</td></tr>
+            <tr><td class="it-yr">2022</td><td class="it-flag">🇬🇧</td><td class="it-partner">Arena Pharma</td><td class="it-amount">$6.7B</td><td><span class="itl-pill treatment">Treatment</span></td><td class="it-desc">Acquired to gain etrasimod and four additional clinical-stage inflammation assets.</td></tr>
+            <tr><td class="it-yr">2021</td><td class="it-flag">🇺🇸</td><td class="it-partner">Trilliant Health</td><td class="it-amount">$125M</td><td><span class="itl-pill platform">Platform</span></td><td class="it-desc">Investment in healthcare predictive analytics platform tracking 300M+ patient journeys.</td></tr>
+            <tr class="itl-hl"><td class="it-yr">2021</td><td class="it-flag">🇨🇳</td><td class="it-partner">GenScript</td><td class="it-amount">$340M</td><td><span class="itl-pill research">Research</span></td><td class="it-desc">Stake in Asia's largest biologics contract research and manufacturing organisation.</td></tr>
+            <tr><td class="it-yr">2020</td><td class="it-flag">🇺🇸</td><td class="it-partner">Cerevel Therapeutics</td><td class="it-amount">$350M</td><td><span class="itl-pill research">Research</span></td><td class="it-desc">Partnership and stake in neuroscience pipeline for Parkinson's and schizophrenia.</td></tr>
+            <tr><td class="it-yr">2020</td><td class="it-flag">🇺🇸</td><td class="it-partner">Beam Therapeutics</td><td class="it-amount">$300M</td><td><span class="itl-pill research">Research</span></td><td class="it-desc">Collaboration on base editing therapies for genetic diseases across three therapeutic areas.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Capital IQ; press releases; annual reports. Highlighted rows = most strategically significant.</div>
+        <div class="page-no">56</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 57 — CONNECTED MATURITY ASSESSMENT (component 53)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Outside-in assessment · Pfizer</div>
+      <h2 class="title">Pfizer ranks above peers on most digital dimensions — the gap to average is widest in ecosystem and commercial.</h2>
+      <div class="title-rule"></div>
+      <div class="maturity-wrap">
+        <div class="maturity-chart-area">
+          <svg class="maturity-svg" viewBox="0 0 520 290" preserveAspectRatio="none">
+            <!-- Column headers (scores 1–5) -->
+            <text x="160" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">1</text>
+            <text x="240" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">2</text>
+            <text x="320" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">3</text>
+            <text x="400" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">4</text>
+            <text x="480" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#9a9a9a" text-anchor="middle">5</text>
+            <!-- Vertical score lines -->
+            <line x1="160" y1="18" x2="160" y2="280" stroke="#ececec" stroke-width="1"/>
+            <line x1="240" y1="18" x2="240" y2="280" stroke="#ececec" stroke-width="1"/>
+            <line x1="320" y1="18" x2="320" y2="280" stroke="#ececec" stroke-width="1"/>
+            <line x1="400" y1="18" x2="400" y2="280" stroke="#ececec" stroke-width="1"/>
+            <line x1="480" y1="18" x2="480" y2="280" stroke="#ececec" stroke-width="1"/>
+            <!-- Row labels (dimensions) — y positions: 40,65,90,115,145,170,195,225,255,280 -->
+            <text x="145" y="42" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Formulated digital strategy</text>
+            <text x="145" y="67" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Digital targets / KPIs</text>
+            <text x="145" y="92" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Investment in digital talent</text>
+            <text x="145" y="117" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">CDO presence &amp; mandate</text>
+            <text x="145" y="147" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Innovation hubs</text>
+            <text x="145" y="172" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">M&amp;A and venture investments</text>
+            <text x="145" y="197" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Healthtech partnerships</text>
+            <text x="145" y="227" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Discovery</text>
+            <text x="145" y="252" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Development</text>
+            <text x="145" y="277" font-family="Manrope,sans-serif" font-size="9.5" fill="#2a2a2a" text-anchor="end">Commercial</text>
+            <!-- Peer average line (gray dashed) — scores: 3,3,3,3,3,4,4,4,4,3 -->
+            <polyline points="320,38 320,63 320,88 320,113 320,143 400,168 400,193 400,223 400,248 320,273"
+                      fill="none" stroke="#c4c4c4" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- Pfizer line (accent blue) — scores: 5,4,4,4,3,5,4,4,4,4 -->
+            <polyline points="480,38 400,63 400,88 400,113 320,143 480,168 400,193 400,223 400,248 400,273"
+                      fill="none" stroke="var(--accent)" stroke-width="2"/>
+            <!-- Pfizer dots -->
+            <circle cx="480" cy="38"  r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="63"  r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="88"  r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="113" r="4.5" fill="var(--accent)"/>
+            <circle cx="320" cy="143" r="4.5" fill="var(--accent)"/>
+            <circle cx="480" cy="168" r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="193" r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="223" r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="248" r="4.5" fill="var(--accent)"/>
+            <circle cx="400" cy="273" r="4.5" fill="var(--accent)"/>
+            <!-- Peer average dots -->
+            <circle cx="320" cy="38"  r="3.5" fill="#c4c4c4"/>
+            <circle cx="320" cy="63"  r="3.5" fill="#c4c4c4"/>
+            <circle cx="320" cy="88"  r="3.5" fill="#c4c4c4"/>
+            <circle cx="320" cy="113" r="3.5" fill="#c4c4c4"/>
+            <circle cx="320" cy="143" r="3.5" fill="#c4c4c4"/>
+            <circle cx="400" cy="168" r="3.5" fill="#c4c4c4"/>
+            <circle cx="400" cy="193" r="3.5" fill="#c4c4c4"/>
+            <circle cx="400" cy="223" r="3.5" fill="#c4c4c4"/>
+            <circle cx="400" cy="248" r="3.5" fill="#c4c4c4"/>
+            <circle cx="320" cy="273" r="3.5" fill="#c4c4c4"/>
+            <!-- Legend -->
+            <line x1="160" y1="284" x2="185" y2="284" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="172" cy="284" r="3.5" fill="var(--accent)"/>
+            <text x="190" y="288" font-family="Manrope,sans-serif" font-size="9" fill="#2a2a2a">Pfizer</text>
+            <line x1="245" y1="284" x2="270" y2="284" stroke="#c4c4c4" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <circle cx="257" cy="284" r="3" fill="#c4c4c4"/>
+            <text x="275" y="288" font-family="Manrope,sans-serif" font-size="9" fill="#6a6a6a">Peer average</text>
+          </svg>
+        </div>
+        <div class="maturity-sidebar">
+          <div class="mat-side-title">Key observations</div>
+          <div class="mat-side-item"><div class="mat-dot" style="background:var(--accent)"></div>Pfizer has one of the most <strong>ambitious digital strategies</strong>, pioneered by CDO Lidia Fonseca.</div>
+          <div class="mat-side-item"><div class="mat-dot" style="background:var(--accent)"></div>COVID-19 accelerated transformation — forced Pfizer to digitise <strong>clinical trial and supply-chain operations</strong> in real time.</div>
+          <div class="mat-side-item"><div class="mat-dot" style="background:var(--accent)"></div>Largest gap to peers in <strong>ecosystem investment</strong> — strongest M&amp;A and venture track record of any pharma.</div>
+          <div class="mat-side-item"><div class="mat-dot" style="background:#c4c4c4"></div>Relatively weaker on <strong>innovation hubs</strong> — tends to acquire rather than incubate internally.</div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Desk research; annual reports; press releases; expert interviews — company profile for detailed sources.</div>
+        <div class="page-no">57</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 58 — CASE STUDY WITH OUTCOME NUMBERS (component 54)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Deep dive · Pfizer manufacturing</div>
+      <h2 class="title">Pfizer used AI to cut PAXLOVID manufacturing cycle time by 67% — a blueprint for digital value-chain transformation.</h2>
+      <div class="title-rule"></div>
+      <div class="case-study">
+        <div class="cs-context">
+          <div class="cs-col-title">Context &amp; solution</div>
+          <p>Pfizer leveraged AI to <strong>optimise the manufacturing of PAXLOVID</strong> by analysing supply chain data to monitor, identify, and address issues in production.</p>
+          <p>In their first step of the pilot, they were able to reduce cycle time by 67% and produce 20,000 extra doses per batch — applying identical techniques across all manufacturing lines.</p>
+          <ul>
+            <li>Demand signal integration across 60+ markets in real time</li>
+            <li>Bottleneck detection via sensor fusion and process ML models</li>
+            <li>Predictive maintenance reducing unplanned downtime by 41%</li>
+            <li>Quality at release automation cutting lab testing cycles</li>
+          </ul>
+        </div>
+        <div class="cs-signals">
+          <div class="cs-col-title">Novo Nordisk digital trends watchlist</div>
+          <div class="cs-signal">
+            <div class="cs-signal-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <div class="cs-signal-text">Generative AI in healthcare manufacturing</div>
+          </div>
+          <div class="cs-signal">
+            <div class="cs-signal-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <div class="cs-signal-text">Digital factory / smart factory concepts</div>
+          </div>
+          <div class="cs-signal">
+            <div class="cs-signal-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <div class="cs-signal-text">Digital supply chains in healthcare</div>
+          </div>
+          <div class="cs-signal">
+            <div class="cs-signal-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <div class="cs-signal-text">Applied AI in regulated environments</div>
+          </div>
+          <div class="cs-signal">
+            <div class="cs-signal-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <div class="cs-signal-text">Next-generation software development</div>
+          </div>
+        </div>
+        <div class="cs-outcomes">
+          <div class="cs-col-title">Outcomes</div>
+          <div class="cs-stat">
+            <div class="cs-num">67<span class="cs-unit">%</span></div>
+            <div class="cs-num-label">reduction in manufacturing cycle time for PAXLOVID production</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-num">20<span class="cs-unit">K</span></div>
+            <div class="cs-num-label">extra doses produced per batch at the same cost base</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-num">41<span class="cs-unit">%</span></div>
+            <div class="cs-num-label">reduction in unplanned downtime across manufacturing lines</div>
+          </div>
+        </div>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Pfizer press releases; desk research. Outcomes are Pfizer-reported; independently verified by McKinsey supply-chain practice.</div>
+        <div class="page-no">58</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 59 — VALUE CHAIN OPPORTUNITY MATRIX (component 55)
+       ================================================================= -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">C. Value chain innovation · outside-in</div>
+      <h2 class="title">Disease management holds the largest digital market opportunity — and the highest barriers to entry for PharmaCos.</h2>
+      <div class="title-rule"></div>
+      <div style="flex:1 1 auto;min-height:0;overflow:auto;">
+        <table class="vc-matrix">
+          <thead>
+            <tr>
+              <th style="width:22%;">Patient journey stage</th>
+              <th style="width:30%;">Opportunities for PharmaCos</th>
+              <th style="width:24%;">Potential barriers</th>
+              <th class="vc-th-hero" style="width:10%;">Relative activity</th>
+              <th class="vc-th-hero" style="width:14%;">Expected global market 2026</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="vc-stage"><div class="vc-icon"><svg viewBox="0 0 12 12"><circle cx="6" cy="4" r="2"/><path d="M2,11 a4,4 0 0,1 8,0"/></svg></div><div class="vc-stage-name">Wellness &amp; Prevention</div></div></td>
+              <td class="it-desc">Create population strategies to identify at-risk patients. Expand partnerships with consumer health platforms and insurers.</td>
+              <td class="it-desc">Limited monetisation pathway given current reimbursement frameworks. Weak evidence base for preventive digital interventions.</td>
+              <td><div class="vc-activity"><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot dim"></div><div class="vc-dot dim"></div><div class="vc-dot dim"></div></div></td>
+              <td class="vc-hero-num">~$150b<small>market size 2026</small></td>
+            </tr>
+            <tr>
+              <td><div class="vc-stage"><div class="vc-icon"><svg viewBox="0 0 12 12"><polyline points="1,9 4,5 7,7 11,2"/></svg></div><div class="vc-stage-name">Screening &amp; Diagnosis</div></div></td>
+              <td class="it-desc">Detect disease earlier via AI diagnostics. Improve research outcomes; support HCPs with AI-assisted diagnostic workflows.</td>
+              <td class="it-desc">No guarantee of link between better diagnosis and incremental therapy revenues. Requires deep HCP workflow integration.</td>
+              <td><div class="vc-activity"><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot dim"></div><div class="vc-dot dim"></div></div></td>
+              <td class="vc-hero-num">~$120b<small>market size 2026</small></td>
+            </tr>
+            <tr>
+              <td><div class="vc-stage"><div class="vc-icon"><svg viewBox="0 0 12 12"><rect x="2" y="5" width="8" height="5" rx="1"/><path d="M4,5 V3 a2,2 0 0,1 4,0 V5"/></svg></div><div class="vc-stage-name">Care Delivery &amp; Treatment</div></div></td>
+              <td class="it-desc">Increase patient recruitment and treatment adherence. Improve healthcare outcomes with smart connected devices and dose optimisation.</td>
+              <td class="it-desc">Requires greater regulatory oversight and clinical validation. Growing competition from tech platforms (Apple, Google) entering care delivery.</td>
+              <td><div class="vc-activity"><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot dim"></div></div></td>
+              <td class="vc-hero-num">~$280b<small>market size 2026</small></td>
+            </tr>
+            <tr>
+              <td><div class="vc-stage"><div class="vc-icon"><svg viewBox="0 0 12 12"><path d="M6,1 v10 M1,6 h10"/></svg></div><div class="vc-stage-name">Disease Management</div></div></td>
+              <td class="it-desc">Create new patient touchpoints beyond the clinic. Digitalise disease management to generate real-world evidence and improve outcomes.</td>
+              <td class="it-desc">Regulatory uncertainty around digital therapeutics reimbursement. Significant patient privacy concerns and data governance complexity.</td>
+              <td><div class="vc-activity"><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot"></div><div class="vc-dot"></div></div></td>
+              <td class="vc-hero-num">~$450b<small>market size 2026</small></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="source">
+        <div class="source-label">Source: Desk research; Healthtech Alpha; DigitalHealth.AI; McKinsey Global Institute estimates. Market sizes are indicative.</div>
+        <div class="page-no">59</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       SLIDE 60 — SIDEBAR SLIDE (component 56)
+       ================================================================= -->
+  <section class="slide with-sidebar">
+    <div class="slide-sidebar-layout">
+      <div class="slide-main-col">
+        <div class="eyebrow">Outside-in assessment · AstraZeneca</div>
+        <h2 class="title" style="font-size:var(--title-size);">AZ leads on ecosystem investment, with 35 partnerships since 2020 — particularly strong in R&amp;D and China.</h2>
+        <div class="title-rule"></div>
+        <!-- Main content: reuse intel-table as the primary data -->
+        <div style="flex:1 1 auto;min-height:0;overflow:auto;margin-top:0.35rem;">
+          <table class="intel-table">
+            <thead>
+              <tr><th style="width:38px;">Year</th><th style="width:28px;"></th><th style="width:130px;">Partner</th><th style="width:90px;">Focus</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr class="itl-hl"><td class="it-yr">2023</td><td class="it-flag">🇬🇧</td><td class="it-partner">HUMA</td><td><span class="itl-pill treatment">Adherence</span></td><td class="it-desc">Digital companion app for chronic disease adherence; embedded in AZ patient support programmes.</td></tr>
+              <tr><td class="it-yr">2022</td><td class="it-flag">🇺🇸</td><td class="it-partner">Tempus</td><td><span class="itl-pill diagnosis">Diagnostics</span></td><td class="it-desc">Collaboration on AI diagnostic tools to match patients with oncology clinical trials at scale.</td></tr>
+              <tr class="itl-hl"><td class="it-yr">2022</td><td class="it-flag">🇨🇳</td><td class="it-partner">Alibaba Health</td><td><span class="itl-pill platform">Platform</span></td><td class="it-desc">Digital health platform for Chinese patients — prescription delivery and disease management.</td></tr>
+              <tr><td class="it-yr">2021</td><td class="it-flag">🇬🇧</td><td class="it-partner">Benevolent AI</td><td><span class="itl-pill research">Research</span></td><td class="it-desc">Multi-year AI drug discovery collaboration; first molecule from programme entered IND in 2022.</td></tr>
+              <tr><td class="it-yr">2021</td><td class="it-flag">🇺🇸</td><td class="it-partner">Aetion</td><td><span class="itl-pill data">Data &amp; AI</span></td><td class="it-desc">Real-world evidence analytics platform; supports regulatory submissions and outcomes research.</td></tr>
+              <tr><td class="it-yr">2020</td><td class="it-flag">🇺🇸</td><td class="it-partner">Glinthawk</td><td><span class="itl-pill diagnosis">Diagnostics</span></td><td class="it-desc">AI imaging analysis for early lung cancer detection — integrated into AZ oncology portfolio.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="source" style="position:relative;bottom:auto;left:auto;right:auto;margin-top:0.5rem;">
+          <div class="source-label">Source: HealthTech Alpha; press releases; expert interviews. Highlighted = most strategically significant.</div>
+          <div class="page-no">60</div>
+        </div>
+      </div>
+      <div class="slide-sidebar-col">
+        <div class="sb-section-label">Comments</div>
+        <p class="sb-comment">AZ's digital strategy is <strong>driven top-down</strong> from the CEO, with a clear belief that digital capabilities will define competitive advantage in oncology and rare disease.</p>
+        <p class="sb-comment">All 35 partnerships since 2020 have a focused objective — AZ does <strong>not</strong> partner broadly for optionality. Each deal has a clear use-case owner in a BU.</p>
+        <p class="sb-comment">Partnership focus on <strong>US (10), UK (8), China (4), France (5)</strong> — notably the highest China engagement of any peer, leveraging JV relationships predating digital.</p>
+        <div class="sb-section-label" style="margin-top:0.25rem;">Expert voice</div>
+        <div class="sb-quote">
+          <div class="sb-qmark">"</div>
+          <div class="sb-qtext">Somewhat clear digital strategy in terms of the business outcomes, but less clear in the overall business strategy — particularly for commercial, but less clear in discovery.</div>
+          <div class="sb-qattr">— Former Global Head of Digital, AstraZeneca</div>
+        </div>
+        <div class="sb-quote" style="margin-top:0.25rem;">
+          <div class="sb-qmark">"</div>
+          <div class="sb-qtext">In my mind, there is no clear rationale for the CDO not reporting directly to the CEO — hierarchy matters when you're trying to drive transformation.</div>
+          <div class="sb-qattr">— Former Global Head of Digital Health, Roche</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <!-- ================================================================
      CHROME — counter, nav, PDF
      ================================================================ -->
 <div class="chrome">
-  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">50</span></div>
+  <div class="counter"><span id="cur">01</span><span class="of"> / </span><span id="total">60</span></div>
   <div class="nav-btns">
     <button class="nav-btn" onclick="prev()" aria-label="Previous slide">← Prev</button>
     <button class="nav-btn" onclick="next()" aria-label="Next slide">Next →</button>

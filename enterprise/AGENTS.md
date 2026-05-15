@@ -338,7 +338,7 @@ Diagnostic of a market or competitor. Usually a build to a strategic recommendat
 
 ## Components — what to use, what to avoid
 
-The enterprise case uses the **broadest palette** of the three cases. Most of the framework's 46 components were designed for enterprise work and fit naturally.
+The enterprise case uses the **broadest palette** of the three cases. Most of the framework's 56 components were designed for enterprise work and fit naturally.
 
 **Heavy use:**
 - Executive summary (Pyramid), SCR, section dividers (Roman)
@@ -355,6 +355,16 @@ The enterprise case uses the **broadest palette** of the three cases. Most of th
 - **Swimlane** — whenever the key finding is about *who does what and when* (onboarding, change management, cross-team handoffs)
 - **TCO table** — business cases and board updates where the reader needs to see cost and benefit detail, not just headline metrics; always pair with the cumulative cash flow chart on the next slide
 - **Gantt-lite** — executive deployment timeline when the argument is about *phasing* (concurrent workstreams, dependencies, milestone sequencing); use `.gantt-tasks` instead when the reader needs task-level detail
+- **Org chart** (47) — governance, operating model, and org redesign work; any time the reader needs to see reporting structure; keep to 3 levels max per slide
+- **Benchmark heatmap** (49) — multi-entity scoring across 8–15 dimensions; use whenever you are benchmarking 5+ peers and need to show where the client is strong vs. weak at a glance
+- **Spectrum/continuum matrix** (50) — positioning an entity on a continuous scale across multiple dimensions; stronger than a table when the story is about movement or aspiration
+- **S-curve journey** (48) — technology adoption, capability building, or transformation arcs where timing and phase transitions matter; combine with callout boxes for the key inflection points
+- **Connected maturity assessment** (53) — radar/spider chart variant for 5–8 capability dimensions; best when comparing client vs. peer average; SVG-based, no Chart.js
+- **Investment / deal intelligence table** (52) — M&A activity, partnership landscape, or any structured deal-by-deal breakdown; `.itl-pill` categories (research, diagnosis, treatment, platform, data) are remappable to your taxonomy
+- **Logo scatter plot** (51) — competitive landscape when position can be expressed as two continuous axes; each logo is a CSS-positioned element so coordinates are literal percentages; hero entity gets `.ls-name.hero`
+- **Value chain opportunity matrix** (55) — journey-stage rows × initiative columns; use `.vc-hero-num` for the dollar opportunity in each cell; strongest when the finding is about *where* to invest across a value chain
+- **Case study with outcome numbers** (54) — three-column layout: context / signals / outcomes; use when a proof point needs to be scannable; `.cs-num` uses Fraunces display font for impact numbers
+- **Sidebar slide** (56) — research heavy sections: interview synthesis, expert Q&A, client verbatim; the 230px sidebar holds `.sb-comment` and `.sb-quote` blocks while the main column holds a table or chart; at most two per deck
 
 **Use sparingly:**
 - Insight/quote — at most two per deck; favor specific testimony over generic motivation
@@ -414,6 +424,15 @@ When the human says:
 - "Show the process / who does what / onboarding flow / handoffs" → **swimlane** (component 40); four phases maximum; hero lane = the primary owning team
 - "Show the business case / costs vs benefits / ROI / TCO" → **TCO table** (component 41) for full breakdown + **fin-tiles** (component 31) or **cumulative cash flow** chart (component 33) on adjacent slides for the headline summary; never put the full table and the cash flow on the same slide
 - "Show the timeline / deployment plan / rollout phasing / workstreams" → **Gantt-lite** (component 42) for executive view; **Gantt task list** (component 38) for operational detail; one Gantt-lite per deck is the rule
+- "Show the org structure / governance / who reports to whom" → **org chart** (47); three levels max per slide; use `.org-node.n0` for the top node, `.n1` for direct reports, `.n2` for the next level
+- "Benchmark against peers / compare maturity / how do we score?" → **benchmark heatmap** (49) for multi-company scoring tables; **connected maturity assessment** (53) for radar/spider presentation of 5–8 capability dimensions; pair them on adjacent slides
+- "Where are we on a spectrum / what's our target operating model?" → **spectrum/continuum matrix** (50); mark the current state with `.spec-option.current` and the aspiration with a label or footnote
+- "Show the adoption curve / where are we in the journey / inflection points" → **S-curve journey** (48); SVG path with absolutely-positioned callout boxes; use `.sc-callout` for the 2–3 key phase annotations
+- "Map the competitive landscape / position us vs. rivals on two axes" → **logo scatter plot** (51); axes are custom labels; client/hero entity gets `.ls-name.hero` for accent treatment
+- "Show M&A activity / partnership landscape / deal table" → **investment intelligence table** (52); remap `.itl-pill` categories to your taxonomy (research / diagnosis / treatment / platform / data are illustrative)
+- "Show a proof point / case study / what we achieved" → **case study with outcome numbers** (54); left col = context, center = signals/evidence, right = outcome stats with large `.cs-num` display figures
+- "Map value chain opportunities / where should we invest / which stage has the highest potential" → **value chain opportunity matrix** (55); rows = journey stages, cells = initiative types, `.vc-hero-num` for the dollar opportunity
+- "Add research findings / interview quotes / expert commentary alongside data" → **sidebar slide** (56); main column holds the table or chart; 230px sidebar holds `.sb-comment` and `.sb-quote` blocks; use `.slide.with-sidebar` on the outer slide div
 - "Here's the data / I have a spreadsheet / here's a CSV" → run `csv-to-chart.js` (see root AGENTS.md). Don't hand-write chart JSON when source data exists.
 - "Add a chart of X" → match to one of the seven chart types: line (trajectory), horizontal bar (ranked comparison), stacked column (composition over time), waterfall (bridge between two states), cost-benefit (project economics by year), cumulative cash flow (running balance), tornado (sensitivity). If none fit the finding, the finding probably isn't a chart — it's a stat grid or comparison table. **Always write the action title before picking the chart type.** The title describes the finding; the chart type is whatever makes the finding most visible.
 - "Make this sharper" → start with the action title. If the title is a sentence stating the conclusion, the slide is probably fine. If it's a topic label, rewrite the title and the rest will follow.
