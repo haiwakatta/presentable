@@ -917,7 +917,7 @@
       raw HTML directly. Works with Claude, GPT-4o, Gemini, or any capable model.
     </p>
     <div class="hero-stats">
-      <span class="stat-pill">56 components</span>
+      <span class="stat-pill"><span data-count="components"></span> components</span>
       <span class="stat-pill">7 chart types</span>
       <span class="stat-pill">3 cases</span>
       <span class="stat-pill">PDF export</span>
@@ -990,7 +990,7 @@
           <div class="case-pills">
             <span class="case-pill">Fraunces · Manrope</span>
             <span class="case-pill">Deep blue accent</span>
-            <span class="case-pill">60-slide showcase</span>
+            <span class="case-pill"><span data-count="enterprise-slides"></span>-slide showcase</span>
             <span class="case-pill">High density</span>
           </div>
           <div class="case-links">
@@ -1133,7 +1133,7 @@
 <section id="components">
   <div class="section-inner">
     <div class="section-eyebrow">Component library</div>
-    <h2 class="section-title">56 components, <em>7 chart types.</em></h2>
+    <h2 class="section-title"><span data-count="components"></span> components, <em>7 chart types.</em></h2>
     <p class="section-sub">
       Every component is pure CSS and HTML — no external libraries beyond
       Chart.js for charts. Same class names across all three cases; only the
@@ -1641,7 +1641,7 @@
         </tr>
         <tr>
           <td>Enterprise showcase</td>
-          <td>60-slide library — every component, every chart type, v0.6 additions. The reference deck for enterprise work.</td>
+          <td><span data-count="enterprise-slides"></span>-slide library — every component, every chart type, latest additions. The reference deck for enterprise work.</td>
           <td class="ex-links-row">
             <a class="ex-link" href="enterprise/deck.html" target="_blank">Open deck ↗</a>
           </td>
@@ -1719,6 +1719,23 @@
     </div>
   </div>
 </footer>
+
+<script>
+// ── Single source of truth for counts ───────────────────────────────────────
+// Update these two numbers when adding components or slides. Everything else
+// on this page updates automatically.
+const COUNTS = {
+  components: 56,
+  'enterprise-slides': 60,
+};
+
+document.querySelectorAll('[data-count]').forEach(el => {
+  el.textContent = COUNTS[el.dataset.count] ?? '';
+});
+
+document.querySelector('meta[name="description"]').content =
+  `An AI-native design system for professional slide decks. The design vocabulary ships as AGENTS.md instruction files — not a runtime library. Your LLM reads the instructions, references the example decks, and writes raw HTML directly. ${COUNTS.components} components, 7 chart types, 3 cases.`;
+</script>
 
 </body>
 </html>

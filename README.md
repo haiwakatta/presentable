@@ -12,7 +12,7 @@ An AI-native design system for the LLM-with-human workflow. **One design vocabul
 - **HTML decks** — few-shot examples. Not templates in a technical sense (no slots, no variables, no inheritance). Worked examples — high-quality, hand-crafted output that an LLM reads to learn the visual vocabulary. The CSS-class design system lives here; the way to use it is to copy a `<section>` from one deck into another.
 - **CLI scripts** — quality-of-life. PDF export, brand drift detection, CSV-to-chart generation. If you deleted every `.js` file, every deck would still open in a browser. That's the point.
 
-The design vocabulary — 56 components and 7 chart types — serves three very different audiences:
+The design vocabulary — an ever-growing component library across 7 chart types — serves three very different audiences:
 
 - **Enterprise** decks for executives, boards, and clients (consulting-grade strategy work)
 - **Investor** decks for startup pitches (seed, Series A/B)
@@ -89,14 +89,14 @@ Every case has its own dedicated **theme builder** (`<case>/theme-builder.html`)
 | **Investor** | Drag-drop logo, deck screenshot, or product image | Canvas extracts the dominant colors from the image; you assign roles (accent / ink) by clicking the swatches |
 | **Portfolio** | Base color + style preset + warm/cool toggle | Algorithmic palette derivation via HSL math; six presets (warm editorial, monochrome, cool studio, library, dusty rose, midnight) plus custom |
 
-All three builders include a live preview, a derived-tokens panel showing every variable, and a copy-paste `:root` block. The output drops into the case's `deck.html` — the whole deck retones to the new theme, all 56 components, every chart.
+All three builders include a live preview, a derived-tokens panel showing every variable, and a copy-paste `:root` block. The output drops into the case's `deck.html` — the whole deck retones to the new theme, every component, every chart.
 
 Open each tool by double-clicking the HTML file (or `open enterprise/theme-builder.html` from a terminal). Detailed per-case theming guidance is in each case's `AGENTS.md`.
 
 ## What's shared, what isn't
 
 **Shared (foundation):**
-- 56 components — covers, section dividers, exec summary, SCR, action titles, stat grids, 2×2 matrix, Strategy House, MECE tree, roadmap, options assessment, risk matrix, Harvey Balls, stakeholder directory, SWOT, persona, TAM/SAM/SOM, financial tiles, RAG dashboard, SaaS metrics, pricing tiers, system topology, BPMN swimlane, mockup frames, image gallery, project hero, org chart, S-curve journey, benchmark heatmap, spectrum matrix, logo scatter plot, investment intelligence table, connected maturity assessment, case study with outcome numbers, value chain opportunity matrix, sidebar slide, and more
+- Components — covers, section dividers, exec summary, SCR, action titles, stat grids, 2×2 matrix, Strategy House, MECE tree, roadmap, options assessment, risk matrix, Harvey Balls, stakeholder directory, SWOT, persona, TAM/SAM/SOM, financial tiles, RAG dashboard, SaaS metrics, pricing tiers, system topology, BPMN swimlane, mockup frames, image gallery, project hero, org chart, S-curve journey, benchmark heatmap, spectrum matrix, logo scatter plot, investment intelligence table, connected maturity assessment, case study with outcome numbers, value chain opportunity matrix, sidebar slide, and more (see `AGENTS.md` for the full reference)
 - 7 chart types — line, horizontal bar, stacked column, waterfall, cost-benefit (mixed-sign stacked), cumulative cash flow (with break-even marker), tornado / sensitivity
 - Navigation, progress bar, keyboard shortcuts, deep links via `#3`
 - PDF export (browser print dialog + headless Playwright)
