@@ -221,7 +221,7 @@ This storyline is the shortest and most personal. It's appropriate for a designe
 
 ## Components — what to use, what to avoid
 
-Most of the framework's 46 components were built for enterprise and investor cases. For portfolio, the disciplined list is much shorter.
+Most of the framework's 56 components were built for enterprise and investor cases. For portfolio, the disciplined list is much shorter.
 
 **Heavy use:**
 - Cover, thanks
@@ -416,6 +416,22 @@ The exception: "thanks" and closing slides intentionally use centered, minimal c
 5. **Refuse to cram.** If they want to show six projects, push back. Three projects with proper case studies beat six brand-name-drops. Reserve the "long list" for a CV — not a portfolio deck.
 6. **Watch the tone drift.** Portfolio writing is the easiest place for both you (the assistant) and the human to slip into corporate voice. Re-read every paragraph in the human's actual voice. If it doesn't sound like them, rewrite.
 7. **Save the "what I'd change" slide for when there's enough drafted content to honestly reflect on.** Don't write it speculatively — wait until the rest of the case study is in place.
+
+## Root component cross-reference
+
+For components used in portfolio work that are documented in the root `AGENTS.md`, the relevant entries are:
+
+| Component | Root number | Notes for portfolio use |
+|---|---|---|
+| Cover slide | 1 | Soften the subtitle — one positioning line, not a title/role/org block |
+| Big stat | 7 | Use on the results slide; always include a human-readable label, not a naked number |
+| Two-column | 12 | For "what I'm thinking about", "what I do" — keep text tight |
+| Three-column | 13 | For "why now" or multi-project overviews; images preferred over text |
+| Insight / quote | 19 | One per slide, one per deck maximum; terracotta accent rule applies |
+| Closing / next steps | 20 | Use for the "thanks" slide; strip out the action-item grid; just a quiet sign-off |
+| Stat grid | 6 | Only when the project moved multiple measurable numbers; never for generic KPIs |
+
+The v0.6 benchmark components (47–56) — org charts, heatmaps, radars, etc. — are enterprise-only. Do not use them in portfolio decks.
 
 ## Final note
 

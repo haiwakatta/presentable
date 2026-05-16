@@ -236,7 +236,7 @@ Series B decks frequently include a customer-logo bar or testimonial quote betwe
 
 ## Components — what to use, what to avoid
 
-Most of the framework's 46 components work in investor decks, but lean toward these:
+Most of the framework's 56 components work in investor decks, but lean toward these:
 
 **Heavy use:**
 - Cover, dark moment slides (`.slide.dark`)

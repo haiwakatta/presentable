@@ -351,6 +351,8 @@ The enterprise case uses the **broadest palette** of the three cases. Most of th
 - Financial tiles, cost-benefit chart, cumulative cash flow, tornado/sensitivity
 - Power/Interest stakeholder map, RAG status dashboard
 - Line chart, horizontal bar, stacked column, waterfall
+- **TAM/SAM/SOM** — for go-to-market, market teardown, and competitive strategy work; any deck where the addressable opportunity is central to the argument; pairs with a stat grid or line chart on the adjacent slide
+- **Process flow** (component 15) — sequential workflows and step-by-step process explanations where actor ownership is *not* the key story; use swimlane (40) when the finding is about *who does what*; process flow when the finding is about *what happens in what order*
 - **System topology** — for any deck proposing or auditing infrastructure (analytics platforms, SaaS rollouts, network architecture)
 - **Swimlane** — whenever the key finding is about *who does what and when* (onboarding, change management, cross-team handoffs)
 - **TCO table** — business cases and board updates where the reader needs to see cost and benefit detail, not just headline metrics; always pair with the cumulative cash flow chart on the next slide
@@ -370,7 +372,7 @@ The enterprise case uses the **broadest palette** of the three cases. Most of th
 - Insight/quote — at most two per deck; favor specific testimony over generic motivation
 - Buyer persona card — for GTM and market work, not strategy
 - Before/After transformation — strong but easily overused; one per deck is the right cadence
-- Big-number section divider — pick *either* Roman or big-number for the whole deck, not both
+- Big-number section divider (component 21) — pick *either* Roman numerals (component 3) or big-number for the whole deck, not both; big-number works when the section intro stat *is* the message (e.g., "$2.8B opportunity" as a divider before the market sizing section); Roman numerals work when the section break is structural, not evidentiary
 
 **Avoid:**
 - Team grid — too informal for executive audiences (and unnecessary; people are introduced in the Cover or appendix)
@@ -422,6 +424,8 @@ When the human says:
 - "Show the plan" → roadmap with named gates
 - "Show the architecture / how the systems connect" → **topology grid** (component 39); three zones maximum; hero zone = the platform being proposed or evaluated
 - "Show the process / who does what / onboarding flow / handoffs" → **swimlane** (component 40); four phases maximum; hero lane = the primary owning team
+- "Show the market / market size / addressable opportunity / TAM" → **TAM/SAM/SOM** (component 27); the three rings communicate that the SAM is real and the SOM is credible; always label each ring with the dollar figure and the scoping assumption
+- "Show the process / workflow / how this works step by step" → **process flow** (component 15) for a linear sequence; **swimlane** (40) when the finding is about which team owns which step; default to process flow unless actor ownership is the point
 - "Show the business case / costs vs benefits / ROI / TCO" → **TCO table** (component 41) for full breakdown + **fin-tiles** (component 31) or **cumulative cash flow** chart (component 33) on adjacent slides for the headline summary; never put the full table and the cash flow on the same slide
 - "Show the timeline / deployment plan / rollout phasing / workstreams" → **Gantt-lite** (component 42) for executive view; **Gantt task list** (component 38) for operational detail; one Gantt-lite per deck is the rule
 - "Show the org structure / governance / who reports to whom" → **org chart** (47); three levels max per slide; use `.org-node.n0` for the top node, `.n1` for direct reports, `.n2` for the next level
